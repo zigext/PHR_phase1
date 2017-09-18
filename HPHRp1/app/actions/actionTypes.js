@@ -1,0 +1,8 @@
+export const INCREMENT = 'INCREMENT'
+export const DECREMENT = 'DECREMENT'
+export const LOG_IN = 'LOG_IN'
+export const CLICK_ACTIVITY = 'CLICK_ACTIVITY'
+export const CLICK_ADVICES = 'CLICK_ADVICES'
+export const CLICK_PROGRESS = 'CLICK_PROGRESS'
+export const CLICK_ADVICES_FOOD = 'CLICK_ADVICES_FOOD'
+export const GET_PROFILE = 'GET_PROFILE'
