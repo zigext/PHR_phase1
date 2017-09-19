@@ -1,14 +1,18 @@
-import React, {
-  PropTypes,
-} from 'react';
+import React from 'react'
 import {
   Text,
-} from 'react-native';
+} from 'react-native'
+import PropTypes from 'prop-types'
+
+// const propTypes = {
+//   selected: PropTypes.bool,
+//   title: PropTypes.string,
+// }
 
 const propTypes = {
-  selected: PropTypes.bool,
-  title: PropTypes.string,
-};
+    selected: PropTypes.bool,
+    title: PropTypes.string
+  }
 
 const TabIcon = (props) => {
   return <Text
