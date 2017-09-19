@@ -23,7 +23,7 @@ export default class InstructionAdvicesButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/patient.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Instruction</Text>
+                        <Text style={styles.buttonText}>คำแนะนำ</Text>
                     </View>
                 </TouchableHighlight>
                 <View>

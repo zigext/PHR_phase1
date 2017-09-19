@@ -25,7 +25,7 @@ export default class AdvicesButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/list.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Advices</Text>
+                        <Text style={styles.buttonText}>คำแนะนำ</Text>
                     </View>
                 </TouchableHighlight>
                 <View>

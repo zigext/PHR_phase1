@@ -25,7 +25,7 @@ export default class ProgressButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/line-chart.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Progress</Text>
+                        <Text style={styles.buttonText}>พัฒนาการ</Text>
                     </View>
                 </TouchableHighlight>
                 <View>

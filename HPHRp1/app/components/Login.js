@@ -32,15 +32,15 @@ export default class Login extends React.Component {
         var { email, password } = this.refs.form.getValue() || {}
         if (!email || !password) {
             this.setState({ loading: false })
-            ToastAndroid.showWithGravity('Email or password is invalid', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            ToastAndroid.showWithGravity('อีเมลหรือรหัสผ่านไม่ถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
         } else {
             this.props.onLoginPress(email, password, (err, user) => {
                 this.setState({ loading: false })
                 
                 if (err !== null) {
-                    ToastAndroid.showWithGravity('Email or password is incorrect', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                    ToastAndroid.showWithGravity('อีเมลหรือรหัสผ่านไม่ถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
                 }
-                ToastAndroid.showWithGravity('Log in success', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                ToastAndroid.showWithGravity('เข้าสู่ระบบสำเร็จ', ToastAndroid.SHORT, ToastAndroid.CENTER)
                 Keyboard.dismiss()
             })
         }
@@ -67,7 +67,7 @@ export default class Login extends React.Component {
                     underlayColor='#99d9f4'
                     disabled={this.state.loading}
                 >
-                    <Text style={_styles.buttonText}>Log in</Text>
+                    <Text style={_styles.buttonText}>เข้าสู่ระบบ</Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight

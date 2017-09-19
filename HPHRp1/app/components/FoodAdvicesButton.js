@@ -23,7 +23,7 @@ export default class FoodAdvicesButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/food.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Food</Text>
+                        <Text style={styles.buttonText}>อาหาร</Text>
                     </View>
                 </TouchableHighlight>
                 <View>

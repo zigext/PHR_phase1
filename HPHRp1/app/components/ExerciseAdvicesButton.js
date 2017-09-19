@@ -23,7 +23,7 @@ export default class ExerciseAdvicesButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/exercise.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Exercise</Text>
+                        <Text style={styles.buttonText}>ออกกำลังกาย</Text>
                     </View>
                 </TouchableHighlight>
                 <View>
@@ -48,13 +48,13 @@ var styles = StyleSheet.create({
     },
     button: {
         flex: 1,
-
         backgroundColor: '#FFFDF9',
         borderColor: '#48BBEC',
         borderWidth: 3,
         borderRadius: 8,
         marginHorizontal: 10,
         marginVertical: 10,
+        paddingHorizontal: 3,
        alignSelf: 'stretch',
         justifyContent: 'center'
     },
@@ -64,5 +64,6 @@ var styles = StyleSheet.create({
         alignItems: 'center',
         height: 100,
         width: 100,
+        alignSelf: 'center'
     }
 })

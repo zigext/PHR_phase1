@@ -38,7 +38,7 @@ export default class ForgotPassword extends React.Component {
         const { inputStyle, labelStyle, containerStyle } = styles
         return (
             <View style={styles.container}>
-                <Text style={{fontSize: 18, alignSelf:'center'}}>Please enter your email</Text>
+                <Text style={{fontSize: 18, alignSelf:'center'}}>กรุณากรอกอีเมล</Text>
                 <Form ref='form' type={Person} options={options} />
                 <TouchableHighlight
                     style={this.state.loading ? styles.disabledButton : styles.button}
@@ -46,7 +46,7 @@ export default class ForgotPassword extends React.Component {
                     underlayColor='#99d9f4'
                     disabled={this.state.loading}
                 >
-                    <Text style={styles.buttonText}>Send</Text>
+                    <Text style={styles.buttonText}>ส่ง</Text>
                 </TouchableHighlight>
 
             </View>

@@ -23,7 +23,7 @@ export default class ProhibitAdvicesButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/prohibit.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Prohibition</Text>
+                        <Text style={styles.buttonText}>ข้อห้าม</Text>
                     </View>
                 </TouchableHighlight>
                 <View>

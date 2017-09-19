@@ -38,6 +38,7 @@ import Login from './Login'
 import Home from './Home'
 import ForgotPassword from './ForgotPassword'
 import Profile from './Profile'
+import Surgery from './Surgery'
 import MainAdvices from './MainAdvices'
 import FoodAdvices from './FoodAdvices'
 import SideDrawer from '../components/drawers/SideDrawer'
@@ -99,8 +100,9 @@ export default class App extends React.Component {
                                 >
                                     <Scene key="echo" back clone component={EchoView} getTitle={({ navigation }) => navigation.state.key} />
                                     <Scene key="launch" component={Login} title="Heart PHR phase 1" initial />
-                                    <Scene key="forgotPassword" component={ForgotPassword} title="Reset Password" back/>
-                                    <Scene key="profile" component={Profile} title="Profile" back/>
+                                    <Scene key="forgotPassword" component={ForgotPassword} title="รีเซ็ตรหัสผ่าน" back/>
+                                    <Scene key="profile" component={Profile} title="ข้อมูลส่วนตัว" back/>
+                                    <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back/>
 
                                     <Drawer
                                         key="drawer"
@@ -121,7 +123,7 @@ export default class App extends React.Component {
                                             >
                                                 <Stack
                                                     key="tab_home"
-                                                    title='Tab 1'
+                                                    title='หน้าหลัก'
                                                     tabBarLabel="TAB #1"
                                                     inactiveBackgroundColor={styles.tab}
                                                     activeBackgroundColor="#DDD"
@@ -133,16 +135,15 @@ export default class App extends React.Component {
                                                     <Scene
                                                         key="tab_home_1"
                                                         component={Home}
-                                                        title="Home"
-                                                        onRight={() => alert('Right button')}
-                                                        rightTitle="Right"
+                                                        title="หน้าหลัก"
+                                        
 
                                                     />
                                                 </Stack>
 
                                                 <Stack
                                                     key="tab_activity"
-                                                    title="Tab #2"
+                                                    title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจ"
                                                     icon={TabIcon}
                                                     navigationBarStyle={styles.selectedTab}
                                                     titleStyle={styles.tabTitle}
@@ -151,8 +152,8 @@ export default class App extends React.Component {
                                                     <Scene
                                                         key="tab_activity_1"
                                                         component={Home}
-                                                        title="Activity"
-                                                        renderRightButton={() => <Text>Right</Text>}
+                                                        title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจ"
+                                                       
                                                     />
                                                     {/*<Scene
                                                         key="tab_2_2"
@@ -166,13 +167,13 @@ export default class App extends React.Component {
 
                                                 <Stack
                                                     key="tab_progress"
-                                                    title="Progress"
+                                                    title="พัฒนาการ"
                                                     navigationBarStyle={styles.selectedTab}
                                                     titleStyle={styles.tabTitle}>
                                                     <Scene
                                                         key="tab_progress_1"
                                                         component={Home}
-                                                        title="Progress"
+                                                        title="พัฒนาการ"
                                                         icon={TabIcon}
                                                         rightTitle="Right3"
                                                         onRight={() => { }}
@@ -184,19 +185,16 @@ export default class App extends React.Component {
                                                     titleStyle={styles.tabTitle}
                                                     
                                                     >
-                                                    <Scene key="tab_advices_1" component={MainAdvices} title="Advices" icon={TabIcon} />
+                                                    <Scene key="tab_advices_1" component={MainAdvices} title="คำแนะนำ" icon={TabIcon} />
                                                     <Scene
                                                         key="tab_advices_food"
                                                         component={FoodAdvices}
-                                                        title="Foods"
-                                                        onBack={() => alert('onBack button!')}
-                                                        backTitle="Back!"
+                                                        title="อาหาร"
+                                                        
                                                         panHandlers={null}
                                                     />
                                                 </Stack>
-                                                <Stack key="tab_5">
-                                                    <Scene key="tab_5_1" component={TabView} title="Tab #5" icon={TabIcon} />
-                                                </Stack>
+                                            
                                             </Tabs>
                                         </Scene>
                                     </Drawer>

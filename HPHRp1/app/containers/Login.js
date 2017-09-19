@@ -79,10 +79,10 @@ class LogIn extends React.Component {
         return (
             <View>
                 <LogInForm onLoginPress={this.onLoginPress} onForgotPasswordPress={this.onForgotPasswordPress} />
-                <Icon name='home' type='font-awesome' />
+                {/*<Icon name='home' type='font-awesome' />
                 <Icon name='bar-graph' type='entypo' />
                 <Icon name='file-document-box' type='material-community' />
-                <Icon name='heartbeat' type='font-awesome' />
+                <Icon name='heartbeat' type='font-awesome' />*/}
             </View>
         )
     }

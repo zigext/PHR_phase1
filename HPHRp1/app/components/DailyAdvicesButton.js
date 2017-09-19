@@ -23,7 +23,7 @@ export default class DailyAdvicesButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/daily.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Daily Life</Text>
+                        <Text style={styles.buttonText}>ชีวิตประจำวัน</Text>
                     </View>
                 </TouchableHighlight>
                 <View>
@@ -48,7 +48,7 @@ var styles = StyleSheet.create({
     },
     button: {
         flex: 1,
-
+        paddingHorizontal: 3,
         backgroundColor: '#FFFDF9',
         borderColor: '#48BBEC',
         borderWidth: 3,
@@ -64,5 +64,6 @@ var styles = StyleSheet.create({
         alignItems: 'center',
         height: 100,
         width: 100,
+        alignSelf: 'center'
     }
 })

@@ -26,7 +26,7 @@ export default class ActivityButton extends React.Component {
                 >
                     <View>
                         <Image source={require('../../assets/images/heart.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>Activity</Text>
+                        <Text style={styles.buttonText}>กิจกรรมฟื้นฟูหัวใจ</Text>
                     </View>
                 </TouchableHighlight>
                 
@@ -90,6 +90,7 @@ var styles = StyleSheet.create({
         borderRadius: 8,
         marginHorizontal: 10,
         marginVertical: 10,
+        paddingHorizontal: 10,
        alignSelf: 'stretch',
         justifyContent: 'center'
     },
@@ -99,5 +100,6 @@ var styles = StyleSheet.create({
         alignItems: 'center',
         height: 100,
         width: 100,
+        alignSelf: 'center'
     }
 })
