@@ -22,19 +22,19 @@ export default class FoodAdvices extends React.Component {
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/food2.jpg')} style={_styles.image}></Image>
-                    <Text style={styles.text}>ควรงดชา กาแฟ และน้ำอัดลม เครื่องดื่มที่มีแอลกอฮอล์ และควรงดสูบบุหรี่</Text>
+                    <Text style={styles.text}>ควรงดชา กาแฟ น้ำอัดลม เครื่องดื่มที่มีแอลกอฮอล์ และควรงดสูบบุหรี่</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/food3.jpg')} style={_styles.image}></Image>
-                    <Text style={styles.text}>หลีกเลี่ยงอาหารที่ทำให้น้ำตาลในเลือดสูง เช่น ข้าวเหนียวทุเรียน ทองหยิบ ทองหยอด   ทุเรียน ลำไย</Text>
+                    <Text style={styles.text}>หลีกเลี่ยงอาหารที่ทำให้น้ำตาลในเลือดสูง เช่น ข้าวเหนียวทุเรียน ขนมหวาน มะม่วง ลำไย</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/food4.jpg')} style={_styles.image}></Image>
-                    <Text style={styles.text}>ถ้าต้องใช้น้ำมันปรุงอาหารควรเลือกใช้น้ำมันพืช แทนเนยหรือน้ำมันจากสัตว์ หรือให้วิธีลวก ต้ม นึ่ง และอบแทนการทอด</Text>
+                    <Text style={styles.text}>ถ้าต้องใช้น้ำมันปรุงอาหารควรเลือกใช้น้ำมันพืช แทนเนยหรือน้ำมันจากสัตว์ หรือใช้การลวก ต้ม นึ่ง และอบแทนการทอด</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/food5.jpg')} style={_styles.image}></Image>
-                    <Text style={styles.text}>ควรรับประทานผักทุกชนิด ผลไม้ที่ไม่มีรสหวานจัด เช่น มะละกอ พุทรา แอปเปิ้ล ฝรั่ง</Text>
+                    <Text style={styles.text}>ควรรับประทานผักทุกชนิด ผลไม้ที่ไม่มีรสหวานจัด เช่น มะละกอ แอปเปิ้ล ฝรั่ง</Text>
                 </View>
             </Swiper>
         )
