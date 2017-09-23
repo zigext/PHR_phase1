@@ -28,7 +28,7 @@ class Home extends React.Component {
     }
 
     onAdvicesPress = (callback) => {
-
+        Actions.tab_advices()
     }
 
     onProgressPress = (callback) => {
