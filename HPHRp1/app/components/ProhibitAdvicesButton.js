@@ -9,8 +9,9 @@ export default class ProhibitAdvicesButton extends React.Component {
     constructor(props) {
         super(props)
     }
-    onPress = () => {
 
+      onPress = () => {
+        this.props.onProhibitPress()
     }
 
     render() {

@@ -10,7 +10,7 @@ export default class ExerciseAdvicesButton extends React.Component {
         super(props)
     }
     onPress = () => {
-
+        this.props.onExercisePress()
     }
 
     render() {

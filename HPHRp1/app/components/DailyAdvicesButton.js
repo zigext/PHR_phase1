@@ -10,7 +10,7 @@ export default class DailyAdvicesButton extends React.Component {
         super(props)
     }
     onPress = () => {
-
+        this.props.onDailyPress()
     }
 
     render() {
