@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableHighlight, ToastAndroid, Keyboard, Image } from 'react-native'
 import { Button } from 'react-native-elements'
-
+import styles from '../styles/index'
 
 
 
@@ -9,21 +9,21 @@ export default class ActivityAdvicesButton extends React.Component {
     constructor(props) {
         super(props)
     }
-    onPress = () => {
-
+     onPress = () => {
+        this.props.onActivityPress()
     }
 
     render() {
         return (
             <View>
                 <TouchableHighlight
-                    style={styles.button}
+                    style={[styles.buttonImage, {paddingHorizontal: 3}]}
                     onPress={this.onPress}
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/cardiogram.png')} style={styles.image}></Image>
-                        <Text style={styles.buttonText}>กิจกรรมฟื้นฟูหัวใจ</Text>
+                        <Image source={require('../../assets/images/cardiogram.png')} style={styles.imageInButtonImage}></Image>
+                        <Text style={styles.buttonImageText}>กิจกรรมฟื้นฟูหัวใจ</Text>
                     </View>
                 </TouchableHighlight>
                 <View>
@@ -35,35 +35,4 @@ export default class ActivityAdvicesButton extends React.Component {
 }
 
 
-var styles = StyleSheet.create({
-    container1: {
-        justifyContent: 'center',
-        flex: 1,
-        backgroundColor: 'blue'
-    },
-    buttonText: {
-        fontSize: 24,
-        color: '#474045',
-        alignSelf: 'center'
-    },
-    button: {
-        flex: 1,
-        paddingHorizontal: 3,
-        backgroundColor: '#FFFDF9',
-        borderColor: '#48BBEC',
-        borderWidth: 3,
-        borderRadius: 8,
-        marginHorizontal: 10,
-        marginVertical: 10,
-       alignSelf: 'stretch',
-        justifyContent: 'center'
-    },
-    image: {
-        resizeMode: 'contain',
-        margin: 10,
-        alignItems: 'center',
-        height: 100,
-        width: 100,
-        alignSelf: 'center'
-    }
-})
+
