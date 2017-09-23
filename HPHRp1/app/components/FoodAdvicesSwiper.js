@@ -97,11 +97,6 @@ const _styles = StyleSheet.create({
         paddingHorizontal: 50,
         margin: 10
     },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
-    },
     image: {
         resizeMode: 'center',
         margin: 10,
