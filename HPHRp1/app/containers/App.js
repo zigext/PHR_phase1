@@ -41,6 +41,12 @@ import Profile from './Profile'
 import Surgery from './Surgery'
 import MainAdvices from './MainAdvices'
 import FoodAdvices from './FoodAdvices'
+import ExerciseAdvices from './ExerciseAdvices'
+import DailyAdvices from './DailyAdvices'
+import ProhibitAdvices from './ProhibitAdvices'
+import ActivityAdvices from './ActivityAdvices'
+import Activity1AdvicesList from '../components/Activity1AdvicesList'
+import Activity1AdvicesDetail from '../components/Activity1AdvicesDetail'
 import SideDrawer from '../components/drawers/SideDrawer'
 import reducer from '../reducers/Index'
 import styles from '../styles/index'
@@ -60,7 +66,7 @@ import MenuIcon from '../../assets/images/ic_menu_burger_24dp.png'
 export default class App extends React.Component {
 
     render() {
-        
+
         const store = createStore(reducer)
         const reducerCreate = params => {
             const defaultReducer = new Reducer(params);
@@ -100,13 +106,13 @@ export default class App extends React.Component {
                                 >
                                     <Scene key="echo" back clone component={EchoView} getTitle={({ navigation }) => navigation.state.key} />
                                     <Scene key="launch" component={Login} title="Heart PHR phase 1" initial />
-                                    <Scene key="forgotPassword" component={ForgotPassword} title="รีเซ็ตรหัสผ่าน" back/>
-                                    <Scene key="profile" component={Profile} title="ข้อมูลส่วนตัว" back/>
-                                    <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back/>
+                                    <Scene key="forgotPassword" component={ForgotPassword} title="รีเซ็ตรหัสผ่าน" back />
+                                    <Scene key="profile" component={Profile} title="ข้อมูลส่วนตัว" back />
+                                    <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back />
 
                                     <Drawer
                                         key="drawer"
-                                       hideNavBar
+                                        hideNavBar
                                         contentComponent={SideDrawerContent}
                                         drawerImage={MenuIcon}
                                         openDrawerOffset={0.4}
@@ -136,7 +142,7 @@ export default class App extends React.Component {
                                                         key="tab_home_1"
                                                         component={Home}
                                                         title="หน้าหลัก"
-                                        
+
 
                                                     />
                                                 </Stack>
@@ -153,7 +159,7 @@ export default class App extends React.Component {
                                                         key="tab_activity_1"
                                                         component={Home}
                                                         title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจ"
-                                                       
+
                                                     />
                                                     {/*<Scene
                                                         key="tab_2_2"
@@ -183,18 +189,52 @@ export default class App extends React.Component {
                                                     key="tab_advices"
                                                     navigationBarStyle={styles.selectedTab}
                                                     titleStyle={styles.tabTitle}
-                                                    
-                                                    >
+                                                >
                                                     <Scene key="tab_advices_1" component={MainAdvices} title="คำแนะนำ" icon={TabIcon} />
                                                     <Scene
                                                         key="tab_advices_food"
                                                         component={FoodAdvices}
                                                         title="อาหาร"
-                                                        
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_exercise"
+                                                        component={ExerciseAdvices}
+                                                        title="ออกกำลังกาย"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_daily"
+                                                        component={DailyAdvices}
+                                                        title="ชีวิตประจำวัน"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_prohibit"
+                                                        component={ProhibitAdvices}
+                                                        title="ข้อห้ามในการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_activity"
+                                                        component={ActivityAdvices}
+                                                        title="รายละเอียดกิจกรรมฟื้นฟูสมรรถภาพหัวใจ"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_activity_1"
+                                                        component={Activity1AdvicesList}
+                                                        title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจระยะที่ 1"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_activity_1_detail"
+                                                        component={Activity1AdvicesDetail}
+                                                        title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจระยะที่ 1"
                                                         panHandlers={null}
                                                     />
                                                 </Stack>
-                                            
+
                                             </Tabs>
                                         </Scene>
                                     </Drawer>
