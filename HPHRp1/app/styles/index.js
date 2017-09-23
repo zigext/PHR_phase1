@@ -7,7 +7,7 @@ export default StyleSheet.create({
         backgroundColor: common.primaryColorDark
     },
     tabTitle: {
-        color: 'white', 
+        color: 'white',
         alignSelf: 'center'
     },
     tab: {
@@ -19,6 +19,31 @@ export default StyleSheet.create({
     },
     background: {
         backgroundColor: common.backgroundWhite
+    },
+    buttonImageText: {
+        fontSize: 24,
+        color: common.grey,
+        alignSelf: 'center'
+    },
+    buttonImage: {
+        flex: 1,
+        backgroundColor: '#FFFDF9',
+        borderColor: common.primaryColor,
+        borderWidth: 3,
+        borderRadius: 8,
+        marginHorizontal: 10,
+        marginVertical: 10,
+        paddingHorizontal: 10,
+        alignSelf: 'stretch',
+        justifyContent: 'center'
+    },
+    imageInButtonImage: {
+        resizeMode: 'contain',
+        margin: 10,
+        alignItems: 'center',
+        height: 100,
+        width: 100,
+        alignSelf: 'center'
     }
 })
 
