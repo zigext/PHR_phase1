@@ -14,7 +14,7 @@ export default class Activity1AdvicesDetail extends React.Component {
 
     }
 
-    playSound = (name) => {
+    playSound = (level) => {
         const callback = (error, sound) => {
             if (error) {
                 Alert.alert('error', error.message)
@@ -45,6 +45,30 @@ export default class Activity1AdvicesDetail extends React.Component {
                 const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
                 break
             }
+            case 5: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 6: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 7: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 8: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 9: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 10: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
             default: return
         }
 
@@ -53,13 +77,13 @@ export default class Activity1AdvicesDetail extends React.Component {
     render() {
         console.log(this.props)
         return (
-                <View style={_styles.slide}>
-                    <Text style={[styles.text, {fontWeight: 'bold', marginBottom: 5}]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>
-                    <Text style={styles.text}>{this.props.activity.subtitle}</Text>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.activity.level)} />  
-                    <Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>
-                    
-                </View> 
+            <View style={_styles.slide}>
+                <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>
+                <Text style={styles.text}>{this.props.activity.subtitle}</Text>
+                <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.activity.level)} />
+                <Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>
+
+            </View>
         )
     }
 }
@@ -70,7 +94,7 @@ const _styles = StyleSheet.create({
     slide: {
         flex: 1,
         justifyContent: 'center',
-        
+
         padding: 20,
         paddingHorizontal: 50,
         margin: 10
