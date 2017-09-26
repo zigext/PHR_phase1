@@ -47,6 +47,7 @@ import ProhibitAdvices from './ProhibitAdvices'
 import ActivityAdvices from './ActivityAdvices'
 import Activity1AdvicesList from '../components/Activity1AdvicesList'
 import Activity1AdvicesDetail from '../components/Activity1AdvicesDetail'
+import SurgeryDetail from '../components/SurgeryDetail'
 import SideDrawer from '../components/drawers/SideDrawer'
 import reducer from '../reducers/Index'
 import styles from '../styles/index'
@@ -109,6 +110,7 @@ export default class App extends React.Component {
                                     <Scene key="forgotPassword" component={ForgotPassword} title="รีเซ็ตรหัสผ่าน" back />
                                     <Scene key="profile" component={Profile} title="ข้อมูลส่วนตัว" back />
                                     <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back />
+                                    <Scene key="surgeryDetail" component={SurgeryDetail} title="ข้อมูลการผ่าตัด" back />
 
                                     <Drawer
                                         key="drawer"
