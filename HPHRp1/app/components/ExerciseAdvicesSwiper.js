@@ -57,34 +57,32 @@ export default class ExerciseAdvicesSwiper extends React.Component {
         return (
             <Swiper style={_styles.wrapper} showsButtons>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/exercise1.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide1')} />
                     <Text style={styles.text}>รูปแบบการออกกําลังกาย ใช้การเดินและการออกกําลังกายแบบไอโซโทนิคเป็นหลัก คือการออกกําลังกายชนิดที่มีการยืด/หดตัวของกล้ามเนื้อ และอวัยวะมีการเคลื่อนไหวขณะออกกําลัง</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food2.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide2')} />
                     <Text style={styles.text}>ผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าชีพจรขณะพักไม่เกิน 20 ครั้งต่อนาที ส่วนผู้ป่วยหลังผ่าตัดหัวใจหรือการรักษาโดยการขยายหลอดเลือดหัวใจด้วยบอลลูน ควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าชีพจรขณะพักไม่เกิน 30 ครั้งต่อนาที</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food3.jpg')} style={_styles.image}></Image>
+                   
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide3')} />
                     <Text style={styles.text}>ระยะเวลา เริ่มจาก 5-10 นาที และเพิ่มเป็น 20-30 นาที ให้รู้สึกเหนื่อยเล็กน้อยหรือปานกลาง (RPE 9-12)</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food4.jpg')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/exercise2.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide4')} />
                     <Text style={styles.text}>ความถี่ วันละ 2 ครั้ง ขึ้นกับสภาพร่างกาย</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food5.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
-                    <Text style={styles.text}>ค่อยๆเพิ่มความหนักในการออกกําลังกาย เริ่มจากเคลื่อนไหวข้อจากข้อเล็กๆ เช่น ข้อมือ ข้อเท้า ไปยังข้อที่ใหญ่ เช่น คอ ไหล่ กระทําอย่างต่อเนื่อง ไม่เกร็งค้าง และไม่กลั้นหายใจขณะทํา อาจมีคนช่วยทําหลังจากนั้นก็ทําด้วยตนเอง ค่อยๆเปลี่ยนท่าจากนอน ไปนั่ง และยืน</Text>
+                    <Text style={styles.text}>ค่อยๆเพิ่มความหนักในการออกกําลังกาย เริ่มจากเคลื่อนไหวข้อจากข้อเล็กๆไปยังข้อที่ใหญ่ กระทําอย่างต่อเนื่อง ไม่เกร็งค้าง และไม่กลั้นหายใจขณะทํา อาจมีคนช่วยทําหลังจากนั้นก็ทําด้วยตนเอง ค่อยๆเปลี่ยนท่าจากนอน ไปนั่ง และยืน</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/food5.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
-                    <Text style={styles.text}>การเดิน เป็นการออกกําลังกายทําได้ง่ายและช่วยเสริมให้ผู้ป่วยประกอบกิจวัตรประจําวันได้ดียิ่งขึ้น โดยพยายามเดินให้ระยะทางไกลขึ้นในครั้งต่อไป  และสามารถเดินได้เร็วขึ้นถ้าไม่มีอาการไม่พึงประสงค์ เช่น มึนงง เซ ซีด เขียว หายใจลําบาก คลื่นไส้ เจ็บหน้าอก</Text>
+                    <Text style={styles.text}>การเดินทําได้ง่ายและช่วยเสริมให้ผู้ป่วยประกอบกิจวัตรประจําวันได้ดียิ่งขึ้น โดยพยายามเดินให้ระยะทางไกลขึ้นในครั้งต่อไป  และสามารถเดินได้เร็วขึ้นถ้าไม่มีอาการไม่พึงประสงค์ เช่น มึนงง เซ ซีด เขียว หายใจลําบาก คลื่นไส้ เจ็บหน้าอก</Text>
                 </View>
             </Swiper>
         )
@@ -101,11 +99,6 @@ const _styles = StyleSheet.create({
         padding: 20,
         paddingHorizontal: 50,
         margin: 10
-    },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
     },
     image: {
         resizeMode: 'center',
