@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppRegistry, Text, View, Button, TextInput, ToastAndroid } from 'react-native'
+import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, FlatList } from 'react-native'
 import firebase from '../config/Firebase'
 import LogInForm from '../components/Login'
 import { Icon } from 'react-native-elements'
@@ -75,7 +75,6 @@ class LogIn extends React.Component {
 
 
     render() {
-        console.log("keys ", AppRegistry.getAppKeys())
         return (
             <View>
                 <LogInForm onLoginPress={this.onLoginPress} onForgotPasswordPress={this.onForgotPasswordPress} />
