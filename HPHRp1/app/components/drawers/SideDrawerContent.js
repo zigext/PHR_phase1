@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, Text, View, ViewPropTypes } from 'react-native'
+import { StyleSheet, Text, View, ViewPropTypes, ScrollView } from 'react-native'
 import { List, ListItem } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux'
 
@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
 })
 
 const list = [
-    {title: 'หน้าหลัก'},
-    {title: 'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ'},
-    {title: 'พัฒนาการ'},
-    {title: 'คำแนะนำ'},
-    {title: 'ประวัติส่วนตัว'},
-    {title: 'ประวัติการผ่าตัด'},
-    {title: 'ออกจากระบบ'}
+    { title: 'หน้าหลัก' },
+    { title: 'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ' },
+    { title: 'พัฒนาการ' },
+    { title: 'คำแนะนำ' },
+    { title: 'ประวัติส่วนตัว' },
+    { title: 'ประวัติการผ่าตัด' },
+    { title: 'ออกจากระบบ' }
 ]
 
 class SideDrawerContent extends React.Component {
@@ -86,19 +86,21 @@ class SideDrawerContent extends React.Component {
             //     <Button>Log out</Button>
             // </View >
             <View style={styles.container}>
-                <List containerStyle={{ backgroundColor: '#3e4042' }}>
-                    {
-                        list.map((item, i) => (
-                            <ListItem
-                                key={i}
-                                title={item.title}
-                                titleStyle={styles.item}
-                                hideChevron={true}
-                                onPress={() => this.onPress(i)}
-                            />
-                        ))
-                    }
-                </List>
+                <ScrollView>
+                    <List containerStyle={{ backgroundColor: '#3e4042' }}>
+                        {
+                            list.map((item, i) => (
+                                <ListItem
+                                    key={i}
+                                    title={item.title}
+                                    titleStyle={styles.item}
+                                    hideChevron={true}
+                                    onPress={() => this.onPress(i)}
+                                />
+                            ))
+                        }
+                    </List>
+                </ScrollView>
             </View >
         )
     }
