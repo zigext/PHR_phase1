@@ -73,18 +73,6 @@ class SideDrawerContent extends React.Component {
 
     render() {
         return (
-            // <View style={styles.container}>
-            //     <Text>Drawer Content</Text>
-            //     <Button onPress={Actions.closeDrawer}>Back</Button>
-            //     <Text>Title: {this.props.title}</Text>
-            //     <Button onPress={Actions.tab_home}>Home</Button>
-            //     <Button onPress={Actions.tab_activity}>Activity</Button>
-            //     <Button onPress={Actions.tab_progress}>Progress</Button>
-            //     <Button onPress={Actions.tab_advices}>Advices</Button>
-            //     <Button onPress={() => { Actions.profile({ data: 'test!' }); }}>Profile</Button>
-            //     <Button onPress={Actions.surgery}>Surgery</Button>
-            //     <Button>Log out</Button>
-            // </View >
             <View style={styles.container}>
                 <ScrollView>
                     <List containerStyle={{ backgroundColor: '#3e4042' }}>
