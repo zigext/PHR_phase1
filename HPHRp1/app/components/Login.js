@@ -4,8 +4,8 @@ import t from 'tcomb-form-native'
 import styles from '../styles/index'
 
 
-var Form = t.form.Form
-var options = {
+let Form = t.form.Form
+let options = {
     // auto: 'placeholders',
     fields: {
         password: {
@@ -16,9 +16,13 @@ var options = {
         }
     }
 }
+let value = {
+    email: 'abc@gmail.com',
+    password: '123456'
+}
 
 // here we are: define your domain model
-var Person = t.struct({
+let Person = t.struct({
     email: t.String, // a required string
     password: t.String // an optional string
 })
@@ -60,7 +64,7 @@ export default class Login extends React.Component {
         return (
             <View style={_styles.container}>
 
-                <Form ref='form' type={Person} options={options} />
+                <Form ref='form' type={Person} options={options} value={value}/>
                 <TouchableHighlight
                     style={this.state.loading ? _styles.disabledButton : _styles.button}
                     onPress={this.onPress}
