@@ -39,7 +39,6 @@ class LogIn extends React.Component {
             })
             .catch(err => {
                 callback(err)
-                console.error('User signin error', err)
             })
     }
 
