@@ -81,7 +81,7 @@ export default class Activity1AdvicesDetail extends React.Component {
                 <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>
                 <Text style={styles.text}>{this.props.activity.subtitle}</Text>
                 <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.activity.level)} />
-                <Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>
+                {/*<Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>*/}
 
             </View>
         )
