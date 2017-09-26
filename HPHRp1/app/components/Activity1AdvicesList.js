@@ -107,8 +107,12 @@ const list = [
 export default class Activity1AdvicesList extends React.Component {
 
     onPress = (i) => {
-        let obj = list[i]
-        Actions.tab_advices_activity_1_detail({ activity: obj })
+        // let obj = list[i]
+        // Actions.tab_advices_activity_1_detail({ activity: obj })
+        let level = list[i].level
+        let title = list[i].title
+        let subtitle = list[i].subtitle
+        Actions.tab_advices_activity_1_detail({ level, title, subtitle })
     }
 
     render() {

@@ -6,8 +6,14 @@ import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import styles from '../styles/index'
 import Sound from 'react-native-sound'
+import PropTypes from 'prop-types'
 
 export default class SurgeryDetail extends React.Component {
+
+    static propTypes = {
+        surgery: PropTypes.object.isRequired
+    }
+
     constructor(props) {
         super(props)
     }

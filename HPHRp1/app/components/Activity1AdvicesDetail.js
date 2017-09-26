@@ -4,14 +4,18 @@ import { Icon } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
-import Swiper from 'react-native-swiper'
 import styles from '../styles/index'
 import Sound from 'react-native-sound'
+import PropTypes from 'prop-types'
 
 export default class Activity1AdvicesDetail extends React.Component {
+    static propTypes = {
+        level: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        subtitle: PropTypes.string.isRequired,
+    }
     constructor(props) {
         super(props)
-
     }
 
     playSound = (level) => {
@@ -99,11 +103,11 @@ export default class Activity1AdvicesDetail extends React.Component {
         return (
             <View style={_styles.slide}>
                 <ScrollView>
-                    {this.props.activity.level <= 10 ? <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text> :
-                        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>{this.props.activity.title}</Text>}
+                    {this.props.level <= 10 ? <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.level}   {this.props.title}</Text> :
+                        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>{this.props.title}</Text>}
                     {/*<Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>*/}
-                    <Text style={styles.text}>{this.props.activity.subtitle}</Text>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.activity.level)} />
+                    <Text style={styles.text}>{this.props.subtitle}</Text>
+                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.level)} />
                     {/*<Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>*/}
                 </ScrollView>
             </View>

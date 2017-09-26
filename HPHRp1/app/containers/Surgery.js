@@ -136,7 +136,6 @@ class Surgery extends React.Component {
         }
     }
 
-
     getSurgeries = () => {
         this.ref = firebase.database().ref(`surgery`) //read all user's surgeries
         this.ref.on('value', this.handleSurgeryUpdate)
