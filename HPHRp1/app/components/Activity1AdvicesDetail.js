@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, Image, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Alert, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
@@ -69,6 +69,26 @@ export default class Activity1AdvicesDetail extends React.Component {
                 const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
                 break
             }
+            case 11: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 12: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 13: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 14: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
+            case 15: {
+                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                break
+            }
             default: return
         }
 
@@ -78,11 +98,14 @@ export default class Activity1AdvicesDetail extends React.Component {
         console.log(this.props)
         return (
             <View style={_styles.slide}>
-                <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>
-                <Text style={styles.text}>{this.props.activity.subtitle}</Text>
-                <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.activity.level)} />
-                {/*<Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>*/}
-
+                <ScrollView>
+                    {this.props.activity.level <= 10 ? <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text> :
+                        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>{this.props.activity.title}</Text>}
+                    {/*<Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>*/}
+                    <Text style={styles.text}>{this.props.activity.subtitle}</Text>
+                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.activity.level)} />
+                    {/*<Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>*/}
+                </ScrollView>
             </View>
         )
     }
