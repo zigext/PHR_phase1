@@ -1,6 +1,6 @@
 import React, { Component, } from 'react'
 import { StyleSheet, View, Text, Button } from 'react-native'
-import {Actions} from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux'
 import FoodAdvicesButton from '../components/FoodAdvicesButton'
 import ExerciseAdvicesButton from '../components/ExerciseAdvicesButton'
 import ActivityAdvicesButton from '../components/ActivityAdvicesButton'
@@ -24,15 +24,30 @@ class MainAdvices extends React.Component {
         Actions.tab_advices_food()
     }
 
+    onExercisePress = () => {
+        Actions.tab_advices_exercise()
+    }
+
+    onDailyPress = () => {
+        Actions.tab_advices_daily()
+    }
+
+    onProhibitPress = () => {
+        Actions.tab_advices_prohibit()
+    }
+    onActivityPress = () => {
+        Actions.tab_advices_activity()
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <FoodAdvicesButton onFoodPress={this.onFoodPress}/>
-				<ExerciseAdvicesButton />
-				<DailyAdvicesButton />
-				<ActivityAdvicesButton />
-				<InstructionAdvicesButton />
-				<ProhibitAdvicesButton />
+                <FoodAdvicesButton onFoodPress={this.onFoodPress} />
+                <ExerciseAdvicesButton onExercisePress={this.onExercisePress} />
+                <DailyAdvicesButton onDailyPress={this.onDailyPress} />
+                <ActivityAdvicesButton onActivityPress={this.onActivityPress}/>
+                <InstructionAdvicesButton />
+                <ProhibitAdvicesButton onProhibitPress={this.onProhibitPress} />
             </View>
         )
     }
