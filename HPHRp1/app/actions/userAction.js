@@ -23,3 +23,9 @@ export const addNewSurgery = () => {
         type: types.ADD_NEW_SURGERY
     }
 }
+
+export const editProfile = () => {
+    return {
+        type: types.EDIT_PROFILE
+    }
+}
