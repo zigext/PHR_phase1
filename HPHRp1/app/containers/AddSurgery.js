@@ -13,6 +13,7 @@ class AddSurgery extends React.Component {
             then((data) => {
                 console.log("add new surgery to database success")
                 this.props.dispatchAddNewSurgery()
+                callback(null)
                 Actions.surgery()
             }).
             catch((err) => {
