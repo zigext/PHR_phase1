@@ -36,9 +36,11 @@ import thunkMiddleware from 'redux-thunk'
 import CreateLogger from 'redux-logger'
 import Login from './Login'
 import Home from './Home'
+import Activity from './Activity'
 import ForgotPassword from './ForgotPassword'
 import Profile from './Profile'
 import Surgery from './Surgery'
+import AddSurgery from './AddSurgery'
 import MainAdvices from './MainAdvices'
 import FoodAdvices from './FoodAdvices'
 import ExerciseAdvices from './ExerciseAdvices'
@@ -111,6 +113,7 @@ export default class App extends React.Component {
                                     <Scene key="profile" component={Profile} title="ข้อมูลส่วนตัว" back />
                                     <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back />
                                     <Scene key="surgeryDetail" component={SurgeryDetail} title="ข้อมูลการผ่าตัด" back />
+                                    <Scene key="addSurgery" component={AddSurgery} title="เพิ่มข้อมูลการผ่าตัด" back />
 
                                     <Drawer
                                         key="drawer"
@@ -144,8 +147,6 @@ export default class App extends React.Component {
                                                         key="tab_home_1"
                                                         component={Home}
                                                         title="หน้าหลัก"
-
-
                                                     />
                                                 </Stack>
 
@@ -159,7 +160,7 @@ export default class App extends React.Component {
                                                 >
                                                     <Scene
                                                         key="tab_activity_1"
-                                                        component={Home}
+                                                        component={Activity}
                                                         title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจ"
 
                                                     />
