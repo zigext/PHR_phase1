@@ -19,7 +19,6 @@ export default class Profile extends React.Component {
     }
 
     render() {
-        console.log("str ", this.changeArrayToString(this.props.profile.allergic_food))
         return (
             
                 <View style={_styles.container}>
