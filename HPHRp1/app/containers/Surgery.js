@@ -185,7 +185,7 @@ class Surgery extends React.Component {
                     </List>
                 
                 </ScrollView>
-                  <ActionButton buttonColor="#f49842" onPress={this.onPressActionButton} />
+                  <ActionButton buttonColor="#f49842" onPress={() =>  Actions.addSurgery()} />
             </View>
         )
     }
