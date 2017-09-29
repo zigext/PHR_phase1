@@ -39,6 +39,7 @@ import Home from './Home'
 import Activity from './Activity'
 import ForgotPassword from './ForgotPassword'
 import Profile from './Profile'
+import EditProfile from './EditProfile'
 import Surgery from './Surgery'
 import AddSurgery from './AddSurgery'
 import MainAdvices from './MainAdvices'
@@ -111,6 +112,7 @@ export default class App extends React.Component {
                                     <Scene key="launch" component={Login} title="Heart PHR phase 1" initial />
                                     <Scene key="forgotPassword" component={ForgotPassword} title="รีเซ็ตรหัสผ่าน" back />
                                     <Scene key="profile" component={Profile} title="ข้อมูลส่วนตัว" back />
+                                    <Scene key="editProfile" component={EditProfile} title="แก้ไขข้อมูลส่วนตัว" back />
                                     <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back />
                                     <Scene key="surgeryDetail" component={SurgeryDetail} title="ข้อมูลการผ่าตัด" back />
                                     <Scene key="addSurgery" component={AddSurgery} title="เพิ่มข้อมูลการผ่าตัด" back />
