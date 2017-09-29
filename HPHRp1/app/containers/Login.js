@@ -1,8 +1,10 @@
 import React from 'react'
-import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, FlatList } from 'react-native'
+import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, StyleSheet } from 'react-native'
 import firebase from '../config/Firebase'
 import LogInForm from '../components/Login'
 import { Icon } from 'react-native-elements'
+import ActionButton from 'react-native-action-button'
+// import Icon from 'react-native-vector-icons'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { logIn } from '../actions/userAction'
@@ -15,9 +17,9 @@ class LogIn extends React.Component {
 
     componentWillMount = async () => {
         const currentUser = firebase.auth().currentUser
-        if (currentUser) {
-            Actions.homePage()
-        }
+        // if (currentUser) {
+        //     Actions.homePage()
+        // }
     }
 
     onLoginPress = (email, password, callback) => {
@@ -58,6 +60,10 @@ class LogIn extends React.Component {
         Actions.forgotPassword()
     }
 
+       onPressActionButton = () => {
+        Actions.addSurgery()
+    }
+
     // createUsersDatabase (uid) {
     //   firebase.database().ref(`bookshelfs/${uid}`).set([{ '1455572101': 10 }])
     // }
@@ -77,6 +83,9 @@ class LogIn extends React.Component {
         return (
             <View>
                 <LogInForm onLoginPress={this.onLoginPress} onForgotPasswordPress={this.onForgotPasswordPress} />
+                 {/*<ActionButton buttonColor="rgba(231,76,60,1)" onPress={() =>  Actions.addSurgery()}>
+                  
+                </ActionButton>*/}
                 {/*<Icon name='home' type='font-awesome' />
                 <Icon name='bar-graph' type='entypo' />
                 <Icon name='file-document-box' type='material-community' />
@@ -98,3 +107,16 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn)
+
+const styles = StyleSheet.create({
+    item: {
+        padding: 10,
+        fontSize: 20,
+        height: 50,
+        fontWeight: 'bold'
+    },
+    actionButtonIcon: {
+        
+   
+    }
+})
