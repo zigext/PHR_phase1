@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableHighlight, ToastAndroid, Keyboard, Button, DatePickerAndroid } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, TouchableHighlight, ToastAndroid, Keyboard, Button, DatePickerAndroid } from 'react-native'
 import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import moment from 'moment'
@@ -100,17 +100,17 @@ export default class AddSurgeryForm extends React.Component {
     render() {
         return (
             <View style={_styles.container}>
-                <Form ref="form" type={Surgery} value={this.state.dateValue} options={options} />
-                {/*<Form ref="form" type={Surgery} options={options} />*/}
-                <TouchableHighlight
-                    style={this.state.loading ? _styles.disabledButton : _styles.button}
-                    onPress={this.onPress}
-                    underlayColor='#99d9f4'
-                    disabled={this.state.loading}
-                >
-                    <Text style={_styles.buttonText}>เพิ่ม</Text>
-                </TouchableHighlight>
-
+                <ScrollView>
+                    <Form ref="form" type={Surgery} value={this.state.dateValue} options={options} />
+                    <TouchableHighlight
+                        style={this.state.loading ? _styles.disabledButton : _styles.button}
+                        onPress={this.onPress}
+                        underlayColor='#99d9f4'
+                        disabled={this.state.loading}
+                    >
+                        <Text style={_styles.buttonText}>เพิ่ม</Text>
+                    </TouchableHighlight>
+                </ScrollView>
             </View>
         )
     }
