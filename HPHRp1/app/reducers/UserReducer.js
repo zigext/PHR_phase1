@@ -17,7 +17,11 @@ export default function UserReducer(state = initialState, action = {}) {
         case types.GET_PROFILE:
             return {
                 ...state,
-               user: Object.assign(state.user,action.payload)
+                user: Object.assign(state.user, action.payload)
+            }
+        case types.ADD_NEW_SURGERY:
+            return {
+                ...state
             }
         default:
             return state

@@ -17,3 +17,9 @@ export const getProfile = (profile) => {
         }
     }
 }
+
+export const addNewSurgery = () => {
+    return {
+        type: types.ADD_NEW_SURGERY
+    }
+}
