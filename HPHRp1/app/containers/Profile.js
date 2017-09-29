@@ -4,6 +4,8 @@ import firebase from '../config/Firebase'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
+import ActionButton from 'react-native-action-button'
+import { Icon } from 'react-native-elements'
 import { getProfile } from '../actions/userAction'
 import ProfileContent from '../components/Profile'
 
@@ -39,6 +41,7 @@ class Profile extends React.Component {
         return (
             <View style={styles.container}>
                 <ProfileContent profile={this.profile}></ProfileContent>
+                <ActionButton buttonColor="#f49842" onPress={() =>  Actions.editProfile()} />
             </View>
         )
     }
