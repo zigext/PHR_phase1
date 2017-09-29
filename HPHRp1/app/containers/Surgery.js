@@ -107,6 +107,9 @@ import Sound from 'react-native-sound'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
+import ActionButton from 'react-native-action-button'
+// import Icon from 'react-native-vector-icons'
+import { Icon } from 'react-native-elements'
 import firebase from '../config/Firebase'
 
 
@@ -158,23 +161,32 @@ class Surgery extends React.Component {
         Actions.surgeryDetail({ surgery: obj })
     }
 
+    onPressActionButton = () => {
+        console.log("click action button")
+        Actions.addSurgery()
+    }
+
     render() {
         return (
-            <ScrollView>
-                <List>
-                    {
-                        this.state.surgeryArray.map((item, i) => (
-                            <ListItem
-                                key={i}
-                                title={<Text style={styles.item}>วันที่   {item.date}   {item.type}</Text>}
-                                subtitle={<Text style={{ fontSize: 18 }}>Doctor   {item.doctor}</Text>}
-                                titleStyle={styles.item}
-                                onPress={() => this.onPress(i)}
-                            />
-                        ))
-                    }
-                </List>
-            </ScrollView>
+            <View>
+                <ScrollView>
+                    <List>
+                        {
+                            this.state.surgeryArray.map((item, i) => (
+                                <ListItem
+                                    key={i}
+                                    title={<Text style={styles.item}>วันที่   {item.date}   {item.type}</Text>}
+                                    subtitle={<Text style={{ fontSize: 18 }}>Doctor   {item.doctor}</Text>}
+                                    titleStyle={styles.item}
+                                    onPress={() => this.onPress(i)}
+                                />
+                            ))
+                        }
+                    </List>
+                
+                </ScrollView>
+                  <ActionButton buttonColor="#f49842" onPress={this.onPressActionButton} />
+            </View>
         )
     }
 }
@@ -198,6 +210,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height: 50,
         fontWeight: 'bold'
+    },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
     }
 })
 
