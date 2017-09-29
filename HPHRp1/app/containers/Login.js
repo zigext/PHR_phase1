@@ -83,9 +83,7 @@ class LogIn extends React.Component {
         return (
             <View>
                 <LogInForm onLoginPress={this.onLoginPress} onForgotPasswordPress={this.onForgotPasswordPress} />
-                 {/*<ActionButton buttonColor="rgba(231,76,60,1)" onPress={() =>  Actions.addSurgery()}>
-                  
-                </ActionButton>*/}
+             
                 {/*<Icon name='home' type='font-awesome' />
                 <Icon name='bar-graph' type='entypo' />
                 <Icon name='file-document-box' type='material-community' />
