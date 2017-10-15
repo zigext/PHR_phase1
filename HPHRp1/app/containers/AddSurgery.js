@@ -6,9 +6,14 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { addNewSurgery } from '../actions/userAction'
 
+// *******ERROR*******
+// child keys in firebase have correct time and date
+// but when show in list time and date is not formatted
+
 class AddSurgery extends React.Component {
 
     onAddSurgeryPress = (newSurgery, date, time, doctor, hospital, type, note, callback) => {
+       
         firebase.database().ref(`surgery/${this.props.default.user.uid}_${hospital}_${date}_${time}`).set(newSurgery).
             then((data) => {
                 console.log("add new surgery to database success")

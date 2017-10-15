@@ -8,7 +8,7 @@ import _ from 'lodash'
 let Form = t.form.Form
 
 let Surgery = t.struct({
-    date: t.Date, // a date field
+    date: t.Date, 
     time: t.Date,
     doctor: t.maybe(t.String),
     hospital: t.String,
@@ -66,27 +66,38 @@ let options = {
 }
 
 export default class AddSurgeryForm extends React.Component {
-    // state = {
-    //     loading: false
-    // }
     constructor(props) {
         super(props);
         this.state = {
             loading: false
         }
     }
-    onPress = () => {
+    onPress = async () => {
         this.setState({ loading: true })
-        let newSurgery = this.refs.form.getValue() || {}
+        // let newSurgery = this.refs.form.getValue() || {}
         let { date, time, doctor, hospital, type, note } = this.refs.form.getValue() || {}
-
+        console.log("value1 ", date , time)
+        // console.log("new surgery ", newSurgery)
         if (!date || !time || !hospital) {
             this.setState({ loading: false })
             ToastAndroid.showWithGravity('กรุณากรอกวันที่ เวลา และโรงพยาบาล', ToastAndroid.SHORT, ToastAndroid.CENTER)
         } else {
-            let date2 = formatDate("YYYY-MM-DD", date)
-            let time2 = formatTime("kk:mm", time)
-            this.props.onAddSurgeryPress(newSurgery, date2, time2, doctor, hospital, type, note, (err) => {
+            let formattedDate = formatDate("YYYY-MM-DD", date)
+            let formattedTime = formatTime("kk:mm", time)
+            let newSurgery = {
+                date: formattedDate,
+                time: formattedTime,
+                doctor: doctor,
+                hospital: hospital,
+                type: type,
+                note: note
+            }
+            // newSurgery.date = formatDate("YYYY-MM-DD", newSurgery.date)
+            // await _.set(newSurgery, 'date', formattedDate)
+            // newSurgery.time = formattedTime
+            console.log("value2 ", formattedDate , formattedTime)
+            console.log("new surgery ", newSurgery)
+            this.props.onAddSurgeryPress(newSurgery, formattedDate, formattedTime, doctor, hospital, type, note, (err) => {
                 this.setState({ loading: false })
                 if (err !== null) {
                     ToastAndroid.showWithGravity('ผิดพลาด ไม่สามารถเพิ่มข้อมูล', ToastAndroid.SHORT, ToastAndroid.CENTER)
