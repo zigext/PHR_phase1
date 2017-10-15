@@ -121,7 +121,6 @@ class Surgery extends React.Component {
         this.state = {
             surgeryArray: []
         }
-        // Keep a local reference of the TODO items
         this.surgeries = {}
         this.surgeryArray = []
     }
@@ -129,7 +128,7 @@ class Surgery extends React.Component {
     componentDidMount() {
         Orientation.lockToLandscape()
         this.getSurgeries()
-        // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.uid}`)
+        // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.user.uid}`)
         // this.ref.on('value', this.handleSurgeryUpdate)
     }
 
@@ -158,11 +157,10 @@ class Surgery extends React.Component {
 
     onPress = (i) => {
         let obj = this.state.surgeryArray[i]
-        Actions.surgeryDetail({ surgery: obj })
+        Actions.surgeryDetail({ surgery: obj, uid: this.props.default.user.uid })
     }
 
     onPressActionButton = () => {
-        console.log("click action button")
         Actions.addSurgery()
     }
 
