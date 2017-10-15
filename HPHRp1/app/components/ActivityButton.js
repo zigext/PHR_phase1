@@ -10,7 +10,7 @@ export default class ActivityButton extends React.Component {
         super(props)
     }
     onPress = () => {
-
+        this.props.onActivityPress()
     }
 
     render() {

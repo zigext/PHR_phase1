@@ -24,7 +24,7 @@ class Home extends React.Component {
 
 
     onActivityPress = (callback) => {
-
+        Actions.tab_activity()
     }
 
     onAdvicesPress = (callback) => {
