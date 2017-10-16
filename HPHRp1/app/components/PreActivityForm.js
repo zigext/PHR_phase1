@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, ToastAndroid, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
 import t from 'tcomb-form-native'
 import styles from '../styles/index'
@@ -30,10 +30,10 @@ hr.getValidationErrorMessage = function (value, path, context) {
 let bp = t.refinement(t.String, function (n) {
     let split = _.split(n, '/')
     console.log("s ", split)
-    if(split[0] > 0 && split[0] < 200 && split[1] > 0 && split[1] < 200){
-        return n!== null
+    if (split[0] > 0 && split[0] < 200 && split[1] > 0 && split[1] < 200) {
+        return n !== null
     }
-    
+
 })
 bp.getValidationErrorMessage = function (value, path, context) {
     return 'ความดันเลือดไม่ถูกต้อง'
@@ -45,16 +45,36 @@ let pre = t.struct({
 })
 
 export default class PreActivityForm extends React.Component {
-  constructor(props){
-      super(props)
-  }
+    constructor(props) {
+        super(props)
+    }
     onPress = () => {
         let value = this.refs.form.getValue()
+
         console.log(value)
-        if(value){
-            this.props.onSubmitPreActivity(value)
+        if (value) {
+            let bp = _.split(value.bp, '/')
+            if (value.hr < 60 || value.hr > 100 || bp[0] > 180 || bp[1] > 110) {
+                if (value.hr < 60 || value.hr > 100) {
+                    Alert.alert(
+                        'คำเตือน',
+                        'ไม่ควรทำกิจกรรมเนื่องจากมีอัตราการเต้นหัวใจที่ผิดปกติ',
+                        [{ text: 'ตกลง', style: 'cancel' }]
+                    )
+                }
+                if (bp[0] > 180 || bp[1] > 110) {
+                    Alert.alert(
+                        'คำเตือน',
+                        'ไม่ควรทำกิจกรรมเนื่องจากมีความดันเลือดที่ผิดปกติ',
+                        [{ text: 'ตกลง', style: 'cancel' }]
+                    )
+                }
+            }
+            else {
+                this.props.onSubmitPreActivity(value)
+            }
         }
-        
+
         // var { email, password } = this.refs.form.getValue() || {}
         // if (!email || !password) {
         //     this.setState({ loading: false })
@@ -76,7 +96,7 @@ export default class PreActivityForm extends React.Component {
         return (
             <View style={_styles.container}>
                 <Form ref='form' type={pre} options={options} />
-                <Icon raised reverse name='ios-arrow-forward' type='ionicon' color={common.accentColor} onPress={this.onPress}
+                <Icon raised reverse name='ios-arrow-forward' type='ionicon' color={common.accentColor} size={35} onPress={this.onPress}
                 />
 
             </View>
