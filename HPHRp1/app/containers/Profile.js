@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Button } from 'react-native'
 import firebase from '../config/Firebase'
+import {SERVER_IP, PROFILE} from '../config/Const'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
@@ -15,9 +16,13 @@ class Profile extends React.Component {
         super(props)
         this.ref = null
         this.profile = {}
+        this.state = {
+            profile: {}
+        }
     }
 
     componentDidMount() {
+        console.log(SERVER_IP)
         Orientation.lockToLandscape()
         this.ref = firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`)
         this.ref.on('value', this.handleProfileUpdate)
@@ -32,8 +37,21 @@ class Profile extends React.Component {
     // Bind the method only once to keep the same reference
     handleProfileUpdate = (snapshot) => {
         this.profile = snapshot.val()
-        console.log('Post Content', this.profile)
         this.props.dispatchProfile(this.profile)
+    }
+
+    fetchProfile = async () => {
+        const path = `${SERVER_IP}${PROFILE}?userid=${this.props.default.user.uid}&appid=${this.props.default.appId}`
+        await fetch(path)
+        .then(response => response.json())
+        .then(responseData => {
+            this.profile = responseData
+            this.setState({profile: this.profile})
+            console.log("Profile = ", this.profile)
+        })
+        .catch(error => {
+            console.log("Error in fetchProfile = ", error)
+        })
     }
 
 
