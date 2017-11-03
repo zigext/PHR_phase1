@@ -23,35 +23,34 @@ class Profile extends React.Component {
     }
 
     componentDidMount() {
-        console.log(SERVER_IP)
         Orientation.lockToLandscape()
         this.fetchProfile()
         // this.ref = firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`)
         // this.ref.on('value', this.handleProfileUpdate)
     }
 
-    componentWillUnmount() {
-        if (this.ref) {
-            this.ref.off('value', this.handleProfileUpdate)
-        }
-    }
+    // componentWillUnmount() {
+    //     if (this.ref) {
+    //         this.ref.off('value', this.handleProfileUpdate)
+    //     }
+    // }
 
-    // Bind the method only once to keep the same reference
-    handleProfileUpdate = (snapshot) => {
-        this.profile = snapshot.val()
-        this.props.dispatchProfile(this.profile)
-    }
+    // // Bind the method only once to keep the same reference
+    // handleProfileUpdate = (snapshot) => {
+    //     this.profile = snapshot.val()
+    //     this.props.dispatchProfile(this.profile)
+    // }
 
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp`
+        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}
         await fetch(path)
         .then(ApiUtils.checkStatus)
         .then(response => response.json())
         .then(responseData => {
             this.profile = responseData.data.profile
             this.setState({profile: this.profile})
-            console.log("response data = ", responseData.data)
-            console.log("Profile = ", this.profile)
+            this.props.dispatchProfile(this.state.profile)
+            console.log("Fetch profile success")
         })
         .catch(error => {
             console.log("Error in fetchProfile = ", error)
@@ -63,7 +62,7 @@ class Profile extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <ProfileContent profile={this.profile}></ProfileContent>
+                <ProfileContent profile={this.state.profile}></ProfileContent>
                 <ActionButton buttonColor="#f49842" onPress={() =>  Actions.editProfile({prevProfile: this.profile})} />
             </View>
         )
