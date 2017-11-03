@@ -4,31 +4,41 @@ import { connect } from 'react-redux'
 import { Grid, Row } from 'react-native-elements'
 import Swiper from 'react-native-swiper'
 import styles from '../styles/index'
-import { join, compact } from 'lodash'
+import { join, compact, replace, trim } from 'lodash'
+
+
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;   
+    return target.split(search).join(replacement);
+}
 
 export default class Profile extends React.Component {
     constructor(props) {
         super(props)
-
     }
 
-    changeArrayToString = (arr) => {
-        let compactArr = compact(arr)
-        let str = join(compactArr, ', ')
-        return str
+    //string comes in [u'something1', u'something2', u'something3'] format
+    formatString = (string) => {
+        // let compactArr = compact(arr)
+        // let str = join(compactArr, ', ')
+        let formattedStr1 = string.replaceAll("u'", "")
+        let formattedStr2 = formattedStr1.replaceAll("'", "")
+        let formattedStr3 = formattedStr2.replaceAll("]", "")
+        let formattedStr4 = formattedStr3.replaceAll("[", "")
+        return formattedStr4
     }
 
     render() {
         return (
-            
-                <View style={_styles.container}>
-                    <View style={_styles.pictureContainer}>
-                        {/*user can upload picture and edit profile*/}
-                        <Image source={require('../../assets/images/user.png')} style={_styles.image}></Image>
-                    </View>
-                    <ScrollView>
+
+            <View style={_styles.container}>
+                <View style={_styles.pictureContainer}>
+                    {/*user can upload picture and edit profile*/}
+                    <Image source={require('../../assets/images/user.png')} style={_styles.image}></Image>
+                </View>
+                <ScrollView>
                     <View style={_styles.contentContainer}>
-                        <Text style={[styles.text, {fontWeight: 'bold', marginBottom: 25, marginTop: 20}]}>ประวัติส่วนตัว</Text>
+                        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25, marginTop: 20 }]}>ประวัติส่วนตัว</Text>
                         <Text style={_styles.text}>ชื่อ : {this.props.profile.firstname} {this.props.profile.lastname}</Text>
                         <Text style={_styles.text}>รหัสผู้ป่วย : {this.props.profile.patient_code}</Text>
                         <Text style={_styles.text}>เพศ : {this.props.profile.gender}</Text>
@@ -39,15 +49,15 @@ export default class Profile extends React.Component {
                         <Text style={_styles.text}>ที่อยู่ : {this.props.profile.address}</Text>
                         <Text style={_styles.text}>เบอร์โทรศัพท์ : {this.props.profile.phone}</Text>
                         <Text style={_styles.text}>เบอร์โทรศัพท์ญาติ : {this.props.profile.kin_phone}</Text>
-                        <Text style={_styles.text}>อาหารที่แพ้ : {this.props.profile.allergic_food ? this.changeArrayToString(this.props.profile.allergic_food) : '-'}</Text>
-                        <Text style={_styles.text}>ยาที่แพ้ : {this.props.profile.allergic_medicine ? this.changeArrayToString(this.props.profile.allergic_medicine) : '-'}</Text>
-                        <Text style={_styles.text}>ยาปัจจุบัน : {this.props.profile.current_medicine ? this.changeArrayToString(this.props.profile.current_medicine) : '-'}</Text>
-                        <Text style={_styles.text}>ภาวะทางการแพทย์ : {this.props.profile.medical_condition ? this.changeArrayToString(this.props.profile.medical_condition) : '-'}</Text>
+                        <Text style={_styles.text}>อาหารที่แพ้ : {this.props.profile.allergic_food ? this.formatString(this.props.profile.allergic_food) : '-'}</Text>
+                        <Text style={_styles.text}>ยาที่แพ้ : {this.props.profile.allergic_medicine ? this.formatString(this.props.profile.allergic_medicine) : '-'}</Text>
+                        <Text style={_styles.text}>ยาปัจจุบัน : {this.props.profile.current_medicine ? this.formatString(this.props.profile.current_medicine) : '-'}</Text>
+                        <Text style={_styles.text}>ภาวะทางการแพทย์ : {this.props.profile.medical_condition ? this.formatString(this.props.profile.medical_condition) : '-'}</Text>
                     </View>
-                    </ScrollView>
+                </ScrollView>
 
-                </View>
-            
+            </View>
+
         )
     }
 }
