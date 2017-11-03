@@ -1,105 +1,3 @@
-// import React from 'react'
-// import { StyleSheet, Text, View, Button, FlatList } from 'react-native'
-// import firebase from '../config/Firebase'
-// import { Actions } from 'react-native-router-flux'
-// import { connect } from 'react-redux'
-// import Orientation from 'react-native-orientation'
-// import _ from 'lodash'
-// import SurgeryInfo from '../components/SurgeryInfo'
-
-
-// class Surgery extends React.Component {
-//     constructor(props) {
-//         super(props)
-//         this.ref = null
-//         this.state = {
-//             surgeryArray: []
-//         }
-//         // Keep a local reference of the TODO items
-//         this.surgeries = {}
-//         this.surgeryArray = []
-//     }
-
-//     componentDidMount() {
-//         Orientation.lockToLandscape()
-//         this.getSurgeries()
-//         // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.uid}`)
-//         // this.ref.on('value', this.handleSurgeryUpdate)
-//     }
-
-//     componentWillUnmount() {
-//         if (this.ref) {
-//             this.ref.off('value', this.handleSurgeryUpdate)
-//         }
-//     }
-
-
-//     getSurgeries = () => {
-//         this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.uid}`)
-//         this.ref.on('value', this.handleSurgeryUpdate)
-//     }
-
-//     // Bind the method only once to keep the same reference
-//     handleSurgeryUpdate = async (snapshot) => {
-//         console.log('Post Content', snapshot)
-//         // this.props.dispatchProfile(this.profile)
-//         this.surgeries = snapshot.val() || {};
-//         this.surgeryArray = Object.keys(this.surgeries).map((k) => this.surgeries[k])
-//         // let sorted = await this.sortContactsByName()
-//         this.setState({
-//             surgeryArray: this.surgeryArray
-//         })
-//     }
-
-//     // sortContactsByName = async () => {
-//     //     // // order by ascending
-//     //     let sortArr = await _.sortBy(this.contactsArray, 'name', function (n) {
-//     //         return Math.sin(n);
-//     //     })
-//     //     return sortArr
-//     // }
-
-//     renderRow(rowData) {
-//         console.log("ROW ", rowData)
-//         return (
-//             <SurgeryInfo {...rowData.item}></SurgeryInfo>
-//         );
-//     }
-
-//     render() {
-//         return (
-//             <View style={styles.container}>
-//                 <FlatList
-//                     data={this.state.surgeryArray}
-//                     renderItem={this.renderRow}
-//                 />
-//             </View>
-//         )
-//     }
-// }
-
-// const mapStateToProps = (state) => {
-//     console.log("mapStateToProps in surgery ", state)
-//     return state
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         // dispatchProfile: (profile) => dispatch(getProfile(profile))
-//     }
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Surgery)
-
-// var styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         flexDirection: 'row',
-//         backgroundColor: '#FFFDF9',
-//         justifyContent: 'center'
-//     }
-// })
-
 import React from 'react'
 import { List, ListItem } from 'react-native-elements'
 import { AppRegistry, StyleSheet, Text, View, ScrollView, Alert, Image, ListView } from 'react-native'
@@ -111,6 +9,8 @@ import ActionButton from 'react-native-action-button'
 // import Icon from 'react-native-vector-icons'
 import { Icon } from 'react-native-elements'
 import firebase from '../config/Firebase'
+import ApiUtils from '../components/ApiUtils'
+import { SERVER_IP, SURGERY } from '../config/Const'
 
 
 class Surgery extends React.Component {
@@ -127,37 +27,65 @@ class Surgery extends React.Component {
 
     componentDidMount() {
         Orientation.lockToLandscape()
-        this.getSurgeries()
+        this.fetchSurgeries()
+        // this.getSurgeries()
         // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.user.uid}`)
         // this.ref.on('value', this.handleSurgeryUpdate)
     }
 
-    componentWillUnmount() {
-        if (this.ref) {
-            this.ref.off('value', this.handleSurgeryUpdate)
-        }
+    // componentWillUnmount() {
+    //     if (this.ref) {
+    //         this.ref.off('value', this.handleSurgeryUpdate)
+    //     }
+    // }
+
+    compare = (a, b) => {
+        if (a.information.date < b.information.date)
+            return -1
+        if (a.information.date > b.information.date)
+            return 1
+        return 0
     }
 
-    getSurgeries = () => {
-        this.ref = firebase.database().ref(`surgery`) //read all user's surgeries
-        this.ref.on('value', this.handleSurgeryUpdate)
+    fetchSurgeries = async () => {
+        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}
+        await fetch(path)
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .then(responseData => {
+                let surgeryArray = responseData.data
+                surgeryArray.sort(this.compare) //surgeryArray.sort(function(a,b) {return (a.information.date > b.information.date) ? 1 : ((b.information.date > a.information.date) ? -1 : 0);} );
+                this.setState({
+                    surgeryArray
+                })
+                console.log("Fetch surgeries success ", this.state.surgeryArray)
+            })
+            .catch(error => {
+                console.log("Fetch surgeries failed = ", error)
+
+            })
     }
 
-    // Bind the method only once to keep the same reference
-    handleSurgeryUpdate = async (snapshot) => {
-        console.log('Post Content', snapshot)
-        // this.props.dispatchProfile(this.profile)
-        this.surgeries = snapshot.val() || {};
-        this.surgeryArray = Object.keys(this.surgeries).map((k) => this.surgeries[k])
-        // let sorted = await this.sortContactsByName()
-        this.setState({
-            surgeryArray: this.surgeryArray
-        })
-    }
+    // getSurgeries = () => {
+    //     this.ref = firebase.database().ref(`surgery`) //read all user's surgeries
+    //     this.ref.on('value', this.handleSurgeryUpdate)
+    // }
+
+    // // Bind the method only once to keep the same reference
+    // handleSurgeryUpdate = async (snapshot) => {
+    //     console.log('Post Content', snapshot)
+    //     // this.props.dispatchProfile(this.profile)
+    //     this.surgeries = snapshot.val() || {};
+    //     this.surgeryArray = Object.keys(this.surgeries).map((k) => this.surgeries[k])
+    //     // let sorted = await this.sortContactsByName()
+    //     this.setState({
+    //         surgeryArray: this.surgeryArray
+    //     })
+    // }
 
     onPress = (i) => {
         let obj = this.state.surgeryArray[i]
-        Actions.surgeryDetail({ surgery: obj, uid: this.props.default.user.uid })
+        Actions.surgeryDetail({ surgery: obj.information, uid: this.props.default.user.uid })
     }
 
     onPressActionButton = () => {
@@ -173,17 +101,17 @@ class Surgery extends React.Component {
                             this.state.surgeryArray.map((item, i) => (
                                 <ListItem
                                     key={i}
-                                    title={<Text style={styles.item}>วันที่   {item.date}   {item.type}</Text>}
-                                    subtitle={<Text style={{ fontSize: 18 }}>Doctor   {item.doctor}</Text>}
+                                    title={<Text style={styles.item}>วันที่   {item.information.date}   {item.information.type}</Text>}
+                                    subtitle={<Text style={{ fontSize: 18 }}>Doctor   {item.information.doctor}</Text>}
                                     titleStyle={styles.item}
                                     onPress={() => this.onPress(i)}
                                 />
                             ))
                         }
                     </List>
-                
+
                 </ScrollView>
-                  <ActionButton buttonColor="#f49842" onPress={() =>  Actions.addSurgery()} />
+                <ActionButton buttonColor="#f49842" onPress={() => Actions.addSurgery()} />
             </View>
         )
     }
