@@ -9,6 +9,7 @@ import ActionButton from 'react-native-action-button'
 import { Icon } from 'react-native-elements'
 import { getProfile } from '../actions/userAction'
 import ProfileContent from '../components/Profile'
+import ApiUtils from '../components/ApiUtils'
 
 
 class Profile extends React.Component {
@@ -24,8 +25,9 @@ class Profile extends React.Component {
     componentDidMount() {
         console.log(SERVER_IP)
         Orientation.lockToLandscape()
-        this.ref = firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`)
-        this.ref.on('value', this.handleProfileUpdate)
+        this.fetchProfile()
+        // this.ref = firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`)
+        // this.ref.on('value', this.handleProfileUpdate)
     }
 
     componentWillUnmount() {
@@ -41,16 +43,19 @@ class Profile extends React.Component {
     }
 
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=${this.props.default.user.uid}&appid=${this.props.default.appId}`
+        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp`
         await fetch(path)
+        .then(ApiUtils.checkStatus)
         .then(response => response.json())
         .then(responseData => {
-            this.profile = responseData
+            this.profile = responseData.data.profile
             this.setState({profile: this.profile})
+            console.log("response data = ", responseData.data)
             console.log("Profile = ", this.profile)
         })
         .catch(error => {
             console.log("Error in fetchProfile = ", error)
+            
         })
     }
 
@@ -59,7 +64,7 @@ class Profile extends React.Component {
         return (
             <View style={styles.container}>
                 <ProfileContent profile={this.profile}></ProfileContent>
-                <ActionButton buttonColor="#f49842" onPress={() =>  Actions.editProfile()} />
+                <ActionButton buttonColor="#f49842" onPress={() =>  Actions.editProfile({prevProfile: this.profile})} />
             </View>
         )
     }
