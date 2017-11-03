@@ -39,11 +39,12 @@ class Surgery extends React.Component {
     //     }
     // }
 
+    //sort by date descending
     compare = (a, b) => {
         if (a.information.date < b.information.date)
-            return -1
-        if (a.information.date > b.information.date)
             return 1
+        if (a.information.date > b.information.date)
+            return -1
         return 0
     }
 
@@ -54,7 +55,7 @@ class Surgery extends React.Component {
             .then(response => response.json())
             .then(responseData => {
                 let surgeryArray = responseData.data
-                surgeryArray.sort(this.compare) //surgeryArray.sort(function(a,b) {return (a.information.date > b.information.date) ? 1 : ((b.information.date > a.information.date) ? -1 : 0);} );
+                surgeryArray.sort(this.compare) //surgeryArray.sort(function(a,b) {return (a.information.date > b.information.date) ? -1 : ((b.information.date > a.information.date) ? 1 : 0);} );
                 this.setState({
                     surgeryArray
                 })
