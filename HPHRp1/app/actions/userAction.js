@@ -24,6 +24,13 @@ export const addNewSurgery = () => {
     }
 }
 
+
+export const deleteSurgery = () => {
+    return {
+        type: types.DELETE_SURGERY
+    }
+}
+
 export const editProfile = () => {
     return {
         type: types.EDIT_PROFILE

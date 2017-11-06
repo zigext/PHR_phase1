@@ -23,6 +23,10 @@ export default function UserReducer(state = initialState, action = {}) {
             return {
                 ...state
             }
+        case types.DELETE_SURGERY:
+            return {
+                ...state
+            }
         case types.EDIT_PROFILE:
             return {
                 ...state
