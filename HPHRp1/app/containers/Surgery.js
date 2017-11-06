@@ -49,7 +49,7 @@ class Surgery extends React.Component {
     }
 
     fetchSurgeries = async () => {
-        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}
+        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846` //userid=${this.props.default.user.uid}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
