@@ -30,7 +30,6 @@ class AddSurgery extends React.Component {
     }
 
     addSurgery = async (newSurgery, hospital, date, time, callback) => {
-        console.log("test ", hospital, date, time, newSurgery)
         const path = `${SERVER_IP}${SURGERY}`
         await fetch(path, {
             method: 'POST',
