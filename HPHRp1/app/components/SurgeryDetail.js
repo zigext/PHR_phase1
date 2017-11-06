@@ -7,6 +7,8 @@ import Orientation from 'react-native-orientation'
 import styles from '../styles/index'
 import PropTypes from 'prop-types'
 import firebase from '../config/Firebase'
+import ApiUtils from '../components/ApiUtils'
+import { SERVER_IP, SURGERY } from '../config/Const'
 
 
 
@@ -21,16 +23,17 @@ export default class SurgeryDetail extends React.Component {
         this.ref = null
     }
 
-    deleteSurgery = () => {
+    deleteSurgeryPress = () => {
         Alert.alert(
             'ออกจากระบบ',
             'ต้องการลบรายการนี้หรือไม่?',
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        this.ref = firebase.database().ref(`surgery`)
-                        this.ref.child(`${this.props.uid}_${this.props.surgery.hospital}_${this.props.surgery.date}_${this.props.surgery.time}`).remove()
-                        Actions.surgery()
+                        // this.ref = firebase.database().ref(`surgery`)
+                        // this.ref.child(`${this.props.uid}_${this.props.surgery.hospital}_${this.props.surgery.date}_${this.props.surgery.time}`).remove()
+                        // Actions.surgery()
+                        this.deleteSurgery()
                     }
                 },
                 { text: 'ไม่', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -38,21 +41,47 @@ export default class SurgeryDetail extends React.Component {
         )
 
     }
+    //Have not tested yet
+    deleteSurgery = () => {
+        const path = `${SERVER_IP}${SURGERY}`
+        await fetch(path, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userid: '1416382941765846', //this.props.uid
+                hospitalid: this.props.surgery.hospital,
+                date: this.props.surgery.date,
+                time: this.props.surgery.time,
+            })
+        })
+            .then(ApiUtils.checkStatus)
+            .then(responseData => {
+                console.log("Delete surgery success")
+                Actions.surgery()
 
-    render() {
-        console.log("uid ", this.props.uid, this.props.surgery)
-        return (
-            <View style={_styles.slide}>
-                <ScrollView>
-                    <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25 }]}>วันที่ {this.props.surgery.date}  เวลา {this.props.surgery.time}  ประเภท {this.props.surgery.type}</Text>
-                    <Text style={[styles.text, { marginBottom: 10 }]}>โรงพยาบาล: {this.props.surgery.hospital}</Text>
-                    <Text style={[styles.text, { marginBottom: 10 }]}>แพทย์: {this.props.surgery.doctor}</Text>
-                    <Text style={[styles.text, { marginBottom: 10 }]}>รายละเอียด: {this.props.surgery.note}</Text>
-                    <Icon reverse name='delete' color='#f49842' onPress={this.deleteSurgery} />
-                </ScrollView>
-            </View>
-        )
+            })
+            .catch(error => {
+                console.log("Delete surgery failed = ", error)
+            })
     }
+
+
+render() {
+    return (
+        <View style={_styles.slide}>
+            <ScrollView>
+                <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25 }]}>วันที่ {this.props.surgery.date}  เวลา {this.props.surgery.time}  ประเภท {this.props.surgery.type}</Text>
+                <Text style={[styles.text, { marginBottom: 10 }]}>โรงพยาบาล: {this.props.surgery.hospital}</Text>
+                <Text style={[styles.text, { marginBottom: 10 }]}>แพทย์: {this.props.surgery.doctor}</Text>
+                <Text style={[styles.text, { marginBottom: 10 }]}>รายละเอียด: {this.props.surgery.note}</Text>
+                <Icon raised reverse name='delete' color='#f49842' onPress={this.deleteSurgeryPress} />
+            </ScrollView>
+        </View>
+    )
+}
 }
 
 const _styles = StyleSheet.create({
