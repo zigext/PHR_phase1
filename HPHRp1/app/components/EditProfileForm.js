@@ -1,10 +1,19 @@
 import React from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableHighlight, ToastAndroid, Keyboard } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, TouchableHighlight, ToastAndroid, Keyboard, Image } from 'react-native'
 import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import moment from 'moment'
 import _ from 'lodash'
+import ImagePicker from 'react-native-image-picker'
+import ImageResizer from 'react-native-image-resizer'
 
+const imageOptions = {
+    title: 'Choose a photo',
+    storageOptions: {
+        skipBackup: true,
+        path: 'images'
+    }
+}
 let Form = t.form.Form
 
 let Profile = t.struct({
@@ -63,14 +72,21 @@ export default class EditProfileForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            loading: false
+            loading: false,
+            
+            path: '',
+            filename: '',
+            timestamp: '',
+            // imageSource: 'https://firebasestorage.googleapis.com/v0/b/cardiac-surgery-phr.appspot.com/o/images%2FScreenshot_2017-09-30-16-15-40.png%2Bundefined?alt=media&token=e50f6a4e-3b8f-4686-8b79-143f8e84b199' 
         }
+        
+
     }
-    onPress = () => {
+    onSubmitPress = () => {
         this.setState({ loading: true })
         let newProfile = this.refs.form.getValue() || {}
         let formattedProfile = _.pickBy(newProfile, _.identity) //remove keys that are null or undefined
-        this.props.onEditProfilePress(formattedProfile, (err) => {
+        this.props.onEditProfilePress(formattedProfile, this.state.path, this.state.filename, this.state.timestamp, (err) => {
             this.setState({ loading: false })
             if (err !== null) {
                 ToastAndroid.showWithGravity('ผิดพลาด ไม่สามารถแก้ไขข้อมูล', ToastAndroid.SHORT, ToastAndroid.CENTER)
@@ -80,14 +96,52 @@ export default class EditProfileForm extends React.Component {
         })
     }
 
+    onChoosePhotoPress = () => {
+        ImagePicker.showImagePicker(imageOptions, response => {
+            console.log('Response = ', response)
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker')
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error)
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton)
+            } else {
+                   
+                let imageSource = { uri: 'data:image/jpeg;base64,' + response.data }
+                console.log('source', imageSource)
+                let imageUri = response.uri + ''
+                console.log('imageUri', imageUri)
+                let filename = response.fileName + ''
+                let timestamp = response.timestamp + ''
+                ImageResizer.createResizedImage(imageUri, 328, 495, 'JPEG', 60).then(response => {
+                    let path = response.path + ''
+                    this.setState({ path, filename, timestamp})
+                     this.setState({ imageSource: imageUri })
+                })
+                // .catch(err => {
+                //   console.log('err', err)
+                //   Alert.alert('Oops, something went wrong', err)
+                // })
+            }
+        })
+    }
+
     render() {
+        console.log("Prev profile = ", this.props.prevProfile)
         return (
             <View style={_styles.container}>
                 <ScrollView>
+                    <Image source={{uri:this.state.imageSource}} style={_styles.image}></Image>
+
+                    <TouchableHighlight style={_styles.button} onPress={this.onChoosePhotoPress} underlayColor='#99d9f4'>
+                        <Text style={_styles.buttonText}>เลือกรูปภาพ</Text>
+                    </TouchableHighlight>
+
                     <Form ref="form" type={Profile} options={options} />
                     <TouchableHighlight
                         style={this.state.loading ? _styles.disabledButton : _styles.button}
-                        onPress={this.onPress}
+                        onPress={this.onSubmitPress}
                         underlayColor='#99d9f4'
                         disabled={this.state.loading}
                     >
@@ -134,5 +188,12 @@ var _styles = StyleSheet.create({
         marginTop: 20,
         alignSelf: 'stretch',
         justifyContent: 'center'
+    },
+       image: {
+        height: 200,
+        borderRadius: 100,
+        width: 200,
+        margin: 10,
+        alignSelf: 'center'
     }
 })

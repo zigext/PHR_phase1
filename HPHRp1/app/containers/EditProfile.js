@@ -10,8 +10,23 @@ import ApiUtils from '../components/ApiUtils'
 
 class EditProfile extends React.Component {
 
-    onEditProfilePress = (newProfile, callback) => {
-        this.editProfile(newProfile, callback)
+    onEditProfilePress = (newProfile, pathStorage, filename, timestamp, callback) => {
+        firebase
+            .storage()
+            .ref(`/images/${filename}+${timestamp}`)
+            .putFile(pathStorage)
+            .then(uploadedFile => {
+                console.log('Upload complete: ', uploadedFile)
+                let downloadUrl = uploadedFile.downloadUrl
+                newProfile.picture_uri = downloadUrl //need TEST
+                this.editProfile(newProfile, callback)
+            })
+            .catch(err => {
+                callback(err)
+            })
+        // this.editProfile(newProfile, callback)
+
+        // console.log('Upload complete: ', uploadedFile)
         // firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`).update(newProfile).
         //     then((data) => {
         //         console.log("edit profile in database success")
@@ -24,7 +39,7 @@ class EditProfile extends React.Component {
         //         callback(err)
         //     })
     }
-    //write over or edit in server?
+    //edit in server
     editProfile = async (newProfile, callback) => {
         const path = `${SERVER_IP}${PROFILE}`
         await fetch(path, {
@@ -55,9 +70,9 @@ class EditProfile extends React.Component {
     }
 
     render() {
-        console.log("prev ", this.props.prevProfile)
+
         return (
-            <EditProfileForm onEditProfilePress={this.onEditProfilePress} prevProfile={this.props.prevProfile}/>
+            <EditProfileForm onEditProfilePress={this.onEditProfilePress} prevProfile={this.props.prevProfile} />
         )
     }
 }
