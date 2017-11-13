@@ -43,29 +43,29 @@ export default class SurgeryDetail extends React.Component {
     }
     //Have not tested yet
     deleteSurgery = () => {
-        const path = `${SERVER_IP}${SURGERY}`
-        await fetch(path, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userid: '1416382941765846', //this.props.uid
-                hospitalid: this.props.surgery.hospital,
-                date: this.props.surgery.date,
-                time: this.props.surgery.time,
-            })
-        })
-            .then(ApiUtils.checkStatus)
-            .then(responseData => {
-                console.log("Delete surgery success")
-                Actions.surgery()
+        // const path = `${SERVER_IP}${SURGERY}`
+        // await fetch(path, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         userid: '1416382941765846', //this.props.uid
+        //         hospitalid: this.props.surgery.hospital,
+        //         date: this.props.surgery.date,
+        //         time: this.props.surgery.time,
+        //     })
+        // })
+        //     .then(ApiUtils.checkStatus)
+        //     .then(responseData => {
+        //         console.log("Delete surgery success")
+        //         Actions.surgery()
 
-            })
-            .catch(error => {
-                console.log("Delete surgery failed = ", error)
-            })
+        //     })
+        //     .catch(error => {
+        //         console.log("Delete surgery failed = ", error)
+        //     })
     }
 
 
