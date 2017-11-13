@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Button } from 'react-native'
 import firebase from '../config/Firebase'
-import {SERVER_IP, PROFILE} from '../config/Const'
+import { SERVER_IP, PROFILE } from '../config/Const'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
@@ -44,18 +44,18 @@ class Profile extends React.Component {
     fetchProfile = async () => {
         const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}
         await fetch(path)
-        .then(ApiUtils.checkStatus)
-        .then(response => response.json())
-        .then(responseData => {
-            this.profile = responseData.data.profile
-            this.setState({profile: this.profile})
-            this.props.dispatchProfile(this.state.profile)
-            console.log("Fetch profile success")
-        })
-        .catch(error => {
-            console.log("Error in fetchProfile = ", error)
-            
-        })
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .then(responseData => {
+                this.profile = responseData.data.profile
+                this.setState({ profile: this.profile })
+                this.props.dispatchProfile(this.state.profile)
+                console.log("Fetch profile success")
+            })
+            .catch(error => {
+                console.log("Error in fetchProfile = ", error)
+
+            })
     }
 
 
@@ -63,7 +63,8 @@ class Profile extends React.Component {
         return (
             <View style={styles.container}>
                 <ProfileContent profile={this.state.profile}></ProfileContent>
-                <ActionButton buttonColor="#f49842" onPress={() =>  Actions.editProfile({prevProfile: this.profile})} />
+           
+                <ActionButton buttonColor="#f49842" onPress={() => Actions.editProfile({ prevProfile: this.profile })} />
             </View>
         )
     }

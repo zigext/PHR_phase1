@@ -5,10 +5,11 @@ import { Grid, Row } from 'react-native-elements'
 import Swiper from 'react-native-swiper'
 import styles from '../styles/index'
 import { join, compact, replace, trim } from 'lodash'
+import moment from 'moment'
 
-
+//replace in String
 String.prototype.replaceAll = function (search, replacement) {
-    var target = this;   
+    var target = this;
     return target.split(search).join(replacement);
 }
 
@@ -28,35 +29,80 @@ export default class Profile extends React.Component {
         return formattedStr4
     }
 
+    //Change duration from ms to hr:min
+    formatDuration = (ms) => {
+        let hm = moment.utc(ms).format('HH:mm')
+        return hm
+        
+    }
+
     render() {
         return (
-
-            <View style={_styles.container}>
-                <View style={_styles.pictureContainer}>
-                    {/*user can upload picture and edit profile*/}
-                    <Image source={require('../../assets/images/user.png')} style={_styles.image}></Image>
-                </View>
-                <ScrollView>
-                    <View style={_styles.contentContainer}>
-                        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25, marginTop: 20 }]}>ประวัติส่วนตัว</Text>
-                        <Text style={_styles.text}>ชื่อ : {this.props.profile.firstname} {this.props.profile.lastname}</Text>
-                        <Text style={_styles.text}>รหัสผู้ป่วย : {this.props.profile.patient_code}</Text>
-                        <Text style={_styles.text}>เพศ : {this.props.profile.gender}</Text>
-                        <Text style={_styles.text}>ส่วนสูง : {this.props.profile.height} เซนติเมตร</Text>
-                        <Text style={_styles.text}>น้ำหนัก : {this.props.profile.weight} กิโลกรัม</Text>
-                        <Text style={_styles.text}>หมู่เลือด : {this.props.profile.blood_type}</Text>
-                        <Text style={_styles.text}>วันเกิด : {this.props.profile.birthday}</Text>
-                        <Text style={_styles.text}>ที่อยู่ : {this.props.profile.address}</Text>
-                        <Text style={_styles.text}>เบอร์โทรศัพท์ : {this.props.profile.phone}</Text>
-                        <Text style={_styles.text}>เบอร์โทรศัพท์ญาติ : {this.props.profile.kin_phone}</Text>
-                        <Text style={_styles.text}>อาหารที่แพ้ : {this.props.profile.allergic_food ? this.formatString(this.props.profile.allergic_food) : '-'}</Text>
-                        <Text style={_styles.text}>ยาที่แพ้ : {this.props.profile.allergic_medicine ? this.formatString(this.props.profile.allergic_medicine) : '-'}</Text>
-                        <Text style={_styles.text}>ยาปัจจุบัน : {this.props.profile.current_medicine ? this.formatString(this.props.profile.current_medicine) : '-'}</Text>
-                        <Text style={_styles.text}>ภาวะทางการแพทย์ : {this.props.profile.medical_condition ? this.formatString(this.props.profile.medical_condition) : '-'}</Text>
+            <Swiper style={_styles.wrapper} showsButtons>
+                {/*general information*/}
+                <View style={_styles.container}>
+                    <View style={_styles.pictureContainer}>
+                        <Image source={{ uri: this.props.profile.picture_uri }} style={_styles.image}></Image>
                     </View>
-                </ScrollView>
+                    <ScrollView>
 
-            </View>
+                        <View style={_styles.contentContainer}>
+                            <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25, marginTop: 20 }]}>ข้อมูลทั่วไป</Text>
+                            <Text style={_styles.text}>ชื่อ : {this.props.profile.firstname} {this.props.profile.lastname}</Text>
+                            <Text style={_styles.text}>รหัสผู้ป่วย : {this.props.profile.patient_code}</Text>
+                            <Text style={_styles.text}>รหัสบัตรประชาชน : {this.props.profile.id_card}</Text>
+                            <Text style={_styles.text}>เพศ : {this.props.profile.gender}</Text>
+                            <Text style={_styles.text}>ส่วนสูง : {this.props.profile.height} เซนติเมตร</Text>
+                            <Text style={_styles.text}>น้ำหนัก : {this.props.profile.weight} กิโลกรัม</Text>
+                            <Text style={_styles.text}>หมู่เลือด : {this.props.profile.blood_type}</Text>
+                            <Text style={_styles.text}>วันเกิด : {this.props.profile.birthday}</Text>
+                            <Text style={_styles.text}>ที่อยู่ : {this.props.profile.address}</Text>
+                            <Text style={_styles.text}>เบอร์โทรศัพท์ : {this.props.profile.phone}</Text>
+                            <Text style={_styles.text}>ชื่อญาติ : {this.props.profile.cousin_name}</Text>
+                            <Text style={_styles.text}>เบอร์โทรศัพท์ญาติ : {this.props.profile.cousin_phone}</Text>
+                            <Text style={_styles.text}>อาหารที่แพ้ : {this.props.profile.allergic_food ? this.formatString(this.props.profile.allergic_food) : '-'}</Text>
+                            <Text style={_styles.text}>ยาที่แพ้ : {this.props.profile.allergic_medicine ? this.formatString(this.props.profile.allergic_medicine) : '-'}</Text>
+                            <Text style={_styles.text}>ยาปัจจุบัน : {this.props.profile.current_medicine ? this.formatString(this.props.profile.current_medicine) : '-'}</Text>
+                        </View>
+
+
+                    </ScrollView>
+
+                </View>
+
+                {/*medical information*/}
+                <View style={_styles.container}>
+                    <View style={_styles.pictureContainer}>
+                        <Image source={{ uri: this.props.profile.picture_uri }} style={_styles.image}></Image>
+                    </View>
+                    <ScrollView>
+
+                        <View style={_styles.contentContainer}>
+                            <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25, marginTop: 20 }]}>ข้อมูลการรักษา</Text>
+                            <Text style={_styles.text}>วันที่รับเข้าโรงพยาบาล : {this.props.profile.admit_date}</Text>
+                            <Text style={_styles.text}>ดัชนีมวลกาย : {this.props.profile.bmi}</Text>
+                            <Text style={_styles.text}>ระดับความรุนแรงของหัวใจตามเกณฑ์สมาคมโรคหัวใจนิวยอร์ก  : {this.props.profile.nyha_class}</Text>
+                            <Text style={_styles.text}>ประสิทธิภาพการบีบตัวของกล้ามเนื้อหัวใจ  : {this.props.profile.ejection_fraction}</Text>
+                            <Text style={_styles.text}>โรคประจำตัว : {this.props.profile.medical_condition ? this.formatString(this.props.profile.medical_condition) : '-'}</Text>
+                            <Text style={_styles.text}>ประวัติการสูบบุหรี่ : {this.props.profile.is_smoking}</Text>
+                            <Text style={_styles.text}>วันที่ผ่าตัดหัวใจ : {this.props.profile.surgery_date}</Text>
+                            <Text style={_styles.text}>เวลาที่ผ่าตัดหัวใจ : {this.props.profile.surgery_time}</Text>
+                            <Text style={_styles.text}>ระยะเวลาในการผ่าตัด : {this.formatDuration(this.props.profile.surgery_duration)}</Text>
+                            <Text style={_styles.text}>ระยะเวลาที่ใส่ท่อช่วยหายใจ  : {this.formatDuration(this.props.profile.surgery_breathing_tube_time)}</Text>
+                            <Text style={_styles.text}>ระยะเวลาที่ใช้เครื่องปอดและหัวใจเทียม : {this.formatDuration(this.props.profile.surgery_cpb_time)}</Text>
+                            <Text style={_styles.text}>ระยะเวลาในการหนีบหลอดเลือด Aorta : {this.formatDuration(this.props.surgery_aorta_time)}</Text>
+                            <Text style={_styles.text}>ปริมาณเลือดที่เสียระหว่างผ่าตัด : {this.props.profile.surgery_blood_loss}</Text>
+                            <Text style={_styles.text}>จำนวนของเส้นเลือดทั้งหมดที่ทำทางเบี่ยง : {this.props.profile.surgery_number_vessel}</Text>
+                            <Text style={_styles.text}>จำนวนเส้นเลือด Sapheneous vein ที่ทำทางเบี่ยง : {this.props.profile.surgery_sapheneous_vein}</Text>
+                            <Text style={_styles.text}>จำนวนเส้นเลือด Radial artery ที่ทำทางเบี่ยง : {this.props.profile.surgery_radial_artery}</Text>
+                            <Text style={_styles.text}>จำนวนเส้นเลือด Internal mammary artery ที่ทำทางเบี่ยง : {this.props.profile.surgery_mammary_artery}</Text>
+                        </View>
+
+
+                    </ScrollView>
+
+                </View>
+            </Swiper>
 
         )
     }
