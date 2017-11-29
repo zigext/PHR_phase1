@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native'
+import { StyleSheet, Text, View, Button, AsyncStorage, BackAndroid } from 'react-native'
 import firebase from '../config/Firebase'
 import { SERVER_IP, PROFILE } from '../config/Const'
 import { Actions } from 'react-native-router-flux'
@@ -42,7 +42,8 @@ class Profile extends React.Component {
     // }
 
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}
+        console.log("FETCHING...")
+        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
@@ -54,7 +55,7 @@ class Profile extends React.Component {
             })
             .catch(error => {
                 console.log("Error in fetchProfile = ", error)
-
+                console.log(path)
             })
     }
 
@@ -63,7 +64,7 @@ class Profile extends React.Component {
         return (
             <View style={styles.container}>
                 <ProfileContent profile={this.state.profile}></ProfileContent>
-           
+
                 <ActionButton buttonColor="#f49842" onPress={() => Actions.editProfile({ prevProfile: this.profile })} />
             </View>
         )
