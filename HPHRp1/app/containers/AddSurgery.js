@@ -48,6 +48,7 @@ class AddSurgery extends React.Component {
             .then(ApiUtils.checkStatus)
             .then(responseData => {
                 console.log("Add surgery success")
+                console.log("response ", responseData)
                 this.props.dispatchAddNewSurgery()
                 callback(null)
                 Actions.surgery()
