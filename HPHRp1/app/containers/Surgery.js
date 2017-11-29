@@ -1,6 +1,6 @@
 import React from 'react'
 import { List, ListItem } from 'react-native-elements'
-import { AppRegistry, StyleSheet, Text, View, ScrollView, Alert, Image, ListView } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View, ScrollView, Alert, Image, ListView, NetInfo, ToastAndroid } from 'react-native'
 import Sound from 'react-native-sound'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
@@ -19,7 +19,8 @@ class Surgery extends React.Component {
         super(props)
         this.ref = null
         this.state = {
-            surgeryArray: []
+            surgeryArray: [],
+            isConnected: ''
         }
         this.surgeries = {}
         this.surgeryArray = []
@@ -28,10 +29,26 @@ class Surgery extends React.Component {
     componentDidMount() {
         Orientation.lockToLandscape()
         this.fetchSurgeries()
+        //Check if internet is on
+        NetInfo.isConnected.fetch().then(isConnected => {
+            console.log('First, is ' + (isConnected ? 'online' : 'offline'));
+            this.setState({ isConnected })
+
+        })
+        NetInfo.isConnected.addEventListener(
+            'change',
+            this.handleFirstConnectivityChange
+        )
         // this.getSurgeries()
         // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.user.uid}`)
         // this.ref.on('value', this.handleSurgeryUpdate)
     }
+    handleFirstConnectivityChange = (isConnected) => {
+        console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
+        this.setState({ isConnected })
+
+    }
+
 
     // componentWillUnmount() {
     //     if (this.ref) {
@@ -49,7 +66,7 @@ class Surgery extends React.Component {
     }
 
     fetchSurgeries = async () => {
-        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846` //userid=${this.props.default.user.uid}
+        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846` //userid=${this.props.default.user.uid} //userid=${this.props.UserReducer.user.uid}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
@@ -94,6 +111,9 @@ class Surgery extends React.Component {
     }
 
     render() {
+        if (!this.state.isConnected) {
+            ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
         return (
             <View>
                 <ScrollView>
