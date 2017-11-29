@@ -38,7 +38,7 @@ class AddSurgery extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.default.user.uid
+                userid: '1416382941765846', //this.props.default.user.uid //this.props.UserReducer.user.uid
                 hospitalid: hospital, 
                 date: date,
                 time: time,
