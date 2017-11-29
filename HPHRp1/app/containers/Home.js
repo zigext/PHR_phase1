@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, BackAndroid } from 'react-native'
 import firebase from '../config/Firebase'
 import LogInForm from '../components/Login'
 import { Actions } from 'react-native-router-flux'
@@ -9,7 +9,8 @@ import AdvicesButton from '../components/AdvicesButton'
 import ProgressButton from '../components/ProgressButton'
 import Orientation from 'react-native-orientation'
 
-
+let scene
+const test = 0
 class Home extends React.Component {
     constructor() {
         super()
@@ -19,9 +20,26 @@ class Home extends React.Component {
     componentDidMount() {
         // this locks the view to Portrait Mode
         // const initial = Orientation.getInitialOrientation()
+        BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton)
         Orientation.lockToLandscape();
+        scene = this.props.title
+        console.log("route ", Actions.currentScene)
+        console.log("focus ", this.props.focused)
     }
 
+    componentWillUnmount() {
+        BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton)
+    }
+
+    //if focus on Home screen then disable back button
+    handleBackButton() {
+        if (Actions.currentScene === 'tab_home_1') {
+            return true
+        }
+        else {
+            return false
+        }
+    }
 
     onActivityPress = (callback) => {
         Actions.tab_activity()
@@ -39,9 +57,9 @@ class Home extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <AdvicesButton onAdvicesPress={this.onAdvicesPress}/>
-                <ActivityButton onActivityPress={this.onActivityPress}/>
-                <ProgressButton onProgressPress={this.onProgressPress}/>
+                <AdvicesButton onAdvicesPress={this.onAdvicesPress} />
+                <ActivityButton onActivityPress={this.onActivityPress} />
+                <ProgressButton onProgressPress={this.onProgressPress} />
             </View>
             // <View style={styles.container1}>
             //     {/*<View style={styles.container2}></View>
@@ -53,13 +71,13 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("mapStateToProps", state)
+    console.log("mapStateToProps in Home", state)
     return state
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // dispatchLogIn: (email, uid) => dispatch(logIn(email, uid))
+        // dispatchStartActivity: () => dispatch(startActivity())
     }
 }
 
