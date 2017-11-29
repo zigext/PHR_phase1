@@ -1,4 +1,4 @@
-const SERVER_IP = 'http://192.168.1.7:5000/'
+const SERVER_IP = 'http://192.168.43.230:5000/'
 const PROFILE = 'profile/info'
 const SURGERY = 'surgery/info'
 const ACTIVITY_RESULT_1 = 'activity_result/1'
