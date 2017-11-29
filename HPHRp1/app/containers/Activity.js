@@ -1,31 +1,41 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Alert } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import firebase from '../config/Firebase'
 import ActivityProgress from '../components/ActivityProgress'
 import Timer from '../components/Timer'
 import PreActivityForm from '../components/PreActivityForm'
 import Instructions from '../components/Instructions'
+import Borg from '../components/Borg'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
-
+import moment from 'moment'
 
 class Activity extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            state: 'pre activity',
+            state: 'borg scale',
             level: 0,
-            progress: 0
+            progress: 0,
+            timeStart: new Date(),
+            timeStop: '',
+            duration: ''
         }
     }
     componentDidMount() {
         Orientation.lockToLandscape()
     }
 
+    //calculate duration from local time (new Date())
+    calculateDuration = (timeStart, timeStop) => {
+        let stop = moment(timeStop)
+        let duration = moment.duration(stop.diff(timeStart))
+        return duration.asMilliseconds()
+    }
+
     onSubmitPreActivity = (value) => {
-        console.log("container ", value.hr, value.bp)
         this.setState({
             state: 'doing activity'
         })
@@ -62,6 +72,23 @@ class Activity extends React.Component {
         }
         await this.setState({ progress, level })
         // this.props.onLevelChanged(this.state.level)
+    }
+
+    finish = () => {
+        Alert.alert(
+            'สิ้นสุดการทำกิจกรรม',
+            'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
+            [
+                {
+                    text: 'ใช่', onPress: () => {
+                        this.setState({ timeStop: new Date() })
+                        let duration = this.calculateDuration(this.state.timeStart, this.state.timeStop)
+                        this.setState({ duration })
+                    }
+                },
+                { text: 'ไม่', style: 'cancel' }
+            ]
+        )
     }
 
     preActivity = () => {
@@ -133,7 +160,7 @@ class Activity extends React.Component {
             <View style={{ flexDirection: 'column' }}>
                 <Timer />
                 <Text style={{ fontSize: 24, alignSelf: 'center' }}>ถัดไป : {str}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Button
                         raised
                         backgroundColor='#118929'
@@ -145,9 +172,17 @@ class Activity extends React.Component {
                         backgroundColor='#f49842'
                         title='สิ้นสุด'
                         fontSize={22}
-                        onPress={this.levelUp} />
+                        onPress={this.finish} />
                 </View>
             </View>
+        </View>
+        )
+    }
+
+    showBorgScale = () => {
+        return (<View style={[styles.container, {flexDirection: 'column'}]}>
+            <Text style={{ fontSize: 24, alignSelf: 'center' }}>รู้สึกเหนื่อยไหม?</Text>
+            <Borg></Borg>
         </View>
         )
     }
@@ -158,6 +193,9 @@ class Activity extends React.Component {
         }
         else if (this.state.state === 'doing activity') {
             return this.doingActivity()
+        }
+        else if (this.state.state === 'borg scale') {
+            return this.showBorgScale()
         }
 
     }
