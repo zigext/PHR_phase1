@@ -29,6 +29,11 @@ export default class Profile extends React.Component {
         return formattedStr4
     }
 
+    splitBirthdayStr = (birthday) => {
+        let str = birthday.split('T1')[0]
+        return str
+    }
+
     //Change duration from ms to hr:min
     formatDuration = (ms) => {
         let hm = moment.utc(ms).format('HH:mm')
@@ -55,7 +60,7 @@ export default class Profile extends React.Component {
                             <Text style={_styles.text}>ส่วนสูง : {this.props.profile.height} เซนติเมตร</Text>
                             <Text style={_styles.text}>น้ำหนัก : {this.props.profile.weight} กิโลกรัม</Text>
                             <Text style={_styles.text}>หมู่เลือด : {this.props.profile.blood_type}</Text>
-                            <Text style={_styles.text}>วันเกิด : {this.props.profile.birthdate}</Text>
+                            <Text style={_styles.text}>วันเกิด : {this.props.profile.birthdate ? this.splitBirthdayStr(this.props.profile.birthdate) : '-'}</Text>
                             <Text style={_styles.text}>ที่อยู่ : {this.props.profile.address}</Text>
                             <Text style={_styles.text}>เบอร์โทรศัพท์ : {this.props.profile.phone}</Text>
                             <Text style={_styles.text}>ชื่อญาติ : {this.props.profile.cousin_name}</Text>
