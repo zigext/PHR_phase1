@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, StyleSheet } from 'react-native'
+import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, StyleSheet, AsyncStorage } from 'react-native'
 import firebase from '../config/Firebase'
 import LogInForm from '../components/Login'
 import { Icon } from 'react-native-elements'
@@ -8,6 +8,7 @@ import ActionButton from 'react-native-action-button'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { logIn } from '../actions/userAction'
+import Timer from '../components/Timer'
 
 class LogIn extends React.Component {
     constructor() {
@@ -17,6 +18,12 @@ class LogIn extends React.Component {
 
     componentWillMount = async () => {
         const currentUser = firebase.auth().currentUser
+        
+        // let auth =  await this.getAuthenticationFromAsyncStorage()
+        // console.log("auth in login = ", auth)
+        // if(auth){
+        //     Actions.drawer()
+        // }
         // if (currentUser) {
         //     Actions.homePage()
         // }
@@ -29,11 +36,15 @@ class LogIn extends React.Component {
             .then(user => {
                 const currentUser = firebase.auth().currentUser
                 const uid = currentUser._user.uid
+                let userTmp = {
+                    uid,
+                    email
+                }
                 callback(null, user)
                 console.log('User successfully logged in', user)
                 this.props.dispatchLogIn(email, uid)
-
                 this.saveUserToFirebase(uid, email)
+                this.setUserToAsyncStorage(userTmp)
                 // this.props.dispatchLogIn({
                 //     user
                 // })
@@ -48,19 +59,43 @@ class LogIn extends React.Component {
         firebase.database().ref(`users/${uid}`).set({ email: email }).
             then((data) => {
                 console.log("add user to Firebase success")
-                dispatch({ type: "FULFILLED" })
+                // dispatch({ type: "FULFILLED" })
             }).
             catch((err) => {
                 console.log("add user to Firebase failed")
-                dispatch({ type: "REJECTED" })
+                // dispatch({ type: "REJECTED" })
             });
+    }
+
+    setUserToAsyncStorage = async (userTmp) => {
+        await AsyncStorage.setItem('user', JSON.stringify({ ...userTmp }))
+        await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: true }))
+        console.log("save to asyn storage success")
+    }
+
+    getAuthenticationFromAsyncStorage = async () => {
+        const value = await AsyncStorage.getItem('authentication')
+        console.log("VALUE ", value)
+        if (value !== null) {
+            if (value === 'null') {
+                console.log("return null")
+                return null
+            }
+            else {
+                const auth = JSON.parse(value)
+                console.log("Auth");
+                console.log(auth)
+                return auth
+            }
+        }
+        return
     }
 
     onForgotPasswordPress = () => {
         Actions.forgotPassword()
     }
 
-       onPressActionButton = () => {
+    onPressActionButton = () => {
         Actions.addSurgery()
     }
 
@@ -80,10 +115,11 @@ class LogIn extends React.Component {
 
 
     render() {
+        console.log("route ", this.props.currentScene)
         return (
             <View>
                 <LogInForm onLoginPress={this.onLoginPress} onForgotPasswordPress={this.onForgotPasswordPress} />
-             
+                {/*<Timer start={Date.now()} />*/}
                 {/*<Icon name='home' type='font-awesome' />
                 <Icon name='bar-graph' type='entypo' />
                 <Icon name='file-document-box' type='material-community' />
@@ -94,7 +130,7 @@ class LogIn extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("mapStateToProps", state)
+    console.log("mapStateToProps in Login ", state)
     return state
 }
 
@@ -114,7 +150,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     actionButtonIcon: {
-        
-   
+
+
     }
 })
