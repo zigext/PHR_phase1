@@ -91,7 +91,9 @@ export default class EditProfileForm extends React.Component {
             if (err !== null) {
                 ToastAndroid.showWithGravity('ผิดพลาด ไม่สามารถแก้ไขข้อมูล', ToastAndroid.SHORT, ToastAndroid.CENTER)
             }
-            ToastAndroid.showWithGravity('แก้ไขข้อมูลสำเร็จ', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            else {
+                ToastAndroid.showWithGravity('แก้ไขข้อมูลสำเร็จ', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            }
 
         })
     }

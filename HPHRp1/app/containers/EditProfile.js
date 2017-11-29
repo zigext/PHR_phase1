@@ -11,6 +11,7 @@ import ApiUtils from '../components/ApiUtils'
 class EditProfile extends React.Component {
 
     onEditProfilePress = (newProfile, pathStorage, filename, timestamp, callback) => {
+        if(filename) {
         firebase
             .storage()
             .ref(`/images/${filename}+${timestamp}`)
@@ -22,8 +23,13 @@ class EditProfile extends React.Component {
                 this.editProfile(newProfile, callback)
             })
             .catch(err => {
+                console.log('Error in upload picture: ', err)
                 callback(err)
             })
+        }
+        else {
+            this.editProfile(newProfile, callback)
+        }
         // this.editProfile(newProfile, callback)
 
         // console.log('Upload complete: ', uploadedFile)
