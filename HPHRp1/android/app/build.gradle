@@ -164,7 +164,8 @@ dependencies {
   compile "com.google.firebase:firebase-storage:11.0.4"
 
   compile project(':react-native-vector-icons')
-
+  compile project(':react-native-image-picker')
+  compile project(':react-native-image-resizer')
   compile project(':react-native-orientation')
     compile project(':react-native-sound')
 }

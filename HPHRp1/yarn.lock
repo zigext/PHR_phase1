@@ -3506,6 +3506,14 @@ react-native-firebase@^2.2.0:
     bows "^1.6.0"
     prop-types "^15.5.10"
 
+react-native-image-picker@^0.26.7:
+  version "0.26.7"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.26.7.tgz#ad2ee957f7f6cc01396893ea03d84cb2adb2e376"
+
+react-native-image-resizer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-resizer/-/react-native-image-resizer-1.0.0.tgz#d47e14943c37938e287fbd639e4db7ceb7fd8917"
+
 react-native-message-bar@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-native-message-bar/-/react-native-message-bar-2.0.4.tgz#ac551ecc8391057a35cd4c48f9b3d412f0a3e9b2"
@@ -3792,6 +3800,10 @@ redux-logger@^3.0.6:
   resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
   dependencies:
     deep-diff "^0.3.5"
+
+redux-persist@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-5.4.0.tgz#a1062313546a9d4ca6f9271464d18f736e8ca394"
 
 redux-thunk@^2.2.0:
   version "2.2.0"

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "69328211327",
+    "firebase_url": "https://cardiac-surgery-phr.firebaseio.com",
+    "project_id": "cardiac-surgery-phr",
+    "storage_bucket": "cardiac-surgery-phr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69328211327:android:124328633db2bf90",
+        "android_client_info": {
+          "package_name": "com.hphrp1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69328211327-bfdnti5khrta2av2jr3u3irrn8hao19p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hphrp1",
+            "certificate_hash": "56bea94e2b3957e0a81be3dbad818ed4cc828220"
+          }
+        },
+        {
+          "client_id": "69328211327-8uia16dghtip0tmkt5tlaa2n9apc8m6h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ82v1S8fvPhiwTj-s4nyDmkNNeSwljus"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69328211327-8uia16dghtip0tmkt5tlaa2n9apc8m6h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

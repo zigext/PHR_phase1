@@ -27,6 +27,8 @@ import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Stora
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.zmxv.RNSound.RNSoundPackage;
+import com.imagepicker.ImagePickerPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -53,7 +55,9 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFirebaseStoragePackage(),
           new VectorIconsPackage(),
           new OrientationPackage(),
-          new RNSoundPackage()
+          new RNSoundPackage(),
+          new ImagePickerPackage(),
+          new ImageResizerPackage()
       );
     }
   };
