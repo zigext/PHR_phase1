@@ -29,23 +29,31 @@ export default class ExerciseAdvicesSwiper extends React.Component {
         }
         switch (name) {
             case 'slide1': {
-                const sound = new Sound(require('../../assets/sound/food1.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/exercise1.wav'), error => callback(error, sound))
                 break
             }
             case 'slide2': {
-                const sound = new Sound(require('../../assets/sound/food2.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/exercise2.wav'), error => callback(error, sound))
                 break
             }
             case 'slide3': {
-                const sound = new Sound(require('../../assets/sound/food3.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/exercise3.wav'), error => callback(error, sound))
                 break
             }
             case 'slide4': {
-                const sound = new Sound(require('../../assets/sound/food4.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/exercise4.wav'), error => callback(error, sound))
                 break
             }
             case 'slide5': {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/exercise5.wav'), error => callback(error, sound))
+                break
+            }
+            case 'slide6': {
+                const sound = new Sound(require('../../assets/sound/exercise6.wav'), error => callback(error, sound))
+                break
+            }
+            case 'slide7': {
+                const sound = new Sound(require('../../assets/sound/exercise7.wav'), error => callback(error, sound))
                 break
             }
             default: return
@@ -59,30 +67,33 @@ export default class ExerciseAdvicesSwiper extends React.Component {
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/exercise1.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide1')} />
-                    <Text style={styles.text}>รูปแบบการออกกําลังกาย ใช้การเดินและการออกกําลังกายแบบไอโซโทนิคเป็นหลัก คือการออกกําลังกายชนิดที่มีการยืด/หดตัวของกล้ามเนื้อ และอวัยวะมีการเคลื่อนไหวขณะออกกําลัง</Text>
+                    <Text style={styles.text}>รูปแบบการออกกําลังกาย ใช้การเดินและการออกกําลังแบบไอโซโทนิค คือการออกกําลังกายชนิดที่มีการยืด/หดตัวของกล้ามเนื้อ และอวัยวะมีการเคลื่อนไหวขณะออกกําลัง</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide2')} />
-                    <Text style={styles.text}>ผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าชีพจรขณะพักไม่เกิน 20 ครั้งต่อนาที ส่วนผู้ป่วยหลังผ่าตัดหัวใจหรือการรักษาโดยการขยายหลอดเลือดหัวใจด้วยบอลลูน ควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าชีพจรขณะพักไม่เกิน 30 ครั้งต่อนาที</Text>
+                    <Text style={styles.text}>ผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลัน ควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าขณะพักไม่เกิน 20 ครั้งต่อนาที</Text>
                 </View>
                 <View style={_styles.slide}>
-                   
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide3')} />
+                    <Text style={styles.text}>ผู้ป่วยหลังผ่าตัดหัวใจ หรือรักษาโดยการขยายหลอดเลือดหัวใจด้วยบอลลูน ควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าขณะพักไม่เกิน 30 ครั้งต่อนาที</Text>
+                </View>
+                <View style={_styles.slide}>
+                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide4')} />
                     <Text style={styles.text}>ระยะเวลา เริ่มจาก 5-10 นาที และเพิ่มเป็น 20-30 นาที ให้รู้สึกเหนื่อยเล็กน้อยหรือปานกลาง (RPE 9-12)</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/exercise2.jpg')} style={_styles.image}></Image>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide4')} />
+                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
                     <Text style={styles.text}>ความถี่ วันละ 2 ครั้ง ขึ้นกับสภาพร่างกาย</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
-                    <Text style={styles.text}>ค่อยๆเพิ่มความหนักในการออกกําลังกาย เริ่มจากเคลื่อนไหวข้อจากข้อเล็กๆไปยังข้อที่ใหญ่ กระทําอย่างต่อเนื่อง ไม่เกร็งค้าง และไม่กลั้นหายใจขณะทํา อาจมีคนช่วยทําหลังจากนั้นก็ทําด้วยตนเอง ค่อยๆเปลี่ยนท่าจากนอน ไปนั่ง และยืน</Text>
+                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide6')} />
+                    <Text style={styles.text}>ค่อยๆเพิ่มความหนักในการออกกําลังกาย เริ่มเคลื่อนไหวจากข้อเล็กไปยังข้อใหญ่ ทําอย่างต่อเนื่อง ไม่เกร็งค้าง และไม่กลั้นหายใจขณะทํา อาจมีคนช่วยในช่วงแรก จากนั้นก็ทําด้วยตนเอง ค่อยๆเปลี่ยนท่าจากนอน ไปนั่ง และยืน</Text>
                 </View>
                 <View style={_styles.slide}>
                     <Image source={require('../../assets/images/food5.jpg')} style={_styles.image}></Image>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
-                    <Text style={styles.text}>การเดินทําได้ง่ายและช่วยเสริมให้ผู้ป่วยประกอบกิจวัตรประจําวันได้ดียิ่งขึ้น โดยพยายามเดินให้ระยะทางไกลขึ้นในครั้งต่อไป  และสามารถเดินได้เร็วขึ้นถ้าไม่มีอาการไม่พึงประสงค์ เช่น มึนงง เซ ซีด เขียว หายใจลําบาก คลื่นไส้ เจ็บหน้าอก</Text>
+                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide7')} />
+                    <Text style={styles.text}>การเดินทําได้ง่าย ช่วยให้ผู้ป่วยทำกิจวัตรประจําวันได้ดีขึ้น โดยพยายามเดินให้ระยะทางไกลขึ้นในครั้งต่อไป  และสามารถเดินได้เร็วขึ้นถ้าไม่มีอาการไม่พึงประสงค์ เช่น มึนงง เซ ซีด หายใจลําบาก คลื่นไส้ เจ็บหน้าอก</Text>
                 </View>
             </Swiper>
         )

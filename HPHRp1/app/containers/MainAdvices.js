@@ -19,6 +19,7 @@ class MainAdvices extends React.Component {
     componentDidMount() {
         Orientation.lockToLandscape();
     }
+    
 
     onFoodPress = () => {
         Actions.tab_advices_food()

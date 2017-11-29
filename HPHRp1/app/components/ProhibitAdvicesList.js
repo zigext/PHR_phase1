@@ -37,67 +37,67 @@ export default class ProhibitAdvicesList extends React.Component {
         }
         switch (index) {
             case 0: {
-                const sound = new Sound(require('../../assets/sound/food1.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro1.wav'), error => callback(error, sound))
                 break
             }
             case 1: {
-                const sound = new Sound(require('../../assets/sound/food2.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro2.wav'), error => callback(error, sound))
                 break
             }
             case 2: {
-                const sound = new Sound(require('../../assets/sound/food3.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro3.wav'), error => callback(error, sound))
                 break
             }
             case 3: {
-                const sound = new Sound(require('../../assets/sound/food4.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro4.wav'), error => callback(error, sound))
                 break
             }
             case 4: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro5.wav'), error => callback(error, sound))
                 break
             }
             case 5: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro6.wav'), error => callback(error, sound))
                 break
             }
             case 6: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro7.wav'), error => callback(error, sound))
                 break
             }
             case 7: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro8.wav'), error => callback(error, sound))
                 break
             }
             case 8: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro9.wav'), error => callback(error, sound))
                 break
             }
             case 9: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro10.wav'), error => callback(error, sound))
                 break
             }
             case 10: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro11.wav'), error => callback(error, sound))
                 break
             }
             case 11: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro12.wav'), error => callback(error, sound))
                 break
             }
             case 12: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro13.wav'), error => callback(error, sound))
                 break
             }
             case 13: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro14.wav'), error => callback(error, sound))
                 break
             }
             case 14: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro15.wav'), error => callback(error, sound))
                 break
             }
             case 15: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/pro16.wav'), error => callback(error, sound))
                 break
             }
             default: return

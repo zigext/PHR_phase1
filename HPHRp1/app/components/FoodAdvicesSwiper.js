@@ -67,7 +67,7 @@ export default class FoodAdvicesSwiper extends React.Component {
                     <Text style={styles.text}>ควรงดชา กาแฟ น้ำอัดลม เครื่องดื่มที่มีแอลกอฮอล์ และควรงดสูบบุหรี่</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food3.jpg')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/food3.png')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide3')} />
                     <Text style={styles.text}>หลีกเลี่ยงอาหารที่ทำให้น้ำตาลในเลือดสูง เช่น ข้าวเหนียวทุเรียน ขนมหวาน มะม่วง ลำไย</Text>
                 </View>
