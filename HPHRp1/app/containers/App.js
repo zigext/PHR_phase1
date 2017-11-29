@@ -27,11 +27,15 @@
  */
 
 import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, AsyncStorage } from 'react-native'
 import { Navigator } from 'react-native-deprecated-custom-components'
 import { Scene, Router, Actions, Reducer, ActionConst, Overlay, Tabs, Modal, Drawer, Stack, Lightbox } from 'react-native-router-flux'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
+import { persistStore, autoRehydrate, REHYDRATE, PURGE, persistCombineReducers } from 'redux-persist'
+import { PersistGate } from 'redux-persist/es/integration/react'
+import storage from 'redux-persist/lib/storage'
+// import { persistor, store } from '../config/ReduxStore'
 import thunkMiddleware from 'redux-thunk'
 import CreateLogger from 'redux-logger'
 import Login from './Login'
@@ -52,7 +56,7 @@ import Activity1AdvicesList from '../components/Activity1AdvicesList'
 import Activity1AdvicesDetail from '../components/Activity1AdvicesDetail'
 import SurgeryDetail from '../components/SurgeryDetail'
 import SideDrawer from '../components/drawers/SideDrawer'
-import reducer from '../reducers/Index'
+import reducers from '../reducers/Index'
 import styles from '../styles/index'
 import { Icon } from 'react-native-elements'
 import HomeIcon from '../components/HomeIcon'
@@ -70,8 +74,33 @@ import MenuIcon from '../../assets/images/ic_menu_burger_24dp.png'
 export default class App extends React.Component {
 
     render() {
-
-        const store = createStore(reducer)
+        // const config = {
+        //     key: 'primary',
+        //     storage
+        // }
+        // let reducer = persistCombineReducers(config, reducers)
+        const store = createStore(
+            reducers,
+            undefined,
+            compose(
+                applyMiddleware(
+                    thunkMiddleware,
+                    CreateLogger
+                ),
+                
+            )
+        )
+        // const callback = ()
+        // persistStore(
+        //     store, 
+        //     null,
+        //     () => {
+        //         console.log("persist store = ", store.getState())
+        //         store.getState()
+        //     });
+        // let persistor = persistStore(store)
+        // Enable persistence
+        // persistStore(store)
         const reducerCreate = params => {
             const defaultReducer = new Reducer(params);
             return (state, action) => {
@@ -84,8 +113,16 @@ export default class App extends React.Component {
             shadowOpacity: 1,
             shadowRadius: 3
         })
+        const onBeforeLift = () => {
+            // take some action before the gate lifts
+            console.log("On before lift")
+        }
         return (
-            <Provider store={store}>
+            <Provider store={store}  >
+                {/*<PersistGate
+                    loading={<Text>Loading...</Text>}
+                    onBeforeLift={onBeforeLift}
+                    persistor={persistor}>*/}
                 {/*<Router>
                     <Scene key='root' navigationBarStyle={{ backgroundColor: '#474045' }} titleStyle={{ color: 'white' }} barButtonTextStyle={{ color: 'white' }}>
                         <Scene key='loginPage' component={Login} title='Log in' initial={true} />
@@ -279,7 +316,7 @@ export default class App extends React.Component {
                         <Scene component={MessageBar} />
                     </Overlay>
                 </Router>
-
+                {/*</PersistGate>*/}
             </Provider>
         );
     }

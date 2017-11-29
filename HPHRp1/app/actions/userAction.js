@@ -9,6 +9,14 @@ export const logIn = (email, uid) => {
         }
     }
 }
+
+export const logOut = (email, uid) => {
+    return {
+        type: types.LOG_OUT,
+   
+    }
+}
+
 export const getProfile = (profile) => {
     return {
         type: types.GET_PROFILE,
