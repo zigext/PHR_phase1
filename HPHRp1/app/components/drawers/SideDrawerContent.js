@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, Text, View, ViewPropTypes, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ViewPropTypes, ScrollView, Alert } from 'react-native'
 import { List, ListItem } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux'
+import firebase from '../../config/Firebase'
+import { logOut } from '../../actions/userAction'
+import { connect } from 'react-redux'
 
 const styles = StyleSheet.create({
     container: {
@@ -38,6 +41,21 @@ class SideDrawerContent extends React.Component {
         drawer: React.PropTypes.object,
     }
 
+    logOut = () => {
+        firebase.auth().signOut()
+            .then(() => {
+                console.log('User signed out successfully');
+                this.props.dispatchLogOut()
+                this.setAuthenticationToAsyncStorage()
+            })
+            .catch()
+    }
+
+    setAuthenticationToAsyncStorage = async () => {
+        await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: false }))
+        console.log("save auth to false")
+    }
+
     onPress = (index) => {
         switch (index) {
             case 0: {
@@ -65,6 +83,21 @@ class SideDrawerContent extends React.Component {
                 break
             }
             case 6: {
+
+                Alert.alert(
+                    'ออกจากระบบ',
+                    'ต้องการออกจากระบบหรือไม่?',
+                    [
+                        {
+                            text: 'ใช่', onPress: () => {
+                                this.logOut()
+                                Actions.launch()
+                            }
+                        },
+                        { text: 'ไม่', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+                    ]
+                )
+
                 break
             }
             default: return
@@ -94,4 +127,15 @@ class SideDrawerContent extends React.Component {
     }
 }
 
-export default SideDrawerContent
+const mapStateToProps = (state) => {
+    console.log("mapStateToProps in Side drawer ", state)
+    return state
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatchLogOut: () => dispatch(logOut())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideDrawerContent)
