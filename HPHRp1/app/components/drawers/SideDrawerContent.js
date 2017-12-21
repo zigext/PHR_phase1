@@ -41,20 +41,24 @@ class SideDrawerContent extends React.Component {
         drawer: React.PropTypes.object,
     }
 
-    logOut = () => {
+    logOut = () => new Promise((resolve, reject) => {
         firebase.auth().signOut()
             .then(() => {
                 console.log('User signed out successfully');
+                // dispatch(logOut())
                 this.props.dispatchLogOut()
-                this.setAuthenticationToAsyncStorage()
+                resolve()
+                // this.setAuthenticationToAsyncStorage()
             })
             .catch()
-    }
+    })
+        
+    
 
-    setAuthenticationToAsyncStorage = async () => {
-        await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: false }))
-        console.log("save auth to false")
-    }
+    // setAuthenticationToAsyncStorage = async () => {
+    //     await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: false }))
+    //     console.log("save auth to false")
+    // }
 
     onPress = (index) => {
         switch (index) {
@@ -90,8 +94,8 @@ class SideDrawerContent extends React.Component {
                     [
                         {
                             text: 'ใช่', onPress: () => {
-                                this.logOut()
-                                Actions.launch()
+                                this.logOut().then( () => Actions.launch())
+                                
                             }
                         },
                         { text: 'ไม่', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -128,7 +132,6 @@ class SideDrawerContent extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("mapStateToProps in Side drawer ", state)
     return state
 }
 
