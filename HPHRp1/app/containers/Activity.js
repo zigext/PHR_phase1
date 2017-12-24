@@ -4,8 +4,10 @@ import { Icon, Button } from 'react-native-elements'
 import firebase from '../config/Firebase'
 import ActivityProgress from '../components/ActivityProgress'
 import Timer from '../components/Timer'
+import PreActivity from './PreActivity'
 import PreActivityForm from '../components/PreActivityForm'
 import Instructions from '../components/Instructions'
+import Stepper from '../components/Stepper'
 import Borg from '../components/Borg'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
@@ -16,12 +18,13 @@ class Activity extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            state: 'borg scale',
+            state: 'pre activity',
             level: 0,
             progress: 0,
             timeStart: new Date(),
             timeStop: '',
-            duration: ''
+            duration: '',
+            preActivity: {},
         }
     }
     componentDidMount() {
@@ -35,7 +38,7 @@ class Activity extends React.Component {
         return duration.asMilliseconds()
     }
 
-    onSubmitPreActivity = (value) => {
+    onPreActivityDone = (value) => {
         this.setState({
             state: 'doing activity'
         })
@@ -91,15 +94,18 @@ class Activity extends React.Component {
         )
     }
 
-    preActivity = () => {
-        return (<View style={styles.container}>
-            <Instructions />
-            <PreActivityForm onSubmitPreActivity={this.onSubmitPreActivity} />
-        </View>
+    renderPreActivity = () => {
+        return (
+          <PreActivity onPreActivityDone={this.onPreActivityDone} />
+        // <View style={styles.container}>
+        //     <Instructions />
+        //     <PreActivityForm onSubmitPreActivity={this.onSubmitPreActivity} />
+            
+        // </View>
         )
     }
 
-    doingActivity = () => {
+    renderDoingActivity = () => {
         let str = ''
         switch (this.state.level) {
             case 0: {
@@ -179,7 +185,7 @@ class Activity extends React.Component {
         )
     }
 
-    showBorgScale = () => {
+    renderBorgScale = () => {
         return (<View style={[styles.container, {flexDirection: 'column'}]}>
             <Text style={{ fontSize: 24, alignSelf: 'center' }}>รู้สึกเหนื่อยไหม?</Text>
             <Borg></Borg>
@@ -189,13 +195,13 @@ class Activity extends React.Component {
 
     render() {
         if (this.state.state === 'pre activity') {
-            return this.preActivity()
+            return this.renderPreActivity()
         }
         else if (this.state.state === 'doing activity') {
-            return this.doingActivity()
+            return this.renderDoingActivity()
         }
         else if (this.state.state === 'borg scale') {
-            return this.showBorgScale()
+            return this.renderBorgScale()
         }
 
     }
