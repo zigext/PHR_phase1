@@ -20,22 +20,17 @@
 //   }
 // }
 
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react'
 import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, AsyncStorage } from 'react-native'
 import { Navigator } from 'react-native-deprecated-custom-components'
 import { Scene, Router, Actions, Reducer, ActionConst, Overlay, Tabs, Modal, Drawer, Stack, Lightbox } from 'react-native-router-flux'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
-import { persistStore, autoRehydrate, REHYDRATE, PURGE, persistCombineReducers } from 'redux-persist'
-import { PersistGate } from 'redux-persist/es/integration/react'
-import storage from 'redux-persist/lib/storage'
-// import { persistor, store } from '../config/ReduxStore'
+// import { persistStore, autoRehydrate, REHYDRATE, PURGE, persistCombineReducers } from 'redux-persist'
+// import { PersistGate } from 'redux-persist/es/integration/react'
+// import storage from 'redux-persist/lib/storage'
+import { persistStore } from 'redux-persist'
+import  store  from '../config/ReduxStore'
 import thunkMiddleware from 'redux-thunk'
 import CreateLogger from 'redux-logger'
 import Login from './Login'
@@ -73,23 +68,48 @@ import MenuIcon from '../../assets/images/ic_menu_burger_24dp.png'
 
 export default class App extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            isReady: false
+        }
+    }
+
+    componentDidMount() {
+        persistStore(
+            store,
+            {
+                storage: AsyncStorage,
+            },
+            () => {
+                this.setState({
+                    isReady: true
+                })
+            }
+        ) //purge here
+    }
+
     render() {
         // const config = {
         //     key: 'primary',
         //     storage
         // }
         // let reducer = persistCombineReducers(config, reducers)
-        const store = createStore(
-            reducers,
-            undefined,
-            compose(
-                applyMiddleware(
-                    thunkMiddleware,
-                    CreateLogger
-                ),
-                
-            )
-        )
+
+        //Works normal
+        // const store = createStore(
+        //     reducers,
+        //     undefined,
+        //     compose(
+        //         applyMiddleware(
+        //             thunkMiddleware,
+        //             CreateLogger
+        //         ),
+
+        //     )
+        // )
+
+
         // const callback = ()
         // persistStore(
         //     store, 
@@ -117,6 +137,13 @@ export default class App extends React.Component {
             // take some action before the gate lifts
             console.log("On before lift")
         }
+
+        if (!this.state.isReady) {
+            return (
+                <Text>Loading...</Text>
+            )
+        }
+
         return (
             <Provider store={store}  >
                 {/*<PersistGate
