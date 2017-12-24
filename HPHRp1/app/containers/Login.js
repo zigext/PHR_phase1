@@ -9,6 +9,7 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { logIn } from '../actions/userAction'
 import Timer from '../components/Timer'
+import Stepper from '../components/Stepper'
 
 class LogIn extends React.Component {
     constructor() {
@@ -16,14 +17,22 @@ class LogIn extends React.Component {
 
     }
 
-    componentWillMount = async () => {
+    componentDidMount = async () => {
+        console.log("XXXXXXXXXXX")
         const currentUser = firebase.auth().currentUser
-        
-        // let auth =  await this.getAuthenticationFromAsyncStorage()
+
+        // let auth = await this.getAuthenticationFromAsyncStorage()
         // console.log("auth in login = ", auth)
-        // if(auth){
+        // if (auth) {
         //     Actions.drawer()
         // }
+        // if (currentUser) {
+        //     Actions.homePage()
+        // }
+        let auth = this.props.default.isLoggedIn
+        if (auth) {
+            Actions.drawer()
+        }
         // if (currentUser) {
         //     Actions.homePage()
         // }
@@ -44,7 +53,7 @@ class LogIn extends React.Component {
                 console.log('User successfully logged in', user)
                 this.props.dispatchLogIn(email, uid)
                 this.saveUserToFirebase(uid, email)
-                this.setUserToAsyncStorage(userTmp)
+                // this.setUserToAsyncStorage(userTmp)
                 // this.props.dispatchLogIn({
                 //     user
                 // })
@@ -67,29 +76,27 @@ class LogIn extends React.Component {
             });
     }
 
-    setUserToAsyncStorage = async (userTmp) => {
-        await AsyncStorage.setItem('user', JSON.stringify({ ...userTmp }))
-        await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: true }))
-        console.log("save to asyn storage success")
-    }
+    // setUserToAsyncStorage = async (userTmp) => {
+    //     await AsyncStorage.setItem('user', JSON.stringify({ ...userTmp }))
+    //     await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: true }))
+    // }
 
-    getAuthenticationFromAsyncStorage = async () => {
-        const value = await AsyncStorage.getItem('authentication')
-        console.log("VALUE ", value)
-        if (value !== null) {
-            if (value === 'null') {
-                console.log("return null")
-                return null
-            }
-            else {
-                const auth = JSON.parse(value)
-                console.log("Auth");
-                console.log(auth)
-                return auth
-            }
-        }
-        return
-    }
+    // getAuthenticationFromAsyncStorage = async () => {
+    //     const value = await AsyncStorage.getItem('authentication')
+    //     if (value !== null) {
+    //         if (value === 'null') {
+    //             console.log("return null")
+    //             return null
+    //         }
+    //         else {
+    //             const auth = JSON.parse(value)
+    //             console.log("Auth");
+    //             console.log(auth)
+    //             return auth
+    //         }
+    //     }
+    //     return
+    // }
 
     onForgotPasswordPress = () => {
         Actions.forgotPassword()
@@ -124,13 +131,13 @@ class LogIn extends React.Component {
                 <Icon name='bar-graph' type='entypo' />
                 <Icon name='file-document-box' type='material-community' />
                 <Icon name='heartbeat' type='font-awesome' />*/}
+                <Stepper></Stepper>
             </View>
         )
     }
 }
 
 const mapStateToProps = (state) => {
-    console.log("mapStateToProps in Login ", state)
     return state
 }
 
