@@ -17,8 +17,8 @@ const imageOptions = {
 let Form = t.form.Form
 
 let Profile = t.struct({
-    phone: t.maybe(t.Number), // a date field
-    cousin_phone: t.maybe(t.Number),
+    phone: t.maybe(t.String),
+    cousin_phone: t.maybe(t.String),
     height: t.maybe(t.Number),
     weight: t.maybe(t.Number),
     address: t.maybe(t.String),
