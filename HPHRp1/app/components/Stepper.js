@@ -7,9 +7,6 @@ const labels = ['Detail', 'Address', 'Available Date', 'Payment']
 export default class Stepper extends Component {
     constructor(props) {
     super(props)
-    this.state = {
-        currentPosition: 0
-    }
 }   
 
   onStepChange = step => {
