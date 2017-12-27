@@ -80,7 +80,9 @@ export default class Step4Pre extends React.Component {
             <View style={_styles.container}>
                 <ScrollView>
                     <Text style={_styles.text}>เกิดภาวะผิดปกติของการหายใจ</Text>
-                    {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    <View style={_styles.formContainer}>
+                        {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    </View>
                     <View style={_styles.buttonContainer}>
                         <Icon
                             raised
@@ -117,6 +119,11 @@ const _styles = StyleSheet.create({
         alignItems: 'stretch',
         margin: 20,
         marginHorizontal: 50,
+    },
+    formContainer: {
+        marginLeft: 60,
+        marginRight: 300,
+        marginTop: 20,
     },
     buttonContainer: {
         flexDirection: 'row',

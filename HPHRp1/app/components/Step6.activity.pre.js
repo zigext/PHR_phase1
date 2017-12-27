@@ -18,9 +18,7 @@ export default class Step6Pre extends React.Component {
 
     //Back to state 1
     onBackToStarter = () => {
-        // Actions.tab_activity()
         this.props.resetState()
-        // this.props.onStepChange(1)
     }
     
     //If any of the conditions is false, should consult with doctor

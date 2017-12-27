@@ -16,7 +16,9 @@ let Form = t.form.Form
 const myCustomStylesheet = cloneDeep(t.form.Form.stylesheet)
 // overriding the text color
 myCustomStylesheet.controlLabel.normal.fontWeight = 'normal'
-
+// myCustomStylesheet.fieldset.flexDirection = 'column'
+// myCustomStylesheet.formGroup.normal.flex = 1
+// myCustomStylesheet.formGroup.error.flex = 1
 let options = {
     fields: {
         sbpLowerThanNormal: {
@@ -71,14 +73,14 @@ export default class Step2Pre extends React.Component {
     render() {
         let defaultValue = {}
         if (this.props.sbpLowerThanNormal || this.props.abnormalGlucose || this.props.weakMuscle) {
-            console.log("IF")
             let { sbpLowerThanNormal: sbpLowerThanNormal, abnormalGlucose: abnormalGlucose, weakMuscle: weakMuscle } = this.props
             defaultValue = { sbpLowerThanNormal, abnormalGlucose, weakMuscle }
-            console.log(defaultValue)
         }
         return (
             <View style={_styles.container}>
-                {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                <View style={_styles.formContainer}>
+                    {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                </View>
                 <View style={_styles.buttonContainer}>
                     <Icon
                         raised
@@ -88,7 +90,6 @@ export default class Step2Pre extends React.Component {
                         color={common.accentColor}
                         size={35}
                         onPress={this.onBackward}
-
                     />
                     <Icon
                         raised
@@ -114,6 +115,11 @@ const _styles = StyleSheet.create({
         alignItems: 'stretch',
         margin: 20,
         marginHorizontal: 50,
+        marginTop: 40,
+    },
+    formContainer: {
+        marginLeft: 60,
+        marginRight: 300
     },
     buttonContainer: {
         flexDirection: 'row',

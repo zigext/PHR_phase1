@@ -67,7 +67,7 @@ export default class Step5Pre extends React.Component {
                             this.props.onDataChange('chestPain', value.chestPain)
                             this.props.onDataChange('dizziness', value.dizziness)
                             this.props.onDataChange('pain', value.pain)
-                            
+
                         }
                     },
                     { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -94,7 +94,9 @@ export default class Step5Pre extends React.Component {
             <View style={_styles.container}>
                 <ScrollView>
                     <Text style={_styles.text}>อาการผิดปกติอื่นๆ</Text>
-                    {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    <View style={_styles.formContainer}>
+                        {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    </View>
                     <View style={_styles.buttonContainer}>
                         <Icon
                             raised
@@ -131,6 +133,11 @@ const _styles = StyleSheet.create({
         alignItems: 'stretch',
         margin: 20,
         marginHorizontal: 50,
+    },
+    formContainer: {
+        marginLeft: 60,
+        marginRight: 300,
+        marginTop: 20,
     },
     buttonContainer: {
         flexDirection: 'row',
