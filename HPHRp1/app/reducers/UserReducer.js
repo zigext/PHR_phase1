@@ -12,13 +12,13 @@ export default function UserReducer(state = initialState, action = {}) {
         case types.LOG_IN:
             return {
                 ...state,
-                isLoggedIn: true,
+                isLoggedIn: !state.isLoggedIn,
                 user: action.payload
             }
         case types.LOG_OUT:
             return {
                 ...state,
-                isLoggedIn: false
+                isLoggedIn: !state.isLoggedIn
             }
         case types.GET_PROFILE:
             return {
