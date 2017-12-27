@@ -19,7 +19,7 @@ class EditProfile extends React.Component {
             .then(uploadedFile => {
                 console.log('Upload complete: ', uploadedFile)
                 let downloadUrl = uploadedFile.downloadUrl
-                newProfile.picture_uri = downloadUrl //need TEST
+                newProfile.picture_uri = downloadUrl 
                 this.editProfile(newProfile, callback)
             })
             .catch(err => {
@@ -62,8 +62,7 @@ class EditProfile extends React.Component {
         })
             .then(ApiUtils.checkStatus)
             .then(responseData => {
-                console.log("responseData = ", responseData)
-                console.log("Edit profile success")
+                console.log("Edit profile success ", newProfile)
                 callback(null)
                 this.props.dispatchEditProfile()
                 Actions.profile()

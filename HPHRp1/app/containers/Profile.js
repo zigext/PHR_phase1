@@ -52,6 +52,7 @@ class Profile extends React.Component {
                 this.setState({ profile: this.profile })
                 this.props.dispatchProfile(this.state.profile)
                 console.log("Fetch profile success")
+                
             })
             .catch(error => {
                 console.log("Error in fetchProfile = ", error)
