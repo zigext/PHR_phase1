@@ -71,6 +71,6 @@ export default class Timer extends React.Component {
 }
 const styles = StyleSheet.create({
     text: {
-        fontSize: 60
+        fontSize: 60,
     }
 })
