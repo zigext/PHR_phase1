@@ -16,6 +16,7 @@ import SLevel9 from '../components/SLevel9.activity.doing'
 import SLevel10 from '../components/SLevel10.activity.doing'
 import SLevel11 from '../components/SLevel11.activity.doing'
 import SLevel12 from '../components/SLevel12.activity.doing'
+import SLevel13 from '../components/SLevel13.activity.doing'
 import VoiceTest from '../components/VoiceTest'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
@@ -89,13 +90,19 @@ class DoingActivity extends React.Component {
     //System level is activity level that we define for our system
     onSystemLevelChange = async (systemLevel) => {
         await this.setState({ systemLevel })
-        console.log("SLevel = ", this.state.systemLevel)
     }
 
     //Real activity level by theory
     onActivityLevelChange = async (activityLevel) => {
         await this.setState({ activityLevel })
-        console.log("ALevel = ", this.state.activityLevel)
+    }
+
+    onDataChange = async (name, value) => {
+        await this.setState({ [name]: value })
+        dataStore[name] = value
+        console.log("STEP = ", this.state.step)
+        console.log("DATA STORE = ", dataStore)
+        console.log("STATE = ", this.state)
     }
 
     onActivityDone = () => {
@@ -103,30 +110,39 @@ class DoingActivity extends React.Component {
     }
 
     renderBody = () => {
-        switch(this.state.systemLevel) {
+        switch (this.state.systemLevel) {
             case 1:
-            // return <VoiceTest />
-                return <SLevel1 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange}/>
+                // return <VoiceTest />
+                return <SLevel1 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 2:
-                return <SLevel2 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange}/>
+                return <SLevel2 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 3:
-                return <SLevel3 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange}/>
+                return <SLevel3 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 4:
-                return <SLevel4 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange}/>
+                return <SLevel4 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 5:
-                return <SLevel5 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange}/>
+                return <SLevel5 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 6:
-                return <SLevel6 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange}/>
+                return <SLevel6 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 7:
-                return <SLevel7 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} />
+                return <SLevel7 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 8:
-                return <SLevel8 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange}/>
+                return <SLevel8 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 9:
-                return <SLevel9 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} doingLevel={1}/>
-                //doingLevel is level that the patient that doing , read from server
+                return <SLevel9 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+            //doingLevel is level that the patient that doing , read from server
             case 10:
-                return <SLevel10 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1}/>
-                //doingLevel is level that the patient that doing , read from server
+                return <SLevel10 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+            //doingLevel is level that the patient that doing , read from server
+            case 11:
+                return <SLevel11 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+            //doingLevel is level that the patient that doing , read from server
+            case 12:
+                return <SLevel12 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+            //doingLevel is level that the patient that doing , read from server
+            case 13:
+                return <SLevel13 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+            //doingLevel is level that the patient that doing , read from server
         }
     }
 
@@ -135,17 +151,17 @@ class DoingActivity extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView>
-                <View>
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                            <Timer />
-                             <ActivityProgress onLevelChanged={this.onLevelChanged} progress={this.state.activityLevel/10} />
+                    <View>
+                        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                <Timer />
+                                <ActivityProgress onLevelChanged={this.onLevelChanged} progress={this.state.activityLevel / 10} />
+                            </View>
+                            {this.renderBody()}
                         </View>
-                        {this.renderBody()}
-                    </View>
-                           
-                            
-                       
+
+
+
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {/*<Icon
                             raised
@@ -157,16 +173,16 @@ class DoingActivity extends React.Component {
                             onPress={this.levelUp}
                         />*/}
                         </View>
-                 </View>
-                 <View>
-                         {/*<Button
+                    </View>
+                    <View>
+                        {/*<Button
                              raised
                              backgroundColor='#f49842'
                              title='สิ้นสุด'
                              fontSize={22}
                              onPress={this.finish} />*/}
-                 </View>
-                  </ScrollView>
+                    </View>
+                </ScrollView>
             </View>
         )
     }

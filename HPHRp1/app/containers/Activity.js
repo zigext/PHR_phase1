@@ -4,6 +4,7 @@ import { Icon, Button } from 'react-native-elements'
 import ApiUtils from '../components/ApiUtils'
 import PreActivity from './PreActivity'
 import DoingActivity from './DoingActivity'
+import PostActivity from './PostActivity'
 import Borg from '../components/Borg'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
@@ -15,20 +16,21 @@ class Activity extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            state: 'doing activity',
+            state: 'pre activity',
             level: 0,
             profile: {},
-            timeStop: '',
-            duration: '',
             preActivity: {},
+            result: {},
+            
+            
         }
     }
     componentDidMount() {
         Orientation.lockToLandscape()
-        if(isEmpty(this.state.profile)) {
+        if (isEmpty(this.state.profile)) {
             // this.fetchProfile()
         }
-       
+
     }
 
     fetchProfile = async () => {
@@ -41,7 +43,7 @@ class Activity extends React.Component {
                 this.setState({ profile: this.profile })
                 // this.props.dispatchProfile(this.state.profile)
                 console.log("Fetch profile success")
-                
+
             })
             .catch(error => {
                 console.log("Error in fetchProfile = ", error)
@@ -51,6 +53,17 @@ class Activity extends React.Component {
     setTimeStart = async () => {
         await this.setState({ timeStart: new Date() })
         console.log("Time start = ", this.state.timeStart)
+    }
+
+    setTimeStop = async () => {
+        await this.setState({ timeStop: new Date() })
+        console.log("Time stop = ", this.state.timeStop)
+    }
+
+    setDuration = async () => {
+        let duration = this.calculateDuration(this.state.timeStart, this.state.timeStop)
+        await this.setState({ duration })
+        console.log("duration = ", this.state.duration)
     }
 
     //calculate duration from local time (new Date())
@@ -66,6 +79,16 @@ class Activity extends React.Component {
             preActivity: value,
         })
         console.log("PRE TEST = ", this.state.preActivity)
+    }
+
+    
+
+    onDoingActivityDone = async (value) => {
+        await this.setState({
+            state: 'post activity',
+            result: value,
+        })
+        console.log("RESULT = ", this.state.result)
     }
 
     onLevelChanged = (level) => {
@@ -120,7 +143,7 @@ class Activity extends React.Component {
 
     renderPreActivity = () => {
         return (
-            <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code}/>
+            <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} />
             // <View style={styles.container}>
             //     <Instructions />
             //     <PreActivityForm onSubmitPreActivity={this.onSubmitPreActivity} />
@@ -130,92 +153,14 @@ class Activity extends React.Component {
     }
 
     renderDoingActivity = () => {
-        // let str = ''
-        // switch (this.state.level) {
-        //     case 0: {
-        //         str = 'ระดับ 1 นั่งบนเตียง ออกกำลังกายบนเตียง'
-        //         break
-        //     }
-        //     case 1: {
-        //         str = 'ระดับ 2 มีผู้ช่วยเหลือผู้ป่วยมานั่งบนเก้าอี้ (ไม่ยืน)'
-        //         break
-        //     }
-        //     case 2: {
-        //         str = 'ระดับ 3 นั่งที่ขอบเตียง'
-        //         break
-        //     }
-        //     case 3: {
-        //         str = 'ระดับ 4 ยืนที่ข้างเตียง'
-        //         break
-        //     }
-        //     case 4: {
-        //         str = 'ระดับ 5 สามารถย้ายจากเตียงไปนั่งที่เก้าอี้ได้'
-        //         break
-        //     }
-        //     case 5: {
-        //         str = 'ระดับ 6 ก้าวขา ย่ำเท้าที่ข้างเตียงได้'
-        //         break
-        //     }
-        //     case 6: {
-        //         str = 'ระดับ 7 สามารถเดินได้โดยมีผู้ช่วยเหลือ 2 คนหรือมากกว่า'
-        //         break
-        //     }
-        //     case 7: {
-        //         str = 'ระดับ 8 สามารถเดินได้โดยมีผู้ช่วยเหลือ 1 คน'
-        //         break
-        //     }
-        //     case 8: {
-        //         str = 'ระดับ 9 สามารถเดินได้เองโดยมีอุปกรณ์ช่วย'
-        //         break
-        //     }
-        //     case 9: {
-        //         str = 'ระดับ 10 สามารถเดินได้เอง'
-        //         break
-        //     }
-        //     case 10: {
-        //         str = 'สิ้นสุด'
-        //         break
-        //     }
-        //     default: str = ''
-        // }
         return (
-            // <View style={[styles.container, { alignSelf: 'stretch', padding: 20, paddingHorizontal: 50 }]}>
-            //     <View style={{ flexDirection: 'column' }}>
-            //         <ActivityProgress onLevelChanged={this.onLevelChanged} progress={this.state.progress} />
-            //         <Button
-            //             raised
-            //             title='ระดับก่อนหน้า'
-            //             fontSize={22}
-            //             onPress={this.levelDown} />
-            //     </View>
-            //     <View style={{ flexDirection: 'column' }}>
-            //         <Timer />
-            //         <Text style={{ fontSize: 24, alignSelf: 'center' }}>ถัดไป : {str}</Text>
-            //         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            //             <Button
-            //                 raised
-            //                 backgroundColor='#118929'
-            //                 title='ระดับถัดไป'
-            //                 fontSize={22}
-            //                 onPress={this.levelUp} />
-            //             <Button
-            //                 raised
-            //                 backgroundColor='#f49842'
-            //                 title='สิ้นสุด'
-            //                 fontSize={22}
-            //                 onPress={this.finish} />
-            //         </View>
-            //     </View>
-            // </View>
-            <DoingActivity />
+            <DoingActivity onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration}/>
         )
     }
 
-    renderBorgScale = () => {
-        return (<View style={[styles.container, { flexDirection: 'column' }]}>
-            <Text style={{ fontSize: 24, alignSelf: 'center' }}>รู้สึกเหนื่อยไหม?</Text>
-            <Borg></Borg>
-        </View>
+    renderPostActivity = () => {
+        return (
+            <PostActivity firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code}/>
         )
     }
 
@@ -226,8 +171,8 @@ class Activity extends React.Component {
         else if (this.state.state === 'doing activity') {
             return this.renderDoingActivity()
         }
-        else if (this.state.state === 'borg scale') {
-            return this.renderBorgScale()
+        else if (this.state.state === 'post activity') {
+            return this.renderPostActivity()
         }
 
     }
