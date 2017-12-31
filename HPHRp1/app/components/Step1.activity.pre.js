@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, Alert, ToastAndroid, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import t from 'tcomb-form-native'
 import styles from '../styles/index'
@@ -92,6 +92,7 @@ export default class Step1Pre extends React.Component {
             this.props.onStepChange(this.props.step + 1)
             this.props.onDataChange('hr', value.hr)
             this.props.onDataChange('bp', value.bp)
+            this.props.setTimeStart()
         }
         else {
             ToastAndroid.showWithGravity('กรุณากรอกข้อมูล', ToastAndroid.SHORT, ToastAndroid.CENTER)
@@ -106,9 +107,9 @@ export default class Step1Pre extends React.Component {
         }
         return (
             <View style={_styles.container}>
+                <ScrollView>
                 <Text style={_styles.text}>ทดสอบก่อนทำกิจกรรม</Text>
                 {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue}/>: <Form ref='form' type={input} options={options} />}
-                {/*<Form ref='form' type={pre} options={options} />*/}
                 <Icon
                     raised
                     reverse
@@ -119,6 +120,7 @@ export default class Step1Pre extends React.Component {
                     onPress={this.onStepChange}
                     containerStyle={{ alignSelf: 'flex-end' }}
                 />
+                </ScrollView>
             </View>
         )
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import i18n from 'tcomb-form-native/lib/i18n/en'
 import templates from 'tcomb-form-native/lib/templates/bootstrap'
@@ -78,30 +78,32 @@ export default class Step2Pre extends React.Component {
         }
         return (
             <View style={_styles.container}>
-                <View style={_styles.formContainer}>
-                    {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
-                </View>
-                <View style={_styles.buttonContainer}>
-                    <Icon
-                        raised
-                        reverse
-                        name='ios-arrow-back'
-                        type='ionicon'
-                        color={common.accentColor}
-                        size={35}
-                        onPress={this.onBackward}
-                    />
-                    <Icon
-                        raised
-                        reverse
-                        name='ios-arrow-forward'
-                        type='ionicon'
-                        color={common.accentColor}
-                        size={35}
-                        onPress={this.onForward}
+                <ScrollView>
+                    <View style={_styles.formContainer}>
+                        {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    </View>
+                    <View style={_styles.buttonContainer}>
+                        <Icon
+                            raised
+                            reverse
+                            name='ios-arrow-back'
+                            type='ionicon'
+                            color={common.accentColor}
+                            size={35}
+                            onPress={this.onBackward}
+                        />
+                        <Icon
+                            raised
+                            reverse
+                            name='ios-arrow-forward'
+                            type='ionicon'
+                            color={common.accentColor}
+                            size={35}
+                            onPress={this.onForward}
 
-                    />
-                </View>
+                        />
+                    </View>
+                </ScrollView>
             </View>
         )
 

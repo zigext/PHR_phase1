@@ -13,7 +13,7 @@ export default class Step6Pre extends React.Component {
 
     //Start doing activity
     onStartDoingActivity = () => {
-        this.props.onPreActivityDone()
+        this.props.onPreActivityDone(this.props.dataStore)
     }
 
     //Back to state 1
