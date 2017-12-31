@@ -17,35 +17,35 @@ export default class ActivityProgress extends React.Component {
     //     this.animate()
     // }
 
-    levelUp = async () => {
-        let progress = this.state.progress
-        progress += 0.1
-        if (progress >= 1) {
-            progress = 1
-        }
-        let level = this.state.level
-        level += 1
-        if (progress >= 10) {
-            progress = 10
-        }
-        await this.setState({ progress, level })
-        this.props.onLevelChanged(this.state.level)
-    }
+    // levelUp = async () => {
+    //     let progress = this.state.progress
+    //     progress += 0.1
+    //     if (progress >= 1) {
+    //         progress = 1
+    //     }
+    //     let level = this.state.level
+    //     level += 1
+    //     if (progress >= 10) {
+    //         progress = 10
+    //     }
+    //     await this.setState({ progress, level })
+    //     this.props.onLevelChanged(this.state.level)
+    // }
 
-    levelDown = async () => {
-        let progress = this.state.progress
-        progress -= 0.1
-        if (progress <= 0) {
-            progress = 0
-        }
-        let level = this.state.level
-        level -= 1
-        if (progress <= 0) {
-            progress = 0
-        }
-        await this.setState({ progress, level })
-        this.props.onLevelChanged(this.state.level)
-    }
+    // levelDown = async () => {
+    //     let progress = this.state.progress
+    //     progress -= 0.1
+    //     if (progress <= 0) {
+    //         progress = 0
+    //     }
+    //     let level = this.state.level
+    //     level -= 1
+    //     if (progress <= 0) {
+    //         progress = 0
+    //     }
+    //     await this.setState({ progress, level })
+    //     this.props.onLevelChanged(this.state.level)
+    // }
 
     render() {
         return (
@@ -53,6 +53,7 @@ export default class ActivityProgress extends React.Component {
                 <View style={{ paddingHorizontal: 25 }}>
                     <Progress.Circle size={210} showsText={true} thickness={5} borderWidth={3} color='#29B6F6' progress={this.props.progress}
                         indeterminate={this.state.indeterminate}
+                        formatText={progress => `Level ${Math.round(this.props.progress * 10)}`}
                     />
                 </View>
                 <View style={styles.subContainer}>
