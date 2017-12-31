@@ -1,9 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Alert } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
-import firebase from '../config/Firebase'
-import ActivityProgress from '../components/ActivityProgress'
-import Timer from '../components/Timer'
+import common from '../styles/common'
 import Step1Pre from '../components/Step1.activity.pre'
 import Step2Pre from '../components/Step2.activity.pre'
 import Step3Pre from '../components/Step3.activity.pre'
@@ -11,10 +9,7 @@ import Step4Pre from '../components/Step4.activity.pre'
 import Step5Pre from '../components/Step5.activity.pre'
 import Step6Pre from '../components/Step6.activity.pre'
 import Stepper from '../components/Stepper'
-import Borg from '../components/Borg'
-import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
-import Orientation from 'react-native-orientation'
 import moment from 'moment'
 import { split } from 'lodash'
 
@@ -54,6 +49,11 @@ class PreActivity extends React.Component {
     componentDidMount() {
     }
 
+    // setTimeStart = async () => {
+    //     await this.setState({ timeStart: new Date() })
+    //      console.log("Time start = ", this.state.timeStart)
+    // }
+
     // onPreActivityDone = (value) => {
     //     this.setState({
     //         state: 'doing activity'
@@ -73,6 +73,7 @@ class PreActivity extends React.Component {
         await this.setState({ [name]: value })
         dataStore[name] = value
         //If blood pressure, set systolic and diastolic 
+        //calculeted from input field
         if (name === 'bp') {
             let bpArray = split(value, '/')
             //High systolic
@@ -102,7 +103,7 @@ class PreActivity extends React.Component {
     renderBody = () => {
         switch (this.state.step) {
             case 1:
-                return <Step1Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} hr={this.state.hr} bp={this.state.bp} />
+                return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} hr={this.state.hr} bp={this.state.bp} />
             case 2:
                 return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} />
             case 3:
@@ -120,8 +121,9 @@ class PreActivity extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
+                <Text style={styles.text}>{this.props.firstname} {this.props.lastname} รหัสผู้ป่วย {this.props.patientCode}</Text>
                 <Stepper step={this.state.step} onStepChange={this.onStepChange} />
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginTop: 10 }}>
                     {this.renderBody()}
                 </View>
             </View>
@@ -147,6 +149,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         backgroundColor: '#FFFDF9',
-
+    },
+    text: {
+        fontSize: 20,
+        color: common.grey,
+        textAlign: 'right',
+        marginTop: 20,
+        marginRight: 20,
+        marginBottom: 10,
     }
 })
