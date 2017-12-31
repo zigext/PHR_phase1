@@ -18,7 +18,6 @@ class Activity extends React.Component {
             state: 'doing activity',
             level: 0,
             profile: {},
-            timeStart: new Date(),
             timeStop: '',
             duration: '',
             preActivity: {},
@@ -29,6 +28,7 @@ class Activity extends React.Component {
         if(isEmpty(this.state.profile)) {
             // this.fetchProfile()
         }
+       
     }
 
     fetchProfile = async () => {
@@ -48,6 +48,11 @@ class Activity extends React.Component {
             })
     }
 
+    setTimeStart = async () => {
+        await this.setState({ timeStart: new Date() })
+        console.log("Time start = ", this.state.timeStart)
+    }
+
     //calculate duration from local time (new Date())
     calculateDuration = (timeStart, timeStop) => {
         let stop = moment(timeStop)
@@ -55,10 +60,12 @@ class Activity extends React.Component {
         return duration.asMilliseconds()
     }
 
-    onPreActivityDone = (value) => {
-        this.setState({
-            state: 'doing activity'
+    onPreActivityDone = async (value) => {
+        await this.setState({
+            state: 'doing activity',
+            preActivity: value,
         })
+        console.log("PRE TEST = ", this.state.preActivity)
     }
 
     onLevelChanged = (level) => {
@@ -113,7 +120,7 @@ class Activity extends React.Component {
 
     renderPreActivity = () => {
         return (
-            <PreActivity onPreActivityDone={this.onPreActivityDone} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code}/>
+            <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code}/>
             // <View style={styles.container}>
             //     <Instructions />
             //     <PreActivityForm onSubmitPreActivity={this.onSubmitPreActivity} />
