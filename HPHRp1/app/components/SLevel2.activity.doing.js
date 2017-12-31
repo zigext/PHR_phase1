@@ -34,76 +34,45 @@ let input = t.struct({
     amount: amount
 })
 
-export default class SLevel1 extends React.Component {
+export default class SLevel2 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             status: 'doing'
         }
-        Voice.onSpeechStart = this.onSpeechStart.bind(this)
-        Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this)
-        Voice.onSpeechEnd = this.onSpeechEnd.bind(this)
-        Voice.onSpeechError = this.onSpeechError.bind(this)
-        Voice.onSpeechResults = this.onSpeechResults.bind(this);
-        Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this)
+        Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
+        Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
+        // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this)
     }
 
-    componentDidMount = () => {
-        Voice.start('th-TH')
-    }
-
-    onSpeechStart(e) {
+    onSpeechStartHandler(e) {
         console.log("Speech start")
     }
-    onSpeechRecognized(e) {
-        console.log("Speech recognized")
-    }
-    onSpeechEnd(e) {
+    onSpeechEndHandler(e) {
         console.log("Speech end")
     }
-    onSpeechError(e) {
-        console.log("Speech error = ", JSON.stringify(e.error))
-    }
-    onSpeechResults(e) {
-        console.log("Speech results = ", e.value)
-    }
-    onSpeechPartialResults(e) {
-        console.log("Speech partial results = ", e.value)
-    }
 
-    onStartButtonPress(e) {
-        Voice.start('th-TH')
-    }
+    onStartButtonPress(e){
+        Voice.start('en')
+  }
 
     onSystemLevelChange = () => {
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
     onActivityDone = () => {
-        Alert.alert(
-            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-            'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
-            [
-                {
-                    text: 'ใช่', onPress: () => {
-                        Alert.alert(
-                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
-                            [
-                                {
-                                    text: 'ใช่', onPress: () => {
-                                        console.log('yes Pressed')
-                                    }
-                                },
-                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
-                            ]
-                        )
-                        //    this.setState({status: 'done'})
-                    }
-                },
-                { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
-            ]
-        )
+          Alert.alert(
+                'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+                'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
+                [
+                    {
+                        text: 'ใช่', onPress: () => {
+                           this.setState({status: 'done'})
+                        }
+                    },
+                    { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+                ]
+            )
     }
 
     onInputFilled = () => {
@@ -114,7 +83,7 @@ export default class SLevel1 extends React.Component {
 
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
+            <View style={{marginTop: 30}}>
                 <Form ref='form' type={input} options={options} />
                 <Icon
                     raised
@@ -132,7 +101,7 @@ export default class SLevel1 extends React.Component {
     renderActivity = () => {
         return (
             <View>
-                <View style={{ alignItems: 'center' }}>
+                <View style={{alignItems: 'center'}}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
                 <Icon
@@ -162,11 +131,11 @@ export default class SLevel1 extends React.Component {
     }
 
     render() {
-        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
+        Tts.speak('บริหารปอดด้วยวิธี Deep breathing')
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>บริหารปอดด้วยวิธี Breathing control 5-10 ครั้ง</Text>
-                {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
+                <Text style={_styles.topic}>บริหารปอดด้วยวิธี Deep breathing 5-10 ครั้ง</Text>
+                {(this.state.status === 'doing')? this.renderActivity() : this.renderForm() }
             </View>
         )
 
@@ -196,7 +165,7 @@ const _styles = StyleSheet.create({
         marginBottom: 15,
     },
     text: {
-        fontSize: 20,
+        fontSize: 20, 
         color: common.grey,
         marginTop: 20,
         marginRight: 15,
@@ -204,6 +173,6 @@ const _styles = StyleSheet.create({
     image: {
         resizeMode: 'center',
         margin: 10,
-        height: 220,
+        height: 220, 
     }
 })

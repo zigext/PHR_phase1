@@ -34,45 +34,26 @@ let input = t.struct({
     amount: amount
 })
 
-export default class SLevel1 extends React.Component {
+export default class SLevel7 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             status: 'doing'
         }
-        Voice.onSpeechStart = this.onSpeechStart.bind(this)
-        Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this)
-        Voice.onSpeechEnd = this.onSpeechEnd.bind(this)
-        Voice.onSpeechError = this.onSpeechError.bind(this)
-        Voice.onSpeechResults = this.onSpeechResults.bind(this);
-        Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this)
+        Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
+        Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
+        // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this)
     }
 
-    componentDidMount = () => {
-        Voice.start('th-TH')
-    }
-
-    onSpeechStart(e) {
+    onSpeechStartHandler(e) {
         console.log("Speech start")
     }
-    onSpeechRecognized(e) {
-        console.log("Speech recognized")
-    }
-    onSpeechEnd(e) {
+    onSpeechEndHandler(e) {
         console.log("Speech end")
-    }
-    onSpeechError(e) {
-        console.log("Speech error = ", JSON.stringify(e.error))
-    }
-    onSpeechResults(e) {
-        console.log("Speech results = ", e.value)
-    }
-    onSpeechPartialResults(e) {
-        console.log("Speech partial results = ", e.value)
     }
 
     onStartButtonPress(e) {
-        Voice.start('th-TH')
+        Voice.start('en')
     }
 
     onSystemLevelChange = () => {
@@ -86,19 +67,7 @@ export default class SLevel1 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        Alert.alert(
-                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
-                            [
-                                {
-                                    text: 'ใช่', onPress: () => {
-                                        console.log('yes Pressed')
-                                    }
-                                },
-                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
-                            ]
-                        )
-                        //    this.setState({status: 'done'})
+                        this.setState({ status: 'done' })
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -162,10 +131,10 @@ export default class SLevel1 extends React.Component {
     }
 
     render() {
-        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
+        Tts.speak('นั่งห้อยขาข้างเตียง แกว่งเท้า')
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>บริหารปอดด้วยวิธี Breathing control 5-10 ครั้ง</Text>
+                <Text style={_styles.topic}>นั่งห้อยขาข้างเตียง แกว่งเท้าข้างละ 20 ครั้ง</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -195,7 +164,7 @@ const _styles = StyleSheet.create({
         color: common.grey,
         marginBottom: 15,
     },
-    text: {
+    detail: {
         fontSize: 20,
         color: common.grey,
         marginTop: 20,
