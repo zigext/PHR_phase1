@@ -2,11 +2,14 @@ package com.hphrp1;
 
 import android.app.Application;
 
+
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.wenkesj.voice.VoicePackage;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +31,9 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.imagepicker.ImagePickerPackage;
+
+import net.no_mad.tts.TextToSpeechPackage;
+
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -57,7 +63,9 @@ public class MainApplication extends Application implements ReactApplication {
           new OrientationPackage(),
           new RNSoundPackage(),
           new ImagePickerPackage(),
-          new ImageResizerPackage()
+          new ImageResizerPackage(),
+              new TextToSpeechPackage(),
+              new VoicePackage()
       );
     }
   };
