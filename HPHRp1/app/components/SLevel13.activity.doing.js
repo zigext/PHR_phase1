@@ -18,7 +18,7 @@ myCustomStylesheet.controlLabel.normal.fontSize = 20
 let options = {
     fields: {
         amount: {
-            label: 'จำนวนครั้งที่ทำได้'
+            label: 'ระยะทางที่เดินได้'
         }
     },
     stylesheet: myCustomStylesheet
@@ -34,7 +34,7 @@ let input = t.struct({
     amount: amount
 })
 
-export default class SLevel9 extends React.Component {
+export default class SLevel13 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -57,9 +57,10 @@ export default class SLevel9 extends React.Component {
         Voice.start('en')
     }
 
-    onSystemLevelChange = () => {
-        this.props.onSystemLevelChange(this.props.systemLevel + 1)
-    }
+    // onSystemLevelChange = () => {
+    //     this.props.onSystemLevelChange(this.props.systemLevel + 1)
+    //     this.props.onActivityLevelChange(this.props.activityLevel + 1)
+    // }
 
     onActivityDone = () => {
         Alert.alert(
@@ -68,20 +69,36 @@ export default class SLevel9 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        this.setState({ status: 'done' })
+                        Alert.alert(
+                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
+                            [
+                                {
+                                    text: 'ใช่', onPress: () => {
+                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                                        //In case of activity is completed
+                                        this.props.setTimeStop()
+                                        this.props.setDuration()
+                                        this.props.onDoingActivityDone()
+                                    }
+                                },
+                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
+                            ]
+                        )
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
             ]
         )
     }
+
     //In case of activity is not completed
     onInputFilled = () => {
         let value = this.refs.form.getValue()
         if (value) {
             let result = {
                 maxLevel: this.props.activityLevel,
-                levelTitle: 'ย่ำเท้า',
+                levelTitle: 'กางข้อศอก ยกไหล่ หมุนแขน',
                 amount: value.amount
             }
             console.log("amount = ", result)
@@ -99,7 +116,7 @@ export default class SLevel9 extends React.Component {
                     raised
                     reverse
                     name='exit-to-app'
-                    color='#d6d4e0'
+                    color={common.accentColor}
                     size={35}
                     onPress={this.onInputFilled}
                     containerStyle={{ alignSelf: 'flex-end' }}
@@ -109,29 +126,19 @@ export default class SLevel9 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('ยืนย่ำเท้าอยู่กับที่')
+        Tts.speak('กางข้อศอก ยกไหล่ หมุนแขน')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
-                <Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
                 <View style={_styles.exitContainer}>
                     <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
                     <Icon
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.accentColor}
                         size={35}
                         onPress={this.onActivityDone}
                         containerStyle={{ alignSelf: 'flex-end' }}
@@ -142,29 +149,9 @@ export default class SLevel9 extends React.Component {
     }
 
     render() {
-        let totalTimes
-        switch (this.props.doingLevel) {
-            case 3:
-                totalTimes = '20 ครั้ง'
-                break
-            case 4:
-                totalTimes = '30 ครั้ง'
-                break
-            case 5:
-                totalTimes = '30 ครั้ง'
-                break
-            case 6:
-                totalTimes = '2 นาที'
-                break
-            case 7:
-                totalTimes = '2 นาที'
-                break
-            default:
-                totalTimes = '20 ครั้ง'
-        }
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>ยืนย่ำเท้าอยู่กับที่ {totalTimes}</Text>
+                <Text style={_styles.topic}>กางข้อศอก ยกไหล่ หมุนแขน</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )

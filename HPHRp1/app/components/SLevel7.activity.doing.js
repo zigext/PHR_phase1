@@ -75,9 +75,19 @@ export default class SLevel7 extends React.Component {
         )
     }
 
+    //In case of activity is not completed
     onInputFilled = () => {
         let value = this.refs.form.getValue()
         if (value) {
+            let result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'แกว่งเท้า',
+                amount: value.amount
+            }
+            console.log("amount = ", result)
+            this.props.setTimeStop()
+            this.props.setDuration()
+            this.props.onDoingActivityDone(result)
         }
     }
 
@@ -99,6 +109,7 @@ export default class SLevel7 extends React.Component {
     }
 
     renderActivity = () => {
+        Tts.speak('นั่งห้อยขาข้างเตียง แกว่งเท้า')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -131,7 +142,6 @@ export default class SLevel7 extends React.Component {
     }
 
     render() {
-        Tts.speak('นั่งห้อยขาข้างเตียง แกว่งเท้า')
         return (
             <View style={_styles.container}>
                 <Text style={_styles.topic}>นั่งห้อยขาข้างเตียง แกว่งเท้าข้างละ 20 ครั้ง</Text>
@@ -165,6 +175,12 @@ const _styles = StyleSheet.create({
         marginBottom: 15,
     },
     detail: {
+        fontSize: 20,
+        color: common.grey,
+        marginTop: 20,
+        marginRight: 15,
+    },
+    text: {
         fontSize: 20,
         color: common.grey,
         marginTop: 20,

@@ -52,38 +52,47 @@ export default class SLevel5 extends React.Component {
         console.log("Speech end")
     }
 
-    onStartButtonPress(e){
+    onStartButtonPress(e) {
         Voice.start('en')
-  }
+    }
 
     onSystemLevelChange = () => {
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
     onActivityDone = () => {
-          Alert.alert(
-                'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
-                [
-                    {
-                        text: 'ใช่', onPress: () => {
-                           this.setState({status: 'done'})
-                        }
-                    },
-                    { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
-                ]
-            )
+        Alert.alert(
+            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+            'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
+            [
+                {
+                    text: 'ใช่', onPress: () => {
+                        this.setState({ status: 'done' })
+                    }
+                },
+                { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+            ]
+        )
     }
-
+    //In case of activity is not completed
     onInputFilled = () => {
         let value = this.refs.form.getValue()
         if (value) {
+            let result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'บริหารขา-ข้อเท้า',
+                amount: value.amount
+            }
+            console.log("amount = ", result)
+            this.props.setTimeStop()
+            this.props.setDuration()
+            this.props.onDoingActivityDone(result)
         }
     }
 
     renderForm = () => {
         return (
-            <View style={{marginTop: 30}}>
+            <View style={{ marginTop: 30 }}>
                 <Form ref='form' type={input} options={options} />
                 <Icon
                     raised
@@ -99,9 +108,10 @@ export default class SLevel5 extends React.Component {
     }
 
     renderActivity = () => {
+        Tts.speak('บริหารขาและข้อเท้า')
         return (
             <View>
-                <View style={{alignItems: 'center'}}>
+                <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
                 <Icon
@@ -131,15 +141,14 @@ export default class SLevel5 extends React.Component {
     }
 
     render() {
-        Tts.speak('บริหารขาและข้อเท้า')
         return (
             <View style={_styles.container}>
                 <Text style={_styles.topic}>บริหารขา-ข้อเท้า</Text>
                 <Text style={_styles.detail}>กระดกเท้าเข้าหาลำตัวแล้วเหยียดออก 10 ครั้ง</Text>
                 <Text style={_styles.detail}>หมุนข้อเท้าตามเข็มนาฬิกา 10 ครั้ง</Text>
                 <Text style={_styles.detail}>หมุนข้อเท้าทวนเข็มนาฬิกา 10 ครั้ง</Text>
-                 <Text style={_styles.detail}>งอเข่าและสะโพก แล้วเหยียดออก ทีละข้างๆละ 5 ครั้ง</Text>
-                {(this.state.status === 'doing')? this.renderActivity() : this.renderForm() }
+                <Text style={_styles.detail}>งอเข่าและสะโพก แล้วเหยียดออก ทีละข้างๆละ 5 ครั้ง</Text>
+                {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
 
@@ -169,7 +178,13 @@ const _styles = StyleSheet.create({
         marginBottom: 15,
     },
     detail: {
-        fontSize: 20, 
+        fontSize: 20,
+        color: common.grey,
+        marginTop: 20,
+        marginRight: 15,
+    },
+    text: {
+        fontSize: 20,
         color: common.grey,
         marginTop: 20,
         marginRight: 15,
@@ -177,6 +192,6 @@ const _styles = StyleSheet.create({
     image: {
         resizeMode: 'center',
         margin: 10,
-        height: 220, 
+        height: 220,
     }
 })

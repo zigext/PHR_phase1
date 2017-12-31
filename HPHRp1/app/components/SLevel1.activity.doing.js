@@ -86,29 +86,27 @@ export default class SLevel1 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        Alert.alert(
-                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
-                            [
-                                {
-                                    text: 'ใช่', onPress: () => {
-                                        console.log('yes Pressed')
-                                    }
-                                },
-                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
-                            ]
-                        )
-                        //    this.setState({status: 'done'})
+                        this.setState({ status: 'done' })
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
             ]
         )
     }
-
+    //In case of activity is not completed
     onInputFilled = () => {
+        let result = {}
         let value = this.refs.form.getValue()
         if (value) {
+            result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'Breathing control',
+                amount: value.amount
+            }
+            // this.onDataChange('')
+            this.props.setTimeStop()
+            this.props.setDuration()
+            this.props.onDoingActivityDone(result)
         }
     }
 
@@ -130,6 +128,7 @@ export default class SLevel1 extends React.Component {
     }
 
     renderActivity = () => {
+        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -162,7 +161,7 @@ export default class SLevel1 extends React.Component {
     }
 
     render() {
-        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
+        
         return (
             <View style={_styles.container}>
                 <Text style={_styles.topic}>บริหารปอดด้วยวิธี Breathing control 5-10 ครั้ง</Text>

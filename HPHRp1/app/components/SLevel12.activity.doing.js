@@ -18,7 +18,7 @@ myCustomStylesheet.controlLabel.normal.fontSize = 20
 let options = {
     fields: {
         amount: {
-            label: 'จำนวนครั้งที่ทำได้'
+            label: 'ระยะทางที่เดินได้'
         }
     },
     stylesheet: myCustomStylesheet
@@ -34,7 +34,7 @@ let input = t.struct({
     amount: amount
 })
 
-export default class SLevel9 extends React.Component {
+export default class SLevel12 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -59,6 +59,7 @@ export default class SLevel9 extends React.Component {
 
     onSystemLevelChange = () => {
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        this.props.onActivityLevelChange(this.props.activityLevel + 1)
     }
 
     onActivityDone = () => {
@@ -68,7 +69,22 @@ export default class SLevel9 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        this.setState({ status: 'done' })
+                        Alert.alert(
+                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
+                            [
+                                {
+                                    text: 'ใช่', onPress: () => {
+                                        //In case of activity is completed
+                                        this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                                        this.props.setTimeStop()
+                                        this.props.setDuration()
+                                        this.props.onDoingActivityDone()
+                                    }
+                                },
+                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
+                            ]
+                        )
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -81,7 +97,7 @@ export default class SLevel9 extends React.Component {
         if (value) {
             let result = {
                 maxLevel: this.props.activityLevel,
-                levelTitle: 'ย่ำเท้า',
+                levelTitle: 'เดินขึ้นลงบันได',
                 amount: value.amount
             }
             console.log("amount = ", result)
@@ -109,7 +125,7 @@ export default class SLevel9 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('ยืนย่ำเท้าอยู่กับที่')
+        Tts.speak('เดินขึ้นลงบันได')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -144,27 +160,21 @@ export default class SLevel9 extends React.Component {
     render() {
         let totalTimes
         switch (this.props.doingLevel) {
-            case 3:
-                totalTimes = '20 ครั้ง'
-                break
-            case 4:
-                totalTimes = '30 ครั้ง'
-                break
             case 5:
-                totalTimes = '30 ครั้ง'
+                totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'
                 break
             case 6:
-                totalTimes = '2 นาที'
+                totalTimes = 'เดินลงบันได 1 ชั้นแบบพักขา'
                 break
             case 7:
-                totalTimes = '2 นาที'
+                totalTimes = 'เดินขึ้นลงบันได 10-15 ขั้น และเดินขึ้นบันได 1-2 ชั้นแบบสลับขา'
                 break
             default:
-                totalTimes = '20 ครั้ง'
+                totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'
         }
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>ยืนย่ำเท้าอยู่กับที่ {totalTimes}</Text>
+                <Text style={_styles.topic}>{totalTimes}</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )

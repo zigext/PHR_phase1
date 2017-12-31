@@ -68,17 +68,41 @@ export default class SLevel8 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        this.setState({ status: 'done' })
+                        Alert.alert(
+                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
+                            [
+                                {
+                                    text: 'ใช่', onPress: () => {
+                                        //In case of activity is completed
+                                        this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                                        this.props.setTimeStop()
+                                        this.props.setDuration()
+                                        this.props.onDoingActivityDone()
+                                    }
+                                },
+                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
+                            ]
+                        )
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
             ]
         )
     }
-
+    //In case of activity is completed
     onInputFilled = () => {
         let value = this.refs.form.getValue()
         if (value) {
+            let result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'ลุกนั่งเก้าอี้ข้างเตียง',
+                amount: value.amount
+            }
+            console.log("amount = ", result)
+            this.props.setTimeStop()
+            this.props.setDuration()
+            this.props.onDoingActivityDone(result)
         }
     }
 
@@ -100,6 +124,7 @@ export default class SLevel8 extends React.Component {
     }
 
     renderActivity = () => {
+        Tts.speak('ลุกและนั่งที่เก้าอี้ข้างเตียง')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -132,7 +157,7 @@ export default class SLevel8 extends React.Component {
     }
 
     render() {
-        Tts.speak('ลุกและนั่งที่เก้าอี้ข้างเตียง')
+
         return (
             <View style={_styles.container}>
                 <Text style={_styles.topic}>ลุก-นั่งเก้าอี้ข้างเตียง 2 ครั้ง</Text>
@@ -166,6 +191,12 @@ const _styles = StyleSheet.create({
         marginBottom: 15,
     },
     detail: {
+        fontSize: 20,
+        color: common.grey,
+        marginTop: 20,
+        marginRight: 15,
+    },
+    text: {
         fontSize: 20,
         color: common.grey,
         marginTop: 20,

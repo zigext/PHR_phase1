@@ -52,38 +52,47 @@ export default class SLevel2 extends React.Component {
         console.log("Speech end")
     }
 
-    onStartButtonPress(e){
+    onStartButtonPress(e) {
         Voice.start('en')
-  }
+    }
 
     onSystemLevelChange = () => {
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
     onActivityDone = () => {
-          Alert.alert(
-                'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
-                [
-                    {
-                        text: 'ใช่', onPress: () => {
-                           this.setState({status: 'done'})
-                        }
-                    },
-                    { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
-                ]
-            )
+        Alert.alert(
+            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+            'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
+            [
+                {
+                    text: 'ใช่', onPress: () => {
+                        this.setState({ status: 'done' })
+                    }
+                },
+                { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+            ]
+        )
     }
 
     onInputFilled = () => {
         let value = this.refs.form.getValue()
         if (value) {
+            let result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'Deep breathing',
+                amount: value.amount
+            }
+            console.log("amount = ", result)
+            this.props.setTimeStop()
+            this.props.setDuration()
+            this.props.onDoingActivityDone(result)
         }
     }
-
+    //In case of activity is not completed
     renderForm = () => {
         return (
-            <View style={{marginTop: 30}}>
+            <View style={{ marginTop: 30 }}>
                 <Form ref='form' type={input} options={options} />
                 <Icon
                     raised
@@ -99,9 +108,10 @@ export default class SLevel2 extends React.Component {
     }
 
     renderActivity = () => {
+        Tts.speak('บริหารปอดด้วยวิธี Deep breathing')
         return (
             <View>
-                <View style={{alignItems: 'center'}}>
+                <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
                 <Icon
@@ -131,11 +141,10 @@ export default class SLevel2 extends React.Component {
     }
 
     render() {
-        Tts.speak('บริหารปอดด้วยวิธี Deep breathing')
         return (
             <View style={_styles.container}>
                 <Text style={_styles.topic}>บริหารปอดด้วยวิธี Deep breathing 5-10 ครั้ง</Text>
-                {(this.state.status === 'doing')? this.renderActivity() : this.renderForm() }
+                {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
 
@@ -165,7 +174,7 @@ const _styles = StyleSheet.create({
         marginBottom: 15,
     },
     text: {
-        fontSize: 20, 
+        fontSize: 20,
         color: common.grey,
         marginTop: 20,
         marginRight: 15,
@@ -173,6 +182,6 @@ const _styles = StyleSheet.create({
     image: {
         resizeMode: 'center',
         margin: 10,
-        height: 220, 
+        height: 220,
     }
 })
