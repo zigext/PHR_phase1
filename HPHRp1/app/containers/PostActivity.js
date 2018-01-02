@@ -23,12 +23,8 @@ class PostActivity extends React.Component {
         super(props)
         this.state = {
             step: 0,
-            hr: '',
-            bp: '',
             highSbp: false,
             highDbp: false,
-            abnormalGlucose: false,
-            weakMuscle: false,
             st: false,
             pvc: false,
             af: false,
@@ -45,7 +41,6 @@ class PostActivity extends React.Component {
             nausea: false,
             chestPain: false,
             dizziness: false,
-            pain: false
         }
         this.baseState = this.state
     }
@@ -131,22 +126,15 @@ class PostActivity extends React.Component {
             case 0:
                 return <Step0Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} checkNursePin={this.checkNursePin} />
             case 1:
-                return <Step1Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} />
+                return <Step1Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} borg={this.state.borg}/>
                 //Borg scale
             case 2:
-                return <Step2Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} />
+                return <Step2Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} postHr={this.state.postHr} postBp={this.state.postBp}/>
             case 3:
-                return <Step3Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} />
+                return <Step3Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} assistant={this.state.assistant}/>
             case 4:
-                return <Step4Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} />
-            // case 2:
-            //     return <Step2Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} />
-            // case 3:
-            //     return <Step3Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment} />
-            // case 4:
-            //     return <Step4Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2} />
-            // case 5:
-            //     return <Step5Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain} />
+                return <Step4Post step={this.state.step} onStepChange={this.onStepChange} onPostActivityDone={this.props.onPostActivityDone} dataStore={dataStore} />
+           
             // case 6:
             //     return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
         }
@@ -157,7 +145,7 @@ class PostActivity extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <Text style={styles.text}>{this.props.firstname} {this.props.lastname} รหัสผู้ป่วย {this.props.patientCode}</Text>
-                {(this.state.step === 0) ? null : <Stepper step={this.state.step} onStepChange={this.onStepChange} />}
+                {(this.state.step === 0) ? null : <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={4}/>}
 
                 <View style={{ flex: 1, marginTop: 10 }}>
                     {this.renderBody()}
