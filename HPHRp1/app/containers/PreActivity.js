@@ -20,8 +20,8 @@ class PreActivity extends React.Component {
         super(props)
         this.state = {
             step: 1,
-            hr: '',
-            bp: '',
+            preHr: '',
+            preBp: '',
             highSbp: false,
             highDbp: false,
             abnormalGlucose: false,
@@ -74,7 +74,7 @@ class PreActivity extends React.Component {
         dataStore[name] = value
         //If blood pressure, set systolic and diastolic 
         //calculeted from input field
-        if (name === 'bp') {
+        if (name === 'preBp') {
             let bpArray = split(value, '/')
             //High systolic
             if (bpArray[0] > 180) {
@@ -103,7 +103,7 @@ class PreActivity extends React.Component {
     renderBody = () => {
         switch (this.state.step) {
             case 1:
-                return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} hr={this.state.hr} bp={this.state.bp} />
+                return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
             case 2:
                 return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} />
             case 3:
@@ -122,7 +122,7 @@ class PreActivity extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <Text style={styles.text}>{this.props.firstname} {this.props.lastname} รหัสผู้ป่วย {this.props.patientCode}</Text>
-                <Stepper step={this.state.step} onStepChange={this.onStepChange} />
+                <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={5}/>
                 <View style={{ flex: 1, marginTop: 10 }}>
                     {this.renderBody()}
                 </View>
@@ -132,7 +132,6 @@ class PreActivity extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-
     return state
 }
 
