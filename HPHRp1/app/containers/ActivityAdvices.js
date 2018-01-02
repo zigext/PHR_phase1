@@ -21,11 +21,15 @@ class FoodAdvices extends React.Component {
         Actions.tab_advices_activity_1()
     }
 
+    onActivity2Press = () => {
+        Actions.tab_advices_activity_2()
+    }
+
     render() {
         return (
             <View style={styles.container}>
-               <Activity1 onActivity1Press={this.onActivity1Press}/>
-               <Activity2 />
+                <Activity1 onActivity1Press={this.onActivity1Press} />
+                <Activity2 onActivity2Press={this.onActivity2Press}/>
             </View>
         )
     }

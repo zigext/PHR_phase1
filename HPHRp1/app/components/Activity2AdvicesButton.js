@@ -5,7 +5,7 @@ import styles from '../styles/index'
 export default class Activity2AdvicesButton extends React.Component {
 
     onPress = () => {
-     
+        this.props.onActivity2Press()
     }
 
     render() {
