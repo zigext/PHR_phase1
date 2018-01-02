@@ -76,7 +76,7 @@ export default class SLevel9 extends React.Component {
         )
     }
     //In case of activity is not completed
-    onInputFilled = () => {
+    onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
             let result = {
@@ -85,7 +85,7 @@ export default class SLevel9 extends React.Component {
                 amount: value.amount
             }
             console.log("amount = ", result)
-            this.props.setTimeStop()
+            await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
         }

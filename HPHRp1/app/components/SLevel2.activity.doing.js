@@ -75,7 +75,7 @@ export default class SLevel2 extends React.Component {
         )
     }
 
-    onInputFilled = () => {
+    onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
             let result = {
@@ -84,7 +84,7 @@ export default class SLevel2 extends React.Component {
                 amount: value.amount
             }
             console.log("amount = ", result)
-            this.props.setTimeStop()
+            await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
         }

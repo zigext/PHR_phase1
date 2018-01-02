@@ -73,12 +73,15 @@ export default class SLevel8 extends React.Component {
                             'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
                             [
                                 {
-                                    text: 'ใช่', onPress: () => {
+                                    text: 'ใช่', onPress: async () => {
                                         //In case of activity is completed
+                                        let result = {
+                                            maxLevel: this.props.activityLevel + 1
+                                        }
                                         this.props.onActivityLevelChange(this.props.activityLevel + 1)
-                                        this.props.setTimeStop()
+                                        await this.props.setTimeStop()
                                         this.props.setDuration()
-                                        this.props.onDoingActivityDone()
+                                        this.props.onDoingActivityDone(result)
                                     }
                                 },
                                 { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
@@ -91,7 +94,7 @@ export default class SLevel8 extends React.Component {
         )
     }
     //In case of activity is completed
-    onInputFilled = () => {
+    onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
             let result = {
@@ -100,7 +103,7 @@ export default class SLevel8 extends React.Component {
                 amount: value.amount
             }
             console.log("amount = ", result)
-            this.props.setTimeStop()
+            await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
         }
