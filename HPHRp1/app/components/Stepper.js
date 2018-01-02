@@ -17,7 +17,7 @@ export default class Stepper extends Component {
     return (
       <View style={{ marginTop: 15 }}>
         <StepIndicator
-          stepCount={5}
+          stepCount={this.props.totalStep}
           customStyles={styles.customStyles}
           currentPosition={this.props.step - 1}
           onPress={step => this.onStepChange(step + 1)}
