@@ -10,10 +10,10 @@ import { split } from 'lodash'
 let Form = t.form.Form
 let options = {
     fields: {
-        hr: {
+        preHr: {
             label: 'อัตราการเต้นหัวใจ'
         },
-        bp: {
+        preBp: {
             label: 'ความดันเลือด',
             help: 'Systolic/Diastolic'
         },
@@ -26,29 +26,29 @@ let options = {
 
 //Heart rate condition
 //heart rate > 0 && < 200
-let hr = t.refinement(t.Number, function (n) { return n > 0 && n < 250 })
+let preHr = t.refinement(t.Number, function (n) { return n > 0 && n < 250 })
 // if you define a getValidationErrorMessage function, it will be called on validation errors
-hr.getValidationErrorMessage = function (value, path, context) {
+preHr.getValidationErrorMessage = function (value, path, context) {
     return 'อัตราการเต้นหัวใจไม่ถูกต้อง'
 }
 
 //Blood pressure condition
 //bp will come in systolic/diastolic format as string
 //bpArray[0] = systolic, bpArray[1] = diastolic
-let bp = t.refinement(t.String, function (n) {
+let preBp = t.refinement(t.String, function (n) {
     let bpArray = split(n, '/')
     if (bpArray[0] > 0 && bpArray[0] < 300 && bpArray[1] > 0 && bpArray[1] < 300) {
         return n !== null
     }
 
 })
-bp.getValidationErrorMessage = function (value, path, context) {
+preBp.getValidationErrorMessage = function (value, path, context) {
     return 'ความดันเลือดไม่ถูกต้อง'
 }
 
 let input = t.struct({
-    hr: hr,
-    bp: bp
+    preHr: preHr,
+    preBp: preBp
 })
 
 export default class Step1Pre extends React.Component {
@@ -90,8 +90,8 @@ export default class Step1Pre extends React.Component {
         if (value) {
             let bp = split(value.bp, '/')
             this.props.onStepChange(this.props.step + 1)
-            this.props.onDataChange('hr', value.hr)
-            this.props.onDataChange('bp', value.bp)
+            this.props.onDataChange('preHr', value.preHr)
+            this.props.onDataChange('preBp', value.preBp)
             this.props.setTimeStart()
         }
         else {
@@ -101,9 +101,9 @@ export default class Step1Pre extends React.Component {
 
     render() {
         let defaultValue = {}
-        if(this.props.hr && this.props.bp){
-            let {hr: hr, bp: bp} = this.props
-            defaultValue = { hr, bp}
+        if(this.props.preHr && this.props.preBp){
+            let {preHr: preHr, preBp: preBp} = this.props
+            defaultValue = { preHr, preBp}
         }
         return (
             <View style={_styles.container}>
