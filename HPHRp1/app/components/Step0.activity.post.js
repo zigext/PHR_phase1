@@ -34,7 +34,7 @@ export default class Step1Post extends React.Component {
         }
     }
 
-    onStepChange = async () => {
+    onForward = async () => {
         await this.checkNursePin()
         if (this.state.authorized === true) {
             if (this.state.authorized === true) {
@@ -104,7 +104,7 @@ export default class Step1Post extends React.Component {
                         type='ionicon'
                         color={common.accentColor}
                         size={35}
-                        onPress={this.onStepChange}
+                        onPress={this.onForward}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </ScrollView>
