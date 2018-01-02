@@ -20,15 +20,16 @@ class Activity extends React.Component {
             level: 0,
             profile: {},
             preActivity: {},
+            postActivity: {},
             result: {},
-            
-            
+
+
         }
     }
-    componentDidMount() {
+    componentDidMount = async () => {
         Orientation.lockToLandscape()
         if (isEmpty(this.state.profile)) {
-            // this.fetchProfile()
+            // await this.fetchProfile()
         }
 
     }
@@ -81,14 +82,21 @@ class Activity extends React.Component {
         console.log("PRE TEST = ", this.state.preActivity)
     }
 
-    
-
     onDoingActivityDone = async (value) => {
         await this.setState({
             state: 'post activity',
             result: value,
         })
         console.log("RESULT = ", this.state.result)
+    }
+
+    onPostActivityDone = async (value) => {
+        await this.setState({
+            state: 'pre activity',
+            postActivity: value,
+        })
+        console.log("POST TEST = ", this.state.postActivity)
+        console.log("ALL = ", this.state)
     }
 
     onLevelChanged = (level) => {
@@ -154,13 +162,13 @@ class Activity extends React.Component {
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration}/>
+            <DoingActivity onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} />
         )
     }
 
     renderPostActivity = () => {
         return (
-            <PostActivity firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code}/>
+            <PostActivity onPostActivityDone={this.onPostActivityDone} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} />
         )
     }
 
