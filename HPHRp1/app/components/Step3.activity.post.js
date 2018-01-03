@@ -43,7 +43,6 @@ const myCustomStylesheet = cloneDeep(t.form.Form.stylesheet)
 // })
 
 let assistant = t.refinement(t.Number, function (n) { return n >= 0 })
-// if you define a getValidationErrorMessage function, it will be called on validation errors
 assistant.getValidationErrorMessage = function (value, path, context) {
     return 'จำนวนผู้ช่วยเหลือไม่ถูกต้อง'
 }
@@ -51,7 +50,7 @@ assistant.getValidationErrorMessage = function (value, path, context) {
 let options = {
     fields: {
         cardiacDisorder: {
-            label: 'เกิดภาวะหัวใจเต้นผิดจังหวะ',
+            label: 'เกิดภาวะหัวใจเต้นผิดจังหวะ (กรณีมีมอนิเตอร์)',
         },
         respiratoryDisorder: {
             label: 'เกิดภาวะผิดปกติของการหายใจ',
@@ -105,6 +104,19 @@ var input = t.struct({
     others: t.maybe(t.list(others))
 });
 
+var input2 = t.struct({
+    a: t.Number,
+    b: t.Number
+});
+
+let defaultValue2 = {
+    a: 10
+}
+
+let defaultValue = {
+    assistant: 10,
+}
+
 
 export default class Step3Post extends React.Component {
     constructor(props) {
@@ -132,17 +144,17 @@ export default class Step3Post extends React.Component {
     }
 
     render() {
-        let defaultValue = {}
+        let defaultValueFromProps = {assistant: 0}
         if (this.props.assistant || this.props.cardiacDisorder || this.props.respiratoryDisorder || this.props.otherDisorder) {
             let { assistant: assistant, cardiacDisorder: cardiacDisorder, respiratoryDisorder: respiratoryDisorder, otherDisorder: otherDisorder } = this.props
-            defaultValue = { assistant, cardiacDisorder, respiratoryDisorder, otherDisorder }
+            defaultValueFromProps = { assistant, cardiacDisorder, respiratoryDisorder, otherDisorder }
         }
         return (
             <View style={_styles.container}>
                 <ScrollView>
                     <View style={_styles.formContainer}>
-                        {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
-                        {/*<Form ref='form' type={input} options={options} />*/}
+                        {defaultValueFromProps ? <Form ref='form' type={input} options={options} value={defaultValueFromProps} /> : <Form ref='form' type={input} options={options} value={defaultValue} />}
+                        <Form ref='form' type={input2} value={defaultValue2} />
                     </View>
                     <View style={_styles.buttonContainer}>
                         <Icon
