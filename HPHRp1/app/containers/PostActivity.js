@@ -1,14 +1,13 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Text, View, Alert, Image } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import common from '../styles/common'
 import Step0Post from '../components/Step0.activity.post'
 import Step1Post from '../components/Step1.activity.post'
 import Step2Post from '../components/Step2.activity.post'
 import Step3Post from '../components/Step3.activity.post'
 import Step4Post from '../components/Step4.activity.post'
-// import Step5Pre from '../components/Step5.activity.pre'
-// import Step6Pre from '../components/Step6.activity.pre'
 import Stepper from '../components/Stepper'
 // import { SERVER_IP, PIN } from '../config/Const'
 import ApiUtils from '../components/ApiUtils'
@@ -126,15 +125,15 @@ class PostActivity extends React.Component {
             case 0:
                 return <Step0Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} checkNursePin={this.checkNursePin} />
             case 1:
-                return <Step1Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} borg={this.state.borg}/>
-                //Borg scale
+                return <Step1Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} borg={this.state.borg} />
+            //Borg scale
             case 2:
-                return <Step2Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} postHr={this.state.postHr} postBp={this.state.postBp}/>
+                return <Step2Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} postHr={this.state.postHr} postBp={this.state.postBp} />
             case 3:
-                return <Step3Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} assistant={this.state.assistant}/>
+                return <Step3Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} assistant={this.state.assistant} />
             case 4:
                 return <Step4Post step={this.state.step} onStepChange={this.onStepChange} onPostActivityDone={this.props.onPostActivityDone} dataStore={dataStore} />
-           
+
             // case 6:
             //     return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
         }
@@ -144,12 +143,17 @@ class PostActivity extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <Text style={styles.text}>{this.props.firstname} {this.props.lastname} รหัสผู้ป่วย {this.props.patientCode}</Text>
-                {(this.state.step === 0) ? null : <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={4}/>}
+                <KeyboardAwareScrollView>
+                    <View style={styles.patientInfoContainer}>
+                        <Text style={styles.text}>{this.props.firstname} {this.props.lastname} รหัสผู้ป่วย {this.props.patientCode}</Text>
+                        <Image source={{ uri: this.props.pictureUri }} style={styles.image}></Image>
+                    </View>
+                    {(this.state.step === 0) ? null : <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={4} />}
 
-                <View style={{ flex: 1, marginTop: 10 }}>
-                    {this.renderBody()}
-                </View>
+                    <View style={styles.bodyContainer}>
+                        {this.renderBody()}
+                    </View>
+                </KeyboardAwareScrollView>
             </View>
         )
     }
@@ -169,10 +173,13 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(PostActivity)
 
 const styles = StyleSheet.create({
-    container: {
+    bodyContainer: {
         flex: 1,
+        marginTop: 10
+    },
+    patientInfoContainer: {
         flexDirection: 'row',
-        backgroundColor: '#FFFDF9',
+        justifyContent: 'flex-end'
     },
     text: {
         fontSize: 20,
@@ -181,5 +188,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginRight: 20,
         marginBottom: 10,
+    },
+    image: {
+        height: 100,
+        borderRadius: 50,
+        width: 100,
+        margin: 10,
+        alignSelf: 'center'
     }
 })
