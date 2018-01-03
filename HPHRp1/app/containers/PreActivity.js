@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Text, View, Alert, Image } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import common from '../styles/common'
 import Step1Pre from '../components/Step1.activity.pre'
 import Step2Pre from '../components/Step2.activity.pre'
@@ -120,12 +121,17 @@ class PreActivity extends React.Component {
     render() {
 
         return (
-            <View style={{ flex: 1 }}>
-                <Text style={styles.text}>{this.props.firstname} {this.props.lastname} รหัสผู้ป่วย {this.props.patientCode}</Text>
-                <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={5}/>
-                <View style={{ flex: 1, marginTop: 10 }}>
-                    {this.renderBody()}
-                </View>
+            <View style={{ flex: 1 }} >
+                <KeyboardAwareScrollView>
+                    <View style={styles.patientInfoContainer}>
+                        <Text style={styles.text}>{this.props.firstname} {this.props.lastname}  รหัสผู้ป่วย {this.props.patientCode}</Text>
+                        <Image source={{ uri: this.props.pictureUri }} style={styles.image}></Image>
+                    </View>
+                    <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={5} />
+                    <View style={styles.bodyContainer} >
+                        {this.renderBody()}
+                    </View>
+                </KeyboardAwareScrollView>
             </View>
         )
     }
@@ -144,10 +150,13 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(PreActivity)
 
 const styles = StyleSheet.create({
-    container: {
+    bodyContainer: {
         flex: 1,
-        flexDirection: 'row',
-        backgroundColor: '#FFFDF9',
+        marginTop: 10
+    },
+    patientInfoContainer: {
+        flexDirection: 'row', 
+        justifyContent: 'flex-end'
     },
     text: {
         fontSize: 20,
@@ -156,5 +165,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginRight: 20,
         marginBottom: 10,
+    },
+    image: {
+        height: 100,
+        borderRadius: 50,
+        width: 100,
+        margin: 10,
+        alignSelf: 'center'
     }
 })
