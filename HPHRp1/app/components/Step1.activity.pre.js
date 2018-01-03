@@ -14,8 +14,7 @@ let options = {
             label: 'อัตราการเต้นหัวใจ'
         },
         preBp: {
-            label: 'ความดันเลือด',
-            help: 'Systolic/Diastolic'
+            label: 'ความดันเลือด (Systolic/Diastolic)'
         },
     }
 }
@@ -107,7 +106,6 @@ export default class Step1Pre extends React.Component {
         }
         return (
             <View style={_styles.container}>
-                <ScrollView>
                 <Text style={_styles.text}>ทดสอบก่อนทำกิจกรรม</Text>
                 {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue}/>: <Form ref='form' type={input} options={options} />}
                 <Icon
@@ -120,7 +118,6 @@ export default class Step1Pre extends React.Component {
                     onPress={this.onStepChange}
                     containerStyle={{ alignSelf: 'flex-end' }}
                 />
-                </ScrollView>
             </View>
         )
 

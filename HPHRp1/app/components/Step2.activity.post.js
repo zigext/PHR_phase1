@@ -14,8 +14,7 @@ let options = {
             label: 'อัตราการเต้นหัวใจ'
         },
         postBp: {
-            label: 'ความดันเลือด',
-            help: 'Systolic/Diastolic'
+            label: 'ความดันเลือด (Systolic/Diastolic)'
         },
     }
 }
