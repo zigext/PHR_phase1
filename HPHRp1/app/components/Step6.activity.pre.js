@@ -20,12 +20,23 @@ export default class Step6Pre extends React.Component {
     onBackToStarter = () => {
         this.props.resetState()
     }
-    
+
     //If any of the conditions is false, should consult with doctor
     checkPreTestResult = () => {
-      for (let property in this.props.dataStore) {
+        for (let property in this.props.dataStore) {
             if (this.props.dataStore[property] === true) {
-                return <Text style={_styles.text}>กรุณาปรึกษาแพทย์เพื่อพิจารณาการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                return (
+                    <View style={{flexDirection: 'row'}}>
+                        <Icon
+                            raised
+                            name='warning'
+                            type='font-awesome'
+                            color='#c81837'
+                            size={35}
+                        />
+                        <Text style={_styles.text}>กรุณาปรึกษาแพทย์เพื่อพิจารณาการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                    </View>
+                )
             }
         }
         return <Text style={_styles.text}>มีความพร้อมในการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
