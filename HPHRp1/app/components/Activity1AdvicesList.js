@@ -6,60 +6,418 @@ import { Actions } from 'react-native-router-flux'
 
 const list = [
     {
-        level: 0,
-        title: 'ไม่เคลื่อนไหวร่างกาย (นอนอยู่บนเตียง)',
-        subtitle: 'บุคลากรเป็นผู้พลิกตัวและออกกำลังกายให้ ผู้ป่วยไม่มีการขยับร่างกายเอง'
-    },
-    {
         level: 1,
-        title: 'นั่งบนเตียง ออกกำลังกายบนเตียง',
-        subtitle: 'ทำกิจกรรมบนเตียง ประกอบด้วย การพลิกตัว การออกกำลังกายด้วยตัวเอง ไม่มีการขยับร่างกายนอกเตียง หรือเกินขอบเตียง'
+        title: 'วันที่ 1 หลังผ่าตัด จัดท่านั่งหัวสูงบนเตียง 45-60 องศา',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  
+                        ▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างบริเวณหน้าท้อง ขณะหายใจเข้าท้องจะป่องจนรู้สึกได้ แต่มือบนทรวงอกจะไม่รู้สึก เพราะหน้าอกจะขยับน้อยมาก
+                        ▪ สูดลมหายใจเข้าทางจมูกช้าๆจนท้องป่องออก
+                        ▪ ผ่อนลมหายใจออกทางปากช้าๆจนสุด แล้วพักสักครู่
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  
+                        ▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างบริเวณหน้าท้อง 
+                        ▪ สูดลมหายใจเข้าทางจมูกช้าๆจนท้องป่องออกจนเกือบสุด แล้วสูดหายใจเข้าอีกพร้อมกับยกหน้าอกและหัวไหล่ขึ้นจนมือที่วางบนทรวงอกรู้สึกได้
+                        ▪ ผ่อนลมหายใจออกทางปากช้าๆจนสุด แล้วพักสักครู่
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารปอดโดยใช้อุปกรณ์ (Tri-flow)  
+                        ▪ ควรอยู่ในท่านั่ง หากนอนบนเตียงให้ไขเตียงสูงมากกว่า 45 องศา
+                        ▪ ควบคุมการหายใจเข้าออก 1-2 ครั้ง 
+                        ▪ ใช้ริมฝีปากอมอุปกรณ์ส่วนท่อของเครื่อง
+                        ▪ สูดลมหายใจเข้าทางปากให้เต็มที่จนลูกบอลลอยขึ้น และให้ลอยคงไว้ให้นานที่สุด แล้วค่อยๆผ่านหายใจออก แล้วหายใจปกติ 3-4 ครั้ง
+                        ▪ ทำซ้ำจนครบ 10 ครั้ง หยุดพัก ควรทำทุก 1-2 ชั่วโมงขณะตื่น
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. ไออย่างมีประสิทธิภาพ (Effective cough)  
+                        ▪ ใช้มือทั้งสอง หมอน หรือผ้าห่มประคองแผลผ่าตัดที่หน้าอก 
+                        ▪ อยู่ในท่านั่ง โน้มตัวมาด้านหน้าเล็กน้อย
+                        ▪ สูดลมหายใจเข้าให้ลึกพอควร แล้วพยายามไอเพื่อขับเสมหะออก อาจรู้สึกเจ็บแผลขณะไอ
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารขา-ข้อเท้า 
+                        ▪ ยืดขาตรง ยกขาสูงประมาณ 30 องศาโดยใช้หมอนรองให้ปลายเท้าพ้นหมอน 
+                        ▪ กระดกเท้าเข้าหาลำตัวนับ 1,2 แล้วเหยียดเท้าออกให้รู้สึกเกร็งบริเวณน่อง นับเป็น 1 ครั้ง ทำจนครบ 20 ครั้ง ทำทีละข้างหรือพร้อมกันก็ได้
+                        ▪ หมุนข้อเท้าตามเข็มนาฬิกา 10 ครั้ง หมุนทวนเข็มนาฬิกา 10 ครั้ง ทั้งสองข้าง
+                        ▪ งอข้อเข่าและสะโพก สลับกับเหยียดออกทีละข้างๆละ 5 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  
+                        ▪ กำมือสลับแบมือ 10 ครั้ง 
+                        ▪ เหยียดแขนไปด้านหน้า งอศอกสลับกับเหยียดศอก 10 ครั้ง
+                        ▪ เหยียดแขนตรง ยกเหนือศีรษะทีละข้างๆละ 5 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            }
+        ]
     },
     {
         level: 2,
-        title: 'มีผู้ช่วยเหลือผู้ป่วยมานั่งบนเก้าอี้ (ไม่ยืน)',
-        subtitle: 'ยก อุ้ม หรือใช้กระดานเคลื่อนย้ายไปที่เก้าอี้ โดยไม่มีการยืนหรือนั่งที่ขอบเตียง'
+        title: 'วันที่ 2 หลังผ่าตัด จัดท่านั่งห้อยขาข้างเตียงโดยไม่พิงหลัง',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารปอดโดยใช้อุปกรณ์ (Tri-flow)  
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. ไออย่างมีประสิทธิภาพ (Effective cough)  
+
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. แกว่งเท้าข้างละ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    7. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. นั่งเก้าอี้ข้างเตียงเมื่อรับประทานอาหารทุกมื้อ หรืออย่างน้อย 1-2 ครั้ง/วัน
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+        ]
     },
     {
         level: 3,
-        title: 'นั่งที่ขอบเตียง',
-        subtitle: 'อาจมีบุคลากรช่วย เกี่ยวข้องกับการทำกิจกรมที่นั่งทำที่ขอบเตียง'
+        title: 'วันที่ 3 หลังผ่าตัด',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. แกว่งเท้าข้างละ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. ยืนย่ำอยู่กับที่ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    7. เดินรอบเตียง 15-20 เมตร ไป-กลับช้าๆ
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. ลุกนั่งเก้าอี้อย่างน้อยวันละ 2 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+        ]
     },
     {
         level: 4,
-        title: 'ยืนที่ข้างเตียง',
-        subtitle: 'ลงน้ำหนักที่เท้าทั้ง 2 ข้างในการยืน โดยมีหรือไม่มีบุคลากรช่วย อาจรวมไปถึงการยืนที่ใช้อุปกรณ์ช่วย'
+        title: 'วันที่ 4 หลังผ่าตัด',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. แกว่งเท้าข้างละ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. ยืนย่ำอยู่กับที่ 30 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    7. เขย่งเท้าขึ้นลง 10 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. เดิน 50-100 เมตร วันละ 2-3 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+        ]
     },
     {
         level: 5,
-        title: 'สามารถย้ายจากเตียงไปนั่งที่เก้าอี้ได้',
-        subtitle: 'สามารถก้าวหรือลากเท้าจากท่ายืนไปนั่งที่เก้าอี้ได้ รวมถึงการลงน้ำหนักเท้า 1 ข้าง แล้วจับอุปกรณ์อื่นเพื่อเคลื่อนไปนั่งที่เก้าอี้ ไม่นับรวมอุปกรณ์ที่มีล้อในการช่วยเคลื่อนย้าย'
+        title: 'วันที่ 5 หลังผ่าตัด',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. แกว่งเท้าข้างละ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. ยืนย่ำอยู่กับที่ 30 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    7. เขย่งเท้าขึ้นลง 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. เดิน 100-200 เมตร วันละ 3 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. ฝึกขึ้นลงบันได 3 ขั้น
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+        ]
     },
     {
         level: 6,
-        title: 'ก้าวขา ย่ำเท้าที่ข้างเตียงได้',
-        subtitle: 'สามารถเดินโดยยกเท้าจากพื้นได้อย่างน้อย 4 ก้าว หรือก้าวเท้าข้างละ 2 ก้าว โดยมีการช่วยเหลือหรือไม่ก็ได้'
+        title: 'วันที่ 6 หลังผ่าตัด',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. แกว่งเท้าข้างละ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. กางข้อศอก ยกไหล่ หมุนแขน
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    7. ยืนย่ำอยู่กับที่ 2 นาที
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. เขย่งเท้าขึ้นลงนาน 2 นาที
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    9. เดิน 200-500 เมตร วันละ 2-3 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    10. เดินขึ้นลงบันได 1 ชั้นแบบพักขา
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+        ]
     },
     {
         level: 7,
-        title: 'สามารถเดินได้โดยมีผู้ช่วยเหลือ 2 คนหรือมากกว่า',
-        subtitle: 'เดินจากเตียงหรือเก้าอี้อย่างน้อย 5 เมตร มีคนช่วย 2 คนหรือมากกว่า'
+        title: 'วันที่ 7 หลังผ่าตัด',
+        subtitle: [
+            {
+                description: `     
+                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+`,
+                image: '../../assets/images/food1.png'
+            },
+            {
+                description: `     
+                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    4. แกว่งเท้าข้างละ 20 ครั้ง
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    6. กางข้อศอก ยกไหล่ หมุนแขน เหมือนกับขั้นที่ 6
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    7. เดิน 10-15 นาที หรือ 100-120 เมตร
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+            {
+                description: `     
+                    8. เดินขึ้นลงบันได 10-15 ขั้นแบบสลับขา ถ้าอาการคงที่ให้ขึ้นบันไดแบบพักขา
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+                        {
+                description: `     
+                    9. เดินขึ้นบันได 1-2 ชั้นแบบสลับขา
+`,
+                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            },
+        ]
     },
-    {
-        level: 8,
-        title: 'สามารถเดินได้โดยมีผู้ช่วยเหลือ 1 คน',
-        subtitle: 'เดินจากเตียงหรือเก้าอี้อย่างน้อย 5 เมตร มีผู้ช่วยเหลือ 1 คน'
-    },
-    {
-        level: 9,
-        title: 'สามารถเดินได้เองโดยมีอุปกรณ์ช่วย',
-        subtitle: 'เดินจากเตียงหรือเก้าอี้อย่างน้อย 5 เมตร มีอุปกรณ์ช่วยแต่ไม่มีผู้ช่วยเหลือ'
-    },
-    {
-        level: 10,
-        title: 'สามารถเดินได้เอง',
-        subtitle: 'เดินจากเตียงหรือเก้าอี้อย่างน้อย 5 เมตร โดยไม่มีการช่วยเหลือ'
-    },
+
     {
         level: 11,
         title: 'การไออย่างมีประสิทธิภาพ (Effective cough) ',
@@ -123,7 +481,7 @@ export default class Activity1AdvicesList extends React.Component {
                         list.map((item, i) => (
                             <ListItem
                                 key={i}
-                                title={item.level <= 10 ? <Text style={styles.item}>ระดับ {item.level}   {item.title}</Text> : <Text style={styles.item}>{item.title}</Text>}
+                                title={item.level <= 10 ? <Text style={styles.item}>ขั้นที่ {item.level}   {item.title}</Text> : <Text style={styles.item}>{item.title}</Text>}
                                 titleStyle={styles.item}
                                 onPress={() => this.onPress(i)}
                             />

@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import styles from '../styles/index'
+import common from '../styles/common'
 import Sound from 'react-native-sound'
 import PropTypes from 'prop-types'
 
@@ -12,7 +13,7 @@ export default class Activity1AdvicesDetail extends React.Component {
     static propTypes = {
         level: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
-        subtitle: PropTypes.string.isRequired,
+        subtitle: PropTypes.array.isRequired,
     }
     constructor(props) {
         super(props)
@@ -98,15 +99,30 @@ export default class Activity1AdvicesDetail extends React.Component {
 
     }
 
+    renderDescription = () => {
+        return (
+            <View>
+                {this.props.subtitle.map(function (d, idx) {
+                    return (
+                        <View>
+                            <Text style={_styles.text}>{d.description}</Text>
+                            {/*<Image source={require({d.image})} style={_styles.image}></Image>*/}
+                        </View>
+                    )
+                })}
+            </View>
+        )
+    }
+
     render() {
-        console.log(this.props)
         return (
             <View style={_styles.slide}>
                 <ScrollView>
-                    {this.props.level <= 10 ? <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.level}   {this.props.title}</Text> :
-                        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>{this.props.title}</Text>}
+                    {this.props.level <= 10 ? <Text style={[_styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.level}   {this.props.title}</Text> :
+                        <Text style={[_styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>{this.props.title}</Text>}
                     {/*<Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>*/}
-                    <Text style={styles.text}>{this.props.subtitle}</Text>
+                    {/*<Text style={styles.text}>{this.props.subtitle}</Text>*/}
+                    {this.renderDescription()}
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.level)} />
                     {/*<Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>*/}
                 </ScrollView>
@@ -130,5 +146,11 @@ const _styles = StyleSheet.create({
         resizeMode: 'center',
         margin: 10,
         flex: 1
+    },
+    text: {
+        color: common.grey,
+        fontSize: 22,
+        letterSpacing: 4,
+        lineHeight: 45
     }
 })
