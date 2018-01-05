@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, BackAndroid } from 'react-native'
+import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, BackHandler } from 'react-native'
 import firebase from '../config/Firebase'
 import LogInForm from '../components/Login'
 import { Actions } from 'react-native-router-flux'
@@ -20,7 +20,7 @@ class Home extends React.Component {
     componentDidMount() {
         // this locks the view to Portrait Mode
         // const initial = Orientation.getInitialOrientation()
-        BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton)
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton)
         Orientation.lockToLandscape();
         scene = this.props.title
         console.log("route ", Actions.currentScene)
@@ -28,10 +28,11 @@ class Home extends React.Component {
     }
 
     componentWillUnmount() {
-        BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton)
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton)
     }
 
     //if focus on Home screen then disable back button
+    //Unable to go back to Login page
     handleBackButton() {
         if (Actions.currentScene === 'tab_home_1') {
             return true
