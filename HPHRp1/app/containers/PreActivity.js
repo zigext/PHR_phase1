@@ -25,6 +25,7 @@ class PreActivity extends React.Component {
             preBp: '',
             highSbp: false,
             highDbp: false,
+            sbpLowerThanNormal: false,
             abnormalGlucose: false,
             weakMuscle: false,
             st: false,
@@ -102,18 +103,30 @@ class PreActivity extends React.Component {
     }
 
     renderBody = () => {
+        // switch (this.state.step) {
+        //     case 1:
+        //         return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
+        //     case 2:
+        //         return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} />
+        //     case 3:
+        //         return <Step3Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment} />
+        //     case 4:
+        //         return <Step4Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2} />
+        //     case 5:
+        //         return <Step5Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain} />
+        //     case 6:
+        //         return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
+        // }
         switch (this.state.step) {
             case 1:
                 return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
             case 2:
-                return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} />
+                return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} 
+                                st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment}
+                                agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2}
+                                anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain}
+                                />
             case 3:
-                return <Step3Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment} />
-            case 4:
-                return <Step4Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2} />
-            case 5:
-                return <Step5Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain} />
-            case 6:
                 return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
         }
     }
@@ -127,7 +140,7 @@ class PreActivity extends React.Component {
                         <Text style={styles.text}>{this.props.firstname} {this.props.lastname}  รหัสผู้ป่วย {this.props.patientCode}</Text>
                         <Image source={{ uri: this.props.pictureUri }} style={styles.image}></Image>
                     </View>
-                    <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={5} />
+                    <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={3} />
                     <View style={styles.bodyContainer} >
                         {this.renderBody()}
                     </View>
@@ -155,7 +168,7 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     patientInfoContainer: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         justifyContent: 'flex-end'
     },
     text: {
