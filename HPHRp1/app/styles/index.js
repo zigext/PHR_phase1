@@ -15,7 +15,7 @@ export default StyleSheet.create({
     },
     text: {
         color: common.grey,
-        fontSize: 28,
+        fontSize: 24,
     },
     background: {
         backgroundColor: common.backgroundWhite
