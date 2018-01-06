@@ -9,6 +9,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.wenkesj.voice.VoicePackage;
+import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 
 
 import java.util.Arrays;
@@ -65,7 +66,8 @@ public class MainApplication extends Application implements ReactApplication {
           new ImagePickerPackage(),
           new ImageResizerPackage(),
               new TextToSpeechPackage(),
-              new VoicePackage()
+              new VoicePackage(),
+              new MPAndroidChartPackage() 
       );
     }
   };
