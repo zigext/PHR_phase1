@@ -104,18 +104,9 @@ var input = t.struct({
     others: t.maybe(t.list(others))
 });
 
-var input2 = t.struct({
-    a: t.Number,
-    b: t.Number
-});
-
-let defaultValue2 = {
-    a: 10
-}
-
-let defaultValue = {
-    assistant: 10,
-}
+// let defaultValue = {
+//     assistant: 10,
+// }
 
 
 export default class Step3Post extends React.Component {
@@ -154,7 +145,7 @@ export default class Step3Post extends React.Component {
                 <ScrollView>
                     <View style={_styles.formContainer}>
                         {defaultValueFromProps ? <Form ref='form' type={input} options={options} value={defaultValueFromProps} /> : <Form ref='form' type={input} options={options} value={defaultValue} />}
-                        <Form ref='form' type={input2} value={defaultValue2} />
+            
                     </View>
                     <View style={_styles.buttonContainer}>
                         <Icon
