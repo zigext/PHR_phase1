@@ -30,7 +30,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 // import { PersistGate } from 'redux-persist/es/integration/react'
 // import storage from 'redux-persist/lib/storage'
 import { persistStore } from 'redux-persist'
-import  store  from '../config/ReduxStore'
+import store from '../config/ReduxStore'
 import thunkMiddleware from 'redux-thunk'
 import CreateLogger from 'redux-logger'
 import Login from './Login'
@@ -49,6 +49,7 @@ import ProhibitAdvices from './ProhibitAdvices'
 import ActivityAdvices from './ActivityAdvices'
 import Activity1AdvicesList from '../components/Activity1AdvicesList'
 import Activity1AdvicesDetail from '../components/Activity1AdvicesDetail'
+import Activity2AdvicesDetail from '../components/Activity2AdvicesDetail'
 import SurgeryDetail from '../components/SurgeryDetail'
 import SideDrawer from '../components/drawers/SideDrawer'
 import reducers from '../reducers/Index'
@@ -300,6 +301,12 @@ export default class App extends React.Component {
                                                         key="tab_advices_activity_1_detail"
                                                         component={Activity1AdvicesDetail}
                                                         title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจระยะที่ 1"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_activity_2"
+                                                        component={Activity2AdvicesDetail}
+                                                        title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจระยะที่ 2"
                                                         panHandlers={null}
                                                     />
                                                 </Stack>
