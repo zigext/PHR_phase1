@@ -36,6 +36,7 @@ import CreateLogger from 'redux-logger'
 import Login from './Login'
 import Home from './Home'
 import Activity from './Activity'
+import Progress from './Progress'
 import ForgotPassword from './ForgotPassword'
 import Profile from './Profile'
 import EditProfile from './EditProfile'
@@ -248,11 +249,10 @@ export default class App extends React.Component {
                                                     titleStyle={styles.tabTitle}>
                                                     <Scene
                                                         key="tab_progress_1"
-                                                        component={Home}
+                                                        component={Progress}
                                                         title="พัฒนาการ"
                                                         icon={TabIcon}
-                                                        rightTitle="Right3"
-                                                        onRight={() => { }}
+                                                    
                                                     />
                                                 </Stack>
                                                 <Stack

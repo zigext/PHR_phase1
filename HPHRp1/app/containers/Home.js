@@ -51,7 +51,7 @@ class Home extends React.Component {
     }
 
     onProgressPress = (callback) => {
-
+        Actions.tab_progress()
     }
 
 
