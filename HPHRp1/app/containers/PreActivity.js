@@ -102,6 +102,21 @@ class PreActivity extends React.Component {
         console.log("STATE = ", this.state)
     }
 
+    calculatePreActivity = async () => {
+        console.log("CAL")
+        for (let property in dataStore) {
+            if (dataStore[property] === true) {
+                await this.setState({ passed: false })
+                dataStore.passed = false
+                console.log("NOT PASS = ", dataStore)
+                return
+            }
+        }
+        await this.setState({ passed: true })
+        dataStore.passed = true
+        console.log("PASS = ", dataStore)
+    }
+
     renderBody = () => {
         // switch (this.state.step) {
         //     case 1:
@@ -121,11 +136,12 @@ class PreActivity extends React.Component {
             case 1:
                 return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
             case 2:
-                return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} 
-                                st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment}
-                                agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2}
-                                anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain}
-                                />
+                return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle}
+                    st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment}
+                    agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2}
+                    anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain}
+                    calculatePreActivity={this.calculatePreActivity}
+                />
             case 3:
                 return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
         }

@@ -172,6 +172,7 @@ export default class Step2Pre extends React.Component {
                             await this.props.onDataChange('dizziness', value4.dizziness)
                             await this.props.onDataChange('pain', value4.pain)
 
+                            await this.props.calculatePreActivity()
                         }
                     },
                     { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
