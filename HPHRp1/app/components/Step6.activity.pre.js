@@ -21,14 +21,15 @@ export default class Step6Pre extends React.Component {
         this.props.resetState()
     }
 
-    //If any of the conditions is false, should consult with doctor
+    //If any of the conditions is true, should consult with doctor
     checkPreTestResult = () => {
         for (let property in this.props.dataStore) {
             if (this.props.dataStore[property] === true) {
                 return (
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                         <Icon
                             raised
+                            reverse
                             name='warning'
                             type='font-awesome'
                             color='#c81837'
