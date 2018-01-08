@@ -36,9 +36,12 @@ export default class Profile extends React.Component {
 
     //Change duration from ms to hr:min
     formatDuration = (ms) => {
-        let hm = moment.utc(ms).format('HH:mm')
+        let hm = moment.utc(ms).format('HH:mm:ss')
         return hm
-        
+    }
+
+    formatDate = (date) => {
+        return moment(date).format(" DD MMM YYYY")
     }
 
     render() {
@@ -60,7 +63,7 @@ export default class Profile extends React.Component {
                             <Text style={_styles.text}>ส่วนสูง : {this.props.profile.height} เซนติเมตร</Text>
                             <Text style={_styles.text}>น้ำหนัก : {this.props.profile.weight} กิโลกรัม</Text>
                             <Text style={_styles.text}>หมู่เลือด : {this.props.profile.blood_type}</Text>
-                            <Text style={_styles.text}>วันเกิด : {this.props.profile.birthdate ? this.splitBirthdayStr(this.props.profile.birthdate) : '-'}</Text>
+                            <Text style={_styles.text}>วันเกิด : {this.props.profile.birthdate ? this.formatDate(this.props.profile.birthdate) : '-'}</Text>
                             <Text style={_styles.text}>ที่อยู่ : {this.props.profile.address}</Text>
                             <Text style={_styles.text}>เบอร์โทรศัพท์ : {this.props.profile.phone}</Text>
                             <Text style={_styles.text}>ชื่อญาติ : {this.props.profile.cousin_name}</Text>
@@ -84,7 +87,7 @@ export default class Profile extends React.Component {
 
                         <View style={_styles.contentContainer}>
                             <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 25, marginTop: 20 }]}>ข้อมูลการรักษา</Text>
-                            <Text style={_styles.text}>วันที่รับเข้าโรงพยาบาล : {this.props.profile.admit_date}</Text>
+                            <Text style={_styles.text}>วันที่รับเข้าโรงพยาบาล : {this.props.profile.admit_date ? this.formatDate(this.props.profile.admit_date) : '-'}</Text>
                             <Text style={_styles.text}>ดัชนีมวลกาย : {this.props.profile.bmi}</Text>
                             <Text style={_styles.text}>ระดับความรุนแรงของหัวใจตามเกณฑ์สมาคมโรคหัวใจนิวยอร์ก  : {this.props.profile.nyha_class}</Text>
                             <Text style={_styles.text}>ประสิทธิภาพการบีบตัวของกล้ามเนื้อหัวใจ  : {this.props.profile.ejection_fraction}</Text>
