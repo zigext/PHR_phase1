@@ -3,7 +3,8 @@ import * as types from '../actions/actionTypes'
 
 const initialState = {
     isLoggedIn: false,
-    appId: 'HPHR'
+    appId: 'HPHR',
+    activity: []
 }
 
 export default function UserReducer(state = initialState, action = {}) {
@@ -36,6 +37,15 @@ export default function UserReducer(state = initialState, action = {}) {
         case types.EDIT_PROFILE:
             return {
                 ...state
+            }
+        case types.SAVE_ACTIVITY:
+            if (state.activity.length > 5) { //Only save 5 last activities 
+                console.log("activity history full")
+                state.activity.shift() //remove first element from array
+            }
+            return {
+                ...state,
+                activity: [...state.activity, action.payload]
             }
         // case ActionConst.FOCUS:
         //     return {

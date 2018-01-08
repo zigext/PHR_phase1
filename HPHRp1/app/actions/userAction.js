@@ -13,7 +13,7 @@ export const logIn = (email, uid) => {
 export const logOut = (email, uid) => {
     return {
         type: types.LOG_OUT,
-   
+
     }
 }
 
@@ -42,5 +42,16 @@ export const deleteSurgery = () => {
 export const editProfile = () => {
     return {
         type: types.EDIT_PROFILE
+    }
+}
+
+export const saveActivity = (results, date, time) => {
+    return {
+        type: types.SAVE_ACTIVITY,
+        payload: {
+            results,
+            date,
+            time
+        }
     }
 }
