@@ -58,27 +58,50 @@ class PostActivity extends React.Component {
         dataStore[name] = value
         //If blood pressure, set systolic and diastolic 
         //calculeted from input field
-        // if (name === 'bp') {
-        //     let bpArray = split(value, '/')
-        //     //High systolic
-        //     if (bpArray[0] > 180) {
-        //         await this.setState({ ['highSbp']: true })
-        //         dataStore['highSbp'] = true
-        //     }
-        //     else {
-        //         await this.setState({ ['highSbp']: false })
-        //         dataStore['highSbp'] = false
-        //     }
-        //     //High diastolic
-        //     if (bpArray[1] > 110) {
-        //         await this.setState({ ['highDbp']: true })
-        //         dataStore['highDbp'] = true
-        //     }
-        //     else {
-        //         await this.setState({ ['highDbp']: false })
-        //         dataStore['highDbp'] = false
-        //     }
-        // }
+        if (name === 'postBp') {
+            let postBpArray = split(value, '/')
+            let preBpArray = split(this.props.preBp, '/')
+            //SBP increase more than 40 mmHg
+            if ((postBpArray[0] - preBpArray[0]) > 40) {
+                await this.setState({ ['SbpIncreaseMoreThan40mmHg']: true })
+                dataStore['SbpIncreaseMoreThan40mmHg'] = true
+            }
+            else {
+                await this.setState({ ['SbpIncreaseMoreThan40mmHg']: false })
+                dataStore['SbpIncreaseMoreThan40mmHg'] = false
+            }
+            //SBP decrease more than 20 mmHg
+            if ((preBpArray[0] - postBpArray[0]) > 20) {
+                await this.setState({ ['SbpDecreaseMoreThan20mmHg']: true })
+                dataStore['SbpDecreaseMoreThan20mmHg'] = true
+            }
+            else {
+                await this.setState({ ['SbpDecreaseMoreThan20mmHg']: false })
+                dataStore['SbpDecreaseMoreThan20mmHg'] = false
+            }
+            //DBP increase at least 20 mmHg
+            if ((postBpArray[1] - preBpArray[1]) >= 20) {
+                await this.setState({ ['DbpIncreaseAtLeast20mmHg']: true })
+                dataStore['DbpIncreaseAtLeast20mmHg'] = true
+            }
+            else {
+                await this.setState({ ['DbpIncreaseAtLeast20mmHg']: false })
+                dataStore['DbpIncreaseAtLeast20mmHg'] = false
+            }
+        }
+        //If HR, check target HR
+        if (name === 'postHr') {
+            let target = this.props.preHr + 30
+            // Heart rate reach target HR
+            if (value >= target) {
+                await this.setState({ ['HRReachTargetHR']: true })
+                dataStore['HRReachTargetHR'] = true
+            }
+            else {
+                await this.setState({ ['HRReachTargetHR']: false })
+                dataStore['HRReachTargetHR'] = false
+            }
+        }
         console.log("STEP = ", this.state.step)
         console.log("DATA STORE = ", dataStore)
         console.log("STATE = ", this.state)
