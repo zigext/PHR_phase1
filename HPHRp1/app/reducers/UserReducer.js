@@ -3,7 +3,7 @@ import * as types from '../actions/actionTypes'
 
 const initialState = {
     isLoggedIn: false,
-    appId: 'HPHRp1'
+    appId: 'HPHR'
 }
 
 export default function UserReducer(state = initialState, action = {}) {
