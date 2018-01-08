@@ -9,7 +9,7 @@ import Step2Post from '../components/Step2.activity.post'
 import Step3Post from '../components/Step3.activity.post'
 import Step4Post from '../components/Step4.activity.post'
 import Stepper from '../components/Stepper'
-// import { SERVER_IP, PIN } from '../config/Const'
+import { SERVER_IP, PIN_CODE } from '../config/Const'
 import ApiUtils from '../components/ApiUtils'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -91,31 +91,20 @@ class PostActivity extends React.Component {
             callback(true, null)
         else
             callback(false, null)
-        // const path = `${SERVER_IP}${PIN}`
-        // await fetch(path, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         userid: '1416382941765846', //this.props.default.user.uid
-        //         appid: 'PHRapp', //this.props.defalt.appId
-        //         pin: pin
-        //     })
-        // })
+        // const path = `${SERVER_IP}${PIN_CODE}?pin_code=1416382941765846&appid=HPHR` //pin_code=${pin}&appid=${this.props.default.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        // await fetch(path)
         //     .then(ApiUtils.checkStatus)
+        //     .then(response => response.json())
         //     .then(responseData => {
-        //         if(responseData === true) {
-        //             callback(true)
-        //         }
-        //         else {
-        //             callback(false)
-        //         } 
-
+        //         console.log("Check pin success")
+        //         let success = responseData.success
+        //         if (success)
+        //             callback(true, null)
+        //         else
+        //             callback(false, null)
         //     })
         //     .catch(error => {
-        //        callback(null, error)     
+        //         console.log("Error in checkNursePin = ", error)
         //     })
     }
 
