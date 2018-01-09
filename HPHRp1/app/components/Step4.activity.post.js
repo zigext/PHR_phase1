@@ -9,7 +9,6 @@ import common from '../styles/common'
 export default class Step4Post extends React.Component {
     constructor(props) {
         super(props)
-
     }
 
     //Start doing activity
@@ -56,6 +55,9 @@ export default class Step4Post extends React.Component {
         return (
             <View style={_styles.container}>
                 <ScrollView>
+                    <Text style={[_styles.text, {fontWeight: 'bold'}]}>สรุปผลการทำกิจกรรม</Text>
+                    <Text style={_styles.text}>ขั้นที่ทำได้ : {this.props.result.maxLevel}</Text>
+                    <Text style={_styles.text}>ขั้นต่อไป: {this.props.result.nextLevel}</Text>
                     <Text style={_styles.text}>อัตราการเต้นหัวใจ : {this.props.dataStore.postHr} bpm</Text>
                     <Text style={_styles.text}>ความดันเลือด : {this.props.dataStore.postBp}</Text>
                     <Text style={_styles.text}>ระดับความเหนื่อย : {this.props.dataStore.borg}</Text>

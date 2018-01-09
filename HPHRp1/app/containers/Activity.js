@@ -6,7 +6,7 @@ import ApiUtils from '../components/ApiUtils'
 import PreActivity from './PreActivity'
 import DoingActivity from './DoingActivity'
 import PostActivity from './PostActivity'
-import Borg from '../components/Borg'
+import { saveActivity } from '../actions/userAction'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
@@ -23,15 +23,18 @@ class Activity extends React.Component {
             preActivity: {},
             postActivity: {},
             result: {},
+            exception: {}
         }
     }
     componentDidMount = async () => {
         Orientation.lockToLandscape()
+        //Always fetch new profile
+        // await this.fetchProfile()
+        //fetch profile if empty
         if (isEmpty(this.state.profile)) {
             console.log("empty")
             // await this.fetchProfile()
         }
-
     }
 
     fetchProfile = async () => {
@@ -63,7 +66,7 @@ class Activity extends React.Component {
         //     body: JSON.stringify({
         //         userid: '1416382941765846', //this.props.default.user.uid
         //         appid: 'PHRapp', //this.props.defalt.appId
-        //         profile: newProfile //this.state.result.maxLevel
+        //         profile: newProfile //{level : this.state.result.nextLevel}
         //     })
         // })
         //     .then(ApiUtils.checkStatus)
@@ -77,32 +80,47 @@ class Activity extends React.Component {
 
     //Save activity's result to server
     saveActivity = async () => {
-        ToastAndroid.showWithGravity('บันทึกผลการทำกิจกรรมเสร็จสิ้น', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        let results = {}
+        results.preActivity = this.state.preActivity
+        results.result = this.state.result
+        results.postActivity = this.state.postActivity
+        results.timeStart = this.state.timeStart
+        results.timeStop = this.state.timeStop
+        results.durationMillis = this.state.durationMillis
+        results.durationMinutes = this.state.durationMinutes
+        results.timestamp = Math.floor(Date.now())
+        let date = moment(this.state.timeStart).format("YYYY-MM-DD")
+        let time = moment(this.state.timeStart).format("kk:mm:ss")
+        console.log("results = ", results)
 
-        // const path = `${SERVER_IP}${ACTIVITY_RESULT_1}`
-        // await fetch(path, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         userid: '1416382941765846', //this.props.default.user.uid
-        //         appid: 'PHRapp', //this.props.defalt.appId
-        //         results: newProfile
-        //     })
-        // })
-        //     .then(ApiUtils.checkStatus)
-        //     .then(responseData => {
-        //         console.log("Save activity success ")
-        //         callback(null)
-        //         this.props.dispatchEditProfile()
+        const path = `${SERVER_IP}${ACTIVITY_RESULT_1}`
+        await fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userid: '1416382941765846', //this.props.default.user.uid
+                appid: 'PHRapp', //this.props.defalt.appId
+                results: results,
+                date: date,
+                time: time
+            })
+        })
+            .then(ApiUtils.checkStatus)
+            .then(responseData => {
+                console.log("Save activity success ")
+                ToastAndroid.showWithGravity('บันทึกผลการทำกิจกรรมเสร็จสิ้น', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                // callback(null)
+                this.props.dispatchSaveActivity(results, date, time)
 
-        //     })
-        //     .catch(error => {
-        //         console.log("Error in saveActivity = ", error)
-        //         callback(error)
-        //     })
+            })
+            .catch(error => {
+                console.log("Error in saveActivity = ", error)
+                ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                // callback(error)
+            })
     }
 
     setTimeStart = async () => {
@@ -116,16 +134,20 @@ class Activity extends React.Component {
     }
 
     setDuration = async () => {
-        let duration = this.calculateDuration(this.state.timeStart, this.state.timeStop)
-        await this.setState({ duration })
-        console.log("duration = ", this.state.duration)
+        let durationMillis = this.calculateDuration(this.state.timeStart, this.state.timeStop, 'millis')
+        let durationMinutes = this.calculateDuration(this.state.timeStart, this.state.timeStop, 'minutes')
+        await this.setState({ durationMillis, durationMinutes })
+        console.log("duration = ", this.state.durationMillis, this.state.durationMinutes)
     }
 
     //calculate duration from local time (new Date())
-    calculateDuration = (timeStart, timeStop) => {
+    calculateDuration = (timeStart, timeStop, format) => {
         let stop = moment(timeStop)
         let duration = moment.duration(stop.diff(timeStart))
-        return duration.asMilliseconds()
+        if (format === 'millis')
+            return duration.asMilliseconds()
+        else if (format === 'minutes')
+            return duration.asMinutes().toFixed(2)
     }
 
     onPreActivityDone = async (value) => {
@@ -138,9 +160,10 @@ class Activity extends React.Component {
 
     onDoingActivityDone = async (value) => {
         await this.setState({
-            state: 'post activity',
+            state: 'post activity', //cause warning
             result: value,
         })
+        
         console.log("RESULT = ", this.state.result)
     }
 
@@ -153,6 +176,14 @@ class Activity extends React.Component {
         console.log("ALL = ", this.state)
         // this.saveProfile()
         this.saveActivity()
+    }
+
+    //In case of patient doesn't pass the pre-test, patient can select which activities to do
+    onSelectActivity = async (selected) => {
+        await this.setState({
+            exception: selected
+        })
+        console.log("select = ", this.state.exception)
     }
 
     // onLevelChanged = (level) => {
@@ -208,20 +239,20 @@ class Activity extends React.Component {
     renderPreActivity = () => {
         return (
             // <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
-            <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
+            <PreActivity onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
         )
     }
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.profile.level} />
+            <DoingActivity exception={this.state.exception} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.profile.level} />
         )
     }
 
     renderPostActivity = () => {
         return (
-            // <PostActivity onPostActivityDone={this.onPostActivityDone} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
-            <PostActivity onPostActivityDone={this.onPostActivityDone} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
+            // <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} result={this.state.result}/>
+            <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result}/>
         )
     }
 
@@ -245,7 +276,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // dispatchLogIn: (email, uid) => dispatch(logIn(email, uid))
+        dispatchSaveActivity: (results, date, time) => dispatch(saveActivity(results, date, time))
     }
 }
 
