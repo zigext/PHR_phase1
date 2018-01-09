@@ -1,8 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
-import i18n from 'tcomb-form-native/lib/i18n/en'
-import templates from 'tcomb-form-native/lib/templates/bootstrap'
 // var stylesheet = require('tcomb-form-native/lib/stylesheets/bootstrap');
 import t from 'tcomb-form-native'
 import styles from '../styles/index'
