@@ -143,7 +143,7 @@ class PreActivity extends React.Component {
                     calculatePreActivity={this.calculatePreActivity}
                 />
             case 3:
-                return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
+                return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} onSelectActivity={this.props.onSelectActivity} />
         }
     }
 

@@ -179,9 +179,9 @@ class Activity extends React.Component {
     }
 
     //In case of patient doesn't pass the pre-test, patient can select which activities to do
-    onSelectActivity = async (selected) => {
+    onSelectActivity = async (selected, finalSystemLevel) => {
         await this.setState({
-            exception: selected
+            exception: {...selected, finalSystemLevel}
         })
         console.log("select = ", this.state.exception)
     }

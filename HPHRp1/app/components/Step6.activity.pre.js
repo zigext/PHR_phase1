@@ -1,14 +1,85 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Alert, ScrollView, ToastAndroid } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux'
+import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import common from '../styles/common'
+import { cloneDeep } from 'lodash'
+
+let Form = t.form.Form
+const myCustomStylesheet = cloneDeep(t.form.Form.stylesheet)
+myCustomStylesheet.controlLabel.normal.fontWeight = 'normal'
+
+let options = {
+    fields: {
+        ac1: {
+            label: 'บริหารปอดด้วยวิธี Breathing control',
+        },
+        ac2: {
+            label: 'บริหารปอดด้วยวิธี Deep breathing',
+        },
+        ac3: {
+            label: 'บริหารปอดด้วยอุปกรณ์ Triflow',
+        },
+
+        ac4: {
+            label: 'ไออย่างมีประสิทธิภาพ',
+        },
+        ac5: {
+            label: 'บริหารขา-ข้อเท้า',
+        },
+        ac6: {
+            label: 'บริหารแขน-ข้อมือ',
+        },
+        ac7: {
+            label: 'นั่งห้อยขาข้างเตียง แกว่งเท้า',
+        },
+        ac8: {
+            label: 'ลุกและนั่งเก้าอี้ข้างเตียง',
+        },
+        ac9: {
+            label: 'ยืนย่ำเท้ากับที่',
+        },
+
+        ac10: {
+            label: 'เดิน',
+        },
+        ac11: {
+            label: 'เขย่งเท้าขึ้นลง',
+        },
+        ac12: {
+            label: 'เดินขึ้นลงบันได',
+        },
+        ac13: {
+            label: 'กางข้อศอก ยกไหล่ หมุนแขน',
+        }
+    },
+    stylesheet: myCustomStylesheet
+}
+
+let input = t.struct({
+    ac1: t.Boolean,
+    ac2: t.Boolean,
+    ac3: t.Boolean,
+    ac4: t.Boolean,
+    ac5: t.Boolean,
+    ac6: t.Boolean,
+    ac7: t.Boolean,
+    ac8: t.Boolean,
+    ac9: t.Boolean,
+    ac10: t.Boolean,
+    ac11: t.Boolean,
+    ac12: t.Boolean,
+    ac13: t.Boolean,
+})
 
 export default class Step6Pre extends React.Component {
     constructor(props) {
         super(props)
-
+        this.state = {
+            status: 'initial'
+        }
     }
 
     //Start doing activity
@@ -21,48 +92,142 @@ export default class Step6Pre extends React.Component {
         this.props.resetState()
     }
 
+    onSelectActivityPress = () => {
+        this.setState({
+            status: 'choosing'
+        })
+    }
+    
+    //Failed pre-test and want to do activities 
+    //Done selecting activities
+    onStartActivityAfterSelect = () => {
+        let value = this.refs.form.getValue()
+        if (value) {
+            Alert.alert(
+                'แบบทดสอบก่อนทำกิจกรรม',
+                'ต้องการสิ้นสุดการทำแบบทดสอบหรือไม่? กรุณาตรวจสอบความถูกต้อง',
+                [
+                    {
+                        text: 'ใช่', onPress: async () => {
+                            //For final system's level activity that patient has to do
+                            let finalSystemLevel
+                            if(value.ac1)   finalSystemLevel = 1
+                            if(value.ac2)   finalSystemLevel = 2
+                            if(value.ac3)   finalSystemLevel = 3
+                            if(value.ac4)   finalSystemLevel = 4
+                            if(value.ac5)   finalSystemLevel = 5
+                            if(value.ac6)   finalSystemLevel = 6
+                            if(value.ac7)   finalSystemLevel = 7
+                            if(value.ac8)   finalSystemLevel = 8
+                            if(value.ac9)   finalSystemLevel = 9
+                            if(value.ac10)   finalSystemLevel = 10
+                            if(value.ac11)   finalSystemLevel = 11
+                            if(value.ac12)   finalSystemLevel = 12
+                            if(value.ac13)   finalSystemLevel = 13
+
+                            this.props.onSelectActivity(value, finalSystemLevel)
+                            this.props.onPreActivityDone(this.props.dataStore)
+                        }
+                    },
+                    { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+                ]
+            )
+        }
+        else {
+            ToastAndroid.showWithGravity('กรุณาเลือกกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+    }
+
+    renderSelectActivity = () => {
+        return (
+            <View>
+                <Text style={[_styles.text, {fontWeight: 'bold'}]}>เลือกกิจกรรมฟื้นฟูหัวใจที่สามารถทำได้</Text>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
+                <View style={_styles.buttonContainer}>
+                    <Button
+                        raised
+                        icon={{ name: 'home' }}
+                        title='กลับสู่หน้าเริ่มต้น'
+                        backgroundColor='grey'
+                        onPress={this.onBackToStarter} />
+                    <Button
+                        raised
+                        iconRight
+                        icon={{ name: 'play', type: 'foundation' }}
+                        title='เริ่มทำกิจกรรม'
+                        backgroundColor={common.accentColor}
+                        onPress={this.onStartActivityAfterSelect} />
+                </View>
+            </View>
+        )
+    }
+
     //If any of the conditions is true, should consult with doctor
     checkPreTestResult = () => {
         for (let property in this.props.dataStore) {
             if (this.props.dataStore[property] === true) {
                 return (
-                    <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                        <Icon
-                            raised
-                            reverse
-                            name='warning'
-                            type='font-awesome'
-                            color='#c81837'
-                            size={35}
-                        />
-                        <Text style={_styles.text}>กรุณาปรึกษาแพทย์เพื่อพิจารณาการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                    <View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <Icon
+                                raised
+                                reverse
+                                name='warning'
+                                type='font-awesome'
+                                color='#c81837'
+                                size={35}
+                            />
+                            <Text style={_styles.text}>กรุณาปรึกษาแพทย์เพื่อพิจารณาการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                        </View>
+                        <View style={_styles.buttonContainer}>
+                            <Button
+                                raised
+                                icon={{ name: 'home' }}
+                                title='กลับสู่หน้าเริ่มต้น'
+                                backgroundColor='grey'
+                                onPress={this.onBackToStarter} />
+                            <Button
+                                raised
+                                iconRight
+                                icon={{ name: 'md-settings', type: 'ionicon' }}
+                                title='เลือกกิจกรรมที่ทำได้'
+                                backgroundColor={common.accentColor}
+                                onPress={this.onSelectActivityPress} />
+                        </View>
                     </View>
                 )
             }
         }
-        return <Text style={_styles.text}>มีความพร้อมในการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+        return (
+            <View>
+                <Text style={_styles.text}>มีความพร้อมในการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                <View style={_styles.buttonContainer}>
+                    <Button
+                        raised
+                        icon={{ name: 'home' }}
+                        title='กลับสู่หน้าเริ่มต้น'
+                        backgroundColor='grey'
+                        onPress={this.onBackToStarter} />
+                    <Button
+                        raised
+                        iconRight
+                        icon={{ name: 'play', type: 'foundation' }}
+                        title='เริ่มทำกิจกรรม'
+                        backgroundColor={common.accentColor}
+                        onPress={this.onStartDoingActivity} />
+                </View>
+            </View>
+
+        )
     }
 
     render() {
         return (
             <View style={_styles.container}>
                 <ScrollView>
-                    {this.checkPreTestResult()}
-                    <View style={_styles.buttonContainer}>
-                        <Button
-                            raised
-                            icon={{ name: 'home' }}
-                            title='กลับสู่หน้าเริ่มต้น'
-                            backgroundColor='grey'
-                            onPress={this.onBackToStarter} />
-                        <Button
-                            raised
-                            iconRight
-                            icon={{ name: 'play', type: 'foundation' }}
-                            title='เริ่มทำกิจกรรม'
-                            backgroundColor={common.accentColor}
-                            onPress={this.onStartDoingActivity} />
-                    </View>
+                    {this.state.status === 'initial' ? this.checkPreTestResult() : this.renderSelectActivity()}
                 </ScrollView>
             </View>
         )
@@ -83,6 +248,10 @@ const _styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         marginTop: 50,
+    },
+    formContainer: {
+        marginLeft: 60,
+        marginRight: 300
     },
     text: {
         fontSize: 20,
