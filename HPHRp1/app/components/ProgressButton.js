@@ -11,7 +11,7 @@ export default class ProgressButton extends React.Component {
         super(props)
     }
     onPress = () => {
-
+        this.props.onProgressPress()
     }
 
     render() {
