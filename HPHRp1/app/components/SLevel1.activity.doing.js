@@ -34,6 +34,8 @@ let input = t.struct({
     amount: amount
 })
 
+const LEVEL = 1
+
 export default class SLevel1 extends React.Component {
     constructor(props) {
         super(props)
@@ -48,8 +50,14 @@ export default class SLevel1 extends React.Component {
         Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this)
     }
 
+
     componentDidMount = () => {
         Voice.start('th-TH')
+        //If patient can't do this activity
+        if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
+            console.log("DONT")
+            this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        }
     }
 
     onSpeechStart(e) {
@@ -76,6 +84,12 @@ export default class SLevel1 extends React.Component {
     }
 
     onSystemLevelChange = () => {
+        // let result = {
+        //         maxLevel: this.props.activityLevel,
+        //         levelTitle: 'Breathing control',
+        //         completedLevel: true,
+        //         nextLevel: this.props.activityLevel
+        //     }
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
@@ -101,14 +115,17 @@ export default class SLevel1 extends React.Component {
             result = {
                 maxLevel: this.props.activityLevel,
                 levelTitle: 'Breathing control',
-                amount: value.amount
+                amount: value.amount,
+                completedLevel: false,
+                nextLevel: this.props.activityLevel
             }
-            // this.onDataChange('')
+
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
         }
     }
+
 
     renderForm = () => {
         return (
@@ -127,13 +144,9 @@ export default class SLevel1 extends React.Component {
         )
     }
 
-    renderActivity = () => {
-        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
+    renderNormalButton = () => {
         return (
             <View>
-                <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
-                </View>
                 <Icon
                     raised
                     reverse
@@ -160,8 +173,60 @@ export default class SLevel1 extends React.Component {
         )
     }
 
+    renderButtonWhenFinal = () => {
+        return (
+            <View style={_styles.exitContainer}>
+                <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color={common.accentColor}
+                    size={35}
+                    onPress={this.onActivityDone}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
+        )
+    }
+
+    renderActivity = () => {
+        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
+        return (
+            <View>
+                <View style={{ alignItems: 'center' }}>
+                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                </View>
+                {/*Check if this is the final activity that patient can do*/}
+                {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
+                {/*<Icon
+                    raised
+                    reverse
+                    name='ios-arrow-forward'
+                    type='ionicon'
+                    color={common.accentColor}
+                    size={35}
+                    onPress={this.onSystemLevelChange}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>*/}
+            </View>
+        )
+    }
+
     render() {
-        
+
         return (
             <View style={_styles.container}>
                 <Text style={_styles.topic}>บริหารปอดด้วยวิธี Breathing control 5-10 ครั้ง</Text>

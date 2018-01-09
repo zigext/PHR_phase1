@@ -34,15 +34,25 @@ let input = t.struct({
     amount: amount
 })
 
+const LEVEL = 8
+
 export default class SLevel8 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: 'doing'
+            status: 'doing',
+            completedLevel: false
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
         // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this)
+    }
+
+    componentDidMount = () => {
+        //If patient can't do this activity
+        if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
+            this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        }
     }
 
     onSpeechStartHandler(e) {
@@ -75,13 +85,17 @@ export default class SLevel8 extends React.Component {
                                 {
                                     text: 'ใช่', onPress: async () => {
                                         //In case of activity is completed
-                                        let result = {
-                                            maxLevel: this.props.activityLevel + 1
-                                        }
-                                        this.props.onActivityLevelChange(this.props.activityLevel + 1)
-                                        await this.props.setTimeStop()
-                                        this.props.setDuration()
-                                        this.props.onDoingActivityDone(result)
+                                        this.setState({
+                                            completedLevel: true,
+                                            status: 'done'
+                                        })
+                                        // let result = {
+                                        //     maxLevel: this.props.activityLevel + 1
+                                        // }
+                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                                        // await this.props.setTimeStop()
+                                        // this.props.setDuration()
+                                        // this.props.onDoingActivityDone(result)
                                     }
                                 },
                                 { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
@@ -97,15 +111,31 @@ export default class SLevel8 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {
-                maxLevel: this.props.activityLevel,
-                levelTitle: 'ลุกนั่งเก้าอี้ข้างเตียง',
-                amount: value.amount
+            let result = {}
+            //Not completed
+            if (!this.state.completedLevel) {
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'ลุกและนั่งเก้าอี้ข้างเตียง'
+                result.amount = value.amount
+                result.completedLevel = this.state.completedLevel
+                result.nextLevel = this.props.activityLevel
             }
-            console.log("amount = ", result)
+            //Completed
+            else {
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'ลุกและนั่งเก้าอี้ข้างเตียง'
+                result.amount = value.amount
+                result.completedLevel = this.state.completedLevel
+                result.nextLevel = this.props.activityLevel + 1
+                this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
+            // console.log("amount = ", result)
+            // await this.props.setTimeStop()
+            // this.props.setDuration()
+            // this.props.onDoingActivityDone(result)
         }
     }
 
@@ -126,13 +156,9 @@ export default class SLevel8 extends React.Component {
         )
     }
 
-    renderActivity = () => {
-        Tts.speak('ลุกและนั่งที่เก้าอี้ข้างเตียง')
+    renderNormalButton = () => {
         return (
             <View>
-                <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
-                </View>
                 <Icon
                     raised
                     reverse
@@ -155,6 +181,58 @@ export default class SLevel8 extends React.Component {
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
+            </View>
+        )
+    }
+
+    renderButtonWhenFinal = () => {
+        return (
+            <View style={_styles.exitContainer}>
+                <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color={common.accentColor}
+                    size={35}
+                    onPress={this.onActivityDone}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
+        )
+    }
+
+    renderActivity = () => {
+        Tts.speak('ลุกและนั่งที่เก้าอี้ข้างเตียง')
+        return (
+            <View>
+                <View style={{ alignItems: 'center' }}>
+                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                </View>
+                {/*Check if this is the final activity that patient can do*/}
+                {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
+                {/*<Icon
+                    raised
+                    reverse
+                    name='ios-arrow-forward'
+                    type='ionicon'
+                    color={common.accentColor}
+                    size={35}
+                    onPress={this.onSystemLevelChange}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>*/}
             </View>
         )
     }

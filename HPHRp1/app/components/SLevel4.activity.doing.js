@@ -34,6 +34,8 @@ let input = t.struct({
     amount: amount
 })
 
+const LEVEL = 4
+
 export default class SLevel4 extends React.Component {
     constructor(props) {
         super(props)
@@ -43,6 +45,13 @@ export default class SLevel4 extends React.Component {
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
         // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this)
+    }
+
+    componentDidMount = () => {
+        //If patient can't do this activity
+        if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
+            this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        }
     }
 
     onSpeechStartHandler(e) {
@@ -81,7 +90,9 @@ export default class SLevel4 extends React.Component {
             let result = {
                 maxLevel: this.props.activityLevel,
                 levelTitle: 'ไออย่างมีประสิทธิภาพ',
-                amount: value.amount
+                amount: value.amount,
+                completedLevel: false,
+                nextLevel: this.props.activityLevel
             }
             await this.props.setTimeStop()
             this.props.setDuration()
@@ -106,13 +117,9 @@ export default class SLevel4 extends React.Component {
         )
     }
 
-    renderActivity = () => {
-        Tts.speak('ไออย่างมีประสิทธิภาพ')
+    renderNormalButton = () => {
         return (
             <View>
-                <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
-                </View>
                 <Icon
                     raised
                     reverse
@@ -135,6 +142,58 @@ export default class SLevel4 extends React.Component {
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
+            </View>
+        )
+    }
+
+    renderButtonWhenFinal = () => {
+        return (
+            <View style={_styles.exitContainer}>
+                <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color={common.accentColor}
+                    size={35}
+                    onPress={this.onActivityDone}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
+        )
+    }
+
+    renderActivity = () => {
+        Tts.speak('ไออย่างมีประสิทธิภาพ')
+        return (
+            <View>
+                <View style={{ alignItems: 'center' }}>
+                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                </View>
+                 {/*Check if this is the final activity that patient can do*/}
+                {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
+                {/*<Icon
+                    raised
+                    reverse
+                    name='ios-arrow-forward'
+                    type='ionicon'
+                    color={common.accentColor}
+                    size={35}
+                    onPress={this.onSystemLevelChange}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>*/}
             </View>
         )
     }

@@ -18,7 +18,7 @@ myCustomStylesheet.controlLabel.normal.fontSize = 20
 let options = {
     fields: {
         amount: {
-            label: 'ระยะทางที่เดินได้'
+            label: 'จำนวนครั้งที่ทำได้'
         }
     },
     stylesheet: myCustomStylesheet
@@ -34,16 +34,27 @@ let input = t.struct({
     amount: amount
 })
 
+const LEVEL = 13
+
 export default class SLevel13 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             status: 'doing',
             doingLevel: this.props.doingLevel,
+            completedLevel: false
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
         // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this)
+    }
+
+    componentDidMount = () => {
+        //If patient can't do this activity
+        if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
+            //This is the last activity, end doing activity state and save the result
+            this.props.onDoingActivityDone(this.props.resultForPassedOn) 
+        }
     }
 
     onSpeechStartHandler(e) {
@@ -77,12 +88,16 @@ export default class SLevel13 extends React.Component {
                                     text: 'ใช่', onPress: async () => {
                                         // this.props.onActivityLevelChange(this.props.activityLevel + 1)
                                         //In case of activity is completed
-                                        let result = {
-                                            maxLevel: this.props.activityLevel + 1
-                                        }
-                                        await this.props.setTimeStop()
-                                        this.props.setDuration()
-                                        this.props.onDoingActivityDone(result)
+                                        this.setState({
+                                            completedLevel: true,
+                                            status: 'done'
+                                        })
+                                        // let result = {
+                                        //     maxLevel: this.props.activityLevel + 1
+                                        // }
+                                        // await this.props.setTimeStop()
+                                        // this.props.setDuration()
+                                        // this.props.onDoingActivityDone(result)
                                     }
                                 },
                                 { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
@@ -99,15 +114,38 @@ export default class SLevel13 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {
-                maxLevel: this.props.activityLevel,
-                levelTitle: 'กางข้อศอก ยกไหล่ หมุนแขน',
-                amount: value.amount
+            let result = {}
+            //Not completed
+            if (!this.state.completedLevel) {
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'กางข้อศอก ยกไหล่ หมุนแขน'
+                result.amount = value.amount
+                result.completedLevel = this.state.completedLevel
+                result.nextLevel = this.props.activityLevel
             }
-            console.log("amount = ", result)
+            //Completed
+            else {
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'กางข้อศอก ยกไหล่ หมุนแขน'
+                result.amount = value.amount
+                result.completedLevel = this.state.completedLevel
+                if(this.props.activityLevel === 6) {
+                    result.nextLevel = this.props.activityLevel + 1
+                }
+                else if(this.props.activityLevel === 7) {
+                    //Max level is 7
+                    result.nextLevel = this.props.activityLevel
+                }
+                //Complete all level activities
+                // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
+            // console.log("amount = ", result)
+            // await this.props.setTimeStop()
+            // this.props.setDuration()
+            // this.props.onDoingActivityDone(result)
         }
     }
 
