@@ -88,8 +88,6 @@ let options = {
 
 let input1 = t.struct({
     sbpLowerThanNormal: t.Boolean,
-    abnormalGlucose: t.Boolean,
-    weakMuscle: t.Boolean,
 })
 
 let input2 = t.struct({
@@ -110,6 +108,8 @@ let input3 = t.struct({
 })
 
 let input4 = t.struct({
+    abnormalGlucose: t.Boolean,
+    weakMuscle: t.Boolean,
     anemia: t.Boolean,
     fatigue: t.Boolean,
     nausea: t.Boolean,
@@ -126,13 +126,10 @@ export default class Step2Pre extends React.Component {
 
     onForward = () => {
         let value1 = this.refs.form1.getValue()
-        console.log("VALUE1 ", value1)
         let value2 = this.refs.form2.getValue()
-        console.log("VALUE2 ", value2)
         let value3 = this.refs.form3.getValue()
-        console.log("VALUE3 ", value3)
         let value4 = this.refs.form4.getValue()
-        console.log("VALUE4 ", value4)
+        
         if (value1 || value2 || value3 || value4) {
             // this.props.onStepChange(this.props.step + 1)
             // this.props.onDataChange('sbpLowerThanNormal', value.sbpLowerThanNormal)
@@ -147,8 +144,6 @@ export default class Step2Pre extends React.Component {
                             this.props.onStepChange(this.props.step + 1)
 
                             await this.props.onDataChange('sbpLowerThanNormal', value1.sbpLowerThanNormal)
-                            await this.props.onDataChange('abnormalGlucose', value1.abnormalGlucose)
-                            await this.props.onDataChange('weakMuscle', value1.weakMuscle)
 
                             await this.props.onDataChange('st', value2.st)
                             await this.props.onDataChange('pvc', value2.pvc)
@@ -163,6 +158,8 @@ export default class Step2Pre extends React.Component {
                             await this.props.onDataChange('spO2', value3.spO2)
                             await this.props.onDataChange('paO2', value3.paO2)
 
+                            await this.props.onDataChange('abnormalGlucose', value4.abnormalGlucose)
+                            await this.props.onDataChange('weakMuscle', value4.weakMuscle)
                             await this.props.onDataChange('anemia', value4.anemia)
                             await this.props.onDataChange('fatigue', value4.fatigue)
                             await this.props.onDataChange('nausea', value4.nausea)
