@@ -74,19 +74,19 @@ let options = {
 }
 
 var cardiac = t.enums({
-    pvc: 'PVC ชนิด bigeminy หรือมาติดกันมากกว่า 2-3 ตัว',
-    af: 'AF ≥ 100 ครั้ง/นาที',
-    svt: 'SVT',
-    bradycardia: 'Bradycardia ที่ใช้ pacemaker, VT, VF',
-    stSegment: 'มีความผิดปกติของ ST-segment',
+    PVC_ชนิด_Bigeminy_หรือมาติดกันมากกว่า2ถึง3ตัว: 'PVC ชนิด bigeminy หรือมาติดกันมากกว่า 2-3 ตัว',
+    AF_มากกว่าเท่ากับ_100_ครั้งต่อนาที: 'AF ≥ 100 ครั้ง/นาที',
+    SVT: 'SVT',
+    Bradycardia_ที่ใช้_pacemaker_VT_หรือ_VF: 'Bradycardia ที่ใช้ pacemaker, VT, VF',
+    มีความผิดปกติของ_stSegment: 'มีความผิดปกติของ ST-segment',
 })
 
 var respiratory = t.enums({
-    agitation: 'กระสับกระส่าย',
-    dyspnea: 'หายใจลำบาก',
-    rrMoreThan35: 'หอบเหนื่อย อัตราการหายใจ ≥ 35 ครั้ง/นาที',
-    spO2: 'SpO2 ≤ 93%',
-    paO2: 'PaO2 ≥ 60 mmHg',
+    กระสับกระส่าย: 'กระสับกระส่าย',
+    หายใจลำบาก: 'หายใจลำบาก',
+    หอบเหนื่อย_อัตราการหายใจมากกว่าเท่ากับ_35_ครั้งต่อนาที: 'หอบเหนื่อย อัตราการหายใจ ≥ 35 ครั้ง/นาที',
+    SpO2_น้อยกว่าเท่ากับ_93: 'SpO2 ≤ 93%',
+    PaO2_มากกว่าเท่ากับ_60_mmHg: 'PaO2 ≥ 60 mmHg',
 })
 
 var others = t.enums({
