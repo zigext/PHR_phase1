@@ -62,6 +62,10 @@ let options = {
             label: 'จำนวนผู้ช่วยเหลือ',
             help: 'ไม่มีใส่ 0'
         },
+        note: {
+            label: 'หมายเหตุ (ถ้ามี)',
+            multiline: true
+        }
     },
     i18n: {
         optional: ' (ถ้ามี)',
@@ -74,8 +78,8 @@ let options = {
 }
 
 var cardiac = t.enums({
-    PVC_ชนิด_Bigeminy_หรือมาติดกันมากกว่า2ถึง3ตัว: 'PVC ชนิด bigeminy หรือมาติดกันมากกว่า 2-3 ตัว',
-    AF_มากกว่าเท่ากับ_100_ครั้งต่อนาที: 'AF ≥ 100 ครั้ง/นาที',
+    PVC_ชนิด_Bigeminy_หรือมาติดกันมากกว่า_2_ถึง_3_ตัว: 'PVC ชนิด bigeminy หรือมาติดกันมากกว่า 2-3 ตัว',
+    AF_มากกว่าหรือเท่ากับ_100_ครั้งต่อนาที: 'AF ≥ 100 ครั้ง/นาที',
     SVT: 'SVT',
     Bradycardia_ที่ใช้_pacemaker_VT_หรือ_VF: 'Bradycardia ที่ใช้ pacemaker, VT, VF',
     มีความผิดปกติของ_stSegment: 'มีความผิดปกติของ ST-segment',
@@ -84,24 +88,25 @@ var cardiac = t.enums({
 var respiratory = t.enums({
     กระสับกระส่าย: 'กระสับกระส่าย',
     หายใจลำบาก: 'หายใจลำบาก',
-    หอบเหนื่อย_อัตราการหายใจมากกว่าเท่ากับ_35_ครั้งต่อนาที: 'หอบเหนื่อย อัตราการหายใจ ≥ 35 ครั้ง/นาที',
-    SpO2_น้อยกว่าเท่ากับ_93: 'SpO2 ≤ 93%',
-    PaO2_มากกว่าเท่ากับ_60_mmHg: 'PaO2 ≥ 60 mmHg',
+    หอบเหนื่อย_อัตราการหายใจมากกว่าหรือเท่ากับ_35_ครั้งต่อนาที: 'หอบเหนื่อย อัตราการหายใจ ≥ 35 ครั้ง/นาที',
+    SpO2_น้อยกว่าหรือเท่ากับ_93: 'SpO2 ≤ 93%',
+    PaO2_มากกว่าหรือเท่ากับ_60_mmHg: 'PaO2 ≥ 60 mmHg',
 })
 
 var others = t.enums({
     อ่อนเพลีย: 'เหนื่อยล้า อ่อนเพลีย',
-    คลื่นไส้อาเจียน: 'คลื่นไส้ อาเจียน',
+    คลื่นไส้_อาเจียน: 'คลื่นไส้ อาเจียน',
     เจ็บแน่นหน้าอก: 'เจ็บแน่นหน้าอก',
     หน้ามืดมึนงง: 'หน้ามืด มึนงง',
-    เหงื่อออกตัวเย็น: 'เหงื่อออก ตัวเย็น',
+    เหงื่อออก_ตัวเย็น: 'เหงื่อออก ตัวเย็น',
 })
 
 var input = t.struct({
     assistant: assistant,
     cardiacDisorder: t.maybe(t.list(cardiac)), // enum
     respiratoryDisorder: t.maybe(t.list(respiratory)),
-    others: t.maybe(t.list(others))
+    others: t.maybe(t.list(others)),
+    note: t.maybe(t.String)
 });
 
 // let defaultValue = {
@@ -123,6 +128,7 @@ export default class Step3Post extends React.Component {
             await this.props.onDataChange('cardiacDisorder', value.cardiacDisorder)
             await this.props.onDataChange('respiratoryDisorder', value.respiratoryDisorder)
             await this.props.onDataChange('otherDisorder', value.others)
+            await this.props.onDataChange('note', value.note)
             this.props.onStepChange(this.props.step + 1)
         }
         else {
