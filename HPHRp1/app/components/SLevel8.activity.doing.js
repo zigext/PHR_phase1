@@ -55,6 +55,11 @@ export default class SLevel8 extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        Voice.destroy().then(Voice.removeAllListeners)
+        Tts.stop()
+    }
+
     onSpeechStartHandler(e) {
         console.log("Speech start")
     }

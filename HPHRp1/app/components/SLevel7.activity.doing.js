@@ -54,6 +54,11 @@ export default class SLevel7 extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        Voice.destroy().then(Voice.removeAllListeners)
+        Tts.stop()
+    }
+
     onSpeechStartHandler(e) {
         console.log("Speech start")
     }
@@ -119,7 +124,7 @@ export default class SLevel7 extends React.Component {
         )
     }
 
-        renderNormalButton = () => {
+    renderNormalButton = () => {
         return (
             <View>
                 <Icon
@@ -172,7 +177,7 @@ export default class SLevel7 extends React.Component {
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
-                 {/*Check if this is the final activity that patient can do*/}
+                {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
                 {/*<Icon
                     raised

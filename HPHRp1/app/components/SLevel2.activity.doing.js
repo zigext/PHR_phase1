@@ -49,9 +49,14 @@ export default class SLevel2 extends React.Component {
 
     componentDidMount = () => {
         //If patient can't do this activity
-        if(typeof this.props.exception === 'boolean' && this.props.exception === false) {
-           this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
+            this.props.onSystemLevelChange(this.props.systemLevel + 1)
         }
+    }
+
+    componentWillUnmount() {
+        Voice.destroy().then(Voice.removeAllListeners)
+        Tts.stop()
     }
 
     onSpeechStartHandler(e) {
@@ -118,7 +123,7 @@ export default class SLevel2 extends React.Component {
         )
     }
 
-        renderNormalButton = () => {
+    renderNormalButton = () => {
         return (
             <View>
                 <Icon

@@ -53,8 +53,13 @@ export default class SLevel13 extends React.Component {
         //If patient can't do this activity
         if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
             //This is the last activity, end doing activity state and save the result
-            this.props.onDoingActivityDone(this.props.resultForPassedOn) 
+            this.props.onDoingActivityDone(this.props.resultForPassedOn)
         }
+    }
+
+    componentWillUnmount() {
+        Voice.destroy().then(Voice.removeAllListeners)
+        Tts.stop()
     }
 
     onSpeechStartHandler(e) {
@@ -129,10 +134,10 @@ export default class SLevel13 extends React.Component {
                 result.levelTitle = 'กางข้อศอก ยกไหล่ หมุนแขน'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
-                if(this.props.activityLevel === 6) {
+                if (this.props.activityLevel === 6) {
                     result.nextLevel = this.props.activityLevel + 1
                 }
-                else if(this.props.activityLevel === 7) {
+                else if (this.props.activityLevel === 7) {
                     //Max level is 7
                     result.nextLevel = this.props.activityLevel
                 }
