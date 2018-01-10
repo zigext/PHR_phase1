@@ -31,61 +31,40 @@ class DoingActivity extends React.Component {
             progress: 0,
             systemLevel: 1,
             activityLevel: 1,
+            resultForPassedOn: {}
         }
         this.baseState = this.state
     }
 
-    setTimeStart = () => {
-        this.setState({ timeStart: new Date() })
-    }
+    // levelUp = async () => {
+    //     let progress = this.state.progress
+    //     progress += 0.1
+    //     if (progress >= 1) {
+    //         progress = 1
+    //     }
+    //     let level = this.state.level
+    //     level += 1
+    //     if (progress >= 10) {
+    //         progress = 10
+    //     }
+    //     await this.setState({ progress, level })
+    //     // this.props.onLevelChanged(this.state.level)
+    // }
 
-
-    levelUp = async () => {
-        let progress = this.state.progress
-        progress += 0.1
-        if (progress >= 1) {
-            progress = 1
-        }
-        let level = this.state.level
-        level += 1
-        if (progress >= 10) {
-            progress = 10
-        }
-        await this.setState({ progress, level })
-        // this.props.onLevelChanged(this.state.level)
-    }
-
-    levelDown = async () => {
-        let progress = this.state.progress
-        progress -= 0.1
-        if (progress <= 0) {
-            progress = 0
-        }
-        let level = this.state.level
-        level -= 1
-        if (progress <= 0) {
-            progress = 0
-        }
-        await this.setState({ progress, level })
-        // this.props.onLevelChanged(this.state.level)
-    }
-
-    finish = () => {
-        Alert.alert(
-            'สิ้นสุดการทำกิจกรรม',
-            'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
-            [
-                {
-                    text: 'ใช่', onPress: () => {
-                        this.setState({ timeStop: new Date() })
-                        let duration = this.calculateDuration(this.state.timeStart, this.state.timeStop)
-                        this.setState({ duration })
-                    }
-                },
-                { text: 'ไม่', style: 'cancel' }
-            ]
-        )
-    }
+    // levelDown = async () => {
+    //     let progress = this.state.progress
+    //     progress -= 0.1
+    //     if (progress <= 0) {
+    //         progress = 0
+    //     }
+    //     let level = this.state.level
+    //     level -= 1
+    //     if (progress <= 0) {
+    //         progress = 0
+    //     }
+    //     await this.setState({ progress, level })
+    //     // this.props.onLevelChanged(this.state.level)
+    // }
 
     //System level is activity level that we define for our system
     onSystemLevelChange = async (systemLevel) => {
@@ -105,49 +84,49 @@ class DoingActivity extends React.Component {
         console.log("STATE = ", this.state)
     }
 
-    onActivityDone = () => {
-
+    setResult = async (result) => {
+        await this.setState({
+            resultForPassedOn: result
+        })
     }
 
     renderBody = () => {
         switch (this.state.systemLevel) {
             case 1:
-                // return <VoiceTest />
-                return <SLevel1 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel1 exception={this.props.exception.ac1} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 2:
-                return <SLevel2 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel2 exception={this.props.exception.ac2} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 3:
-                return <SLevel3 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel3 exception={this.props.exception.ac3} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 4:
-                return <SLevel4 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel4 exception={this.props.exception.ac4} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 5:
-                return <SLevel5 systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel5 exception={this.props.exception.ac5} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} onSystemLevelChange={this.onSystemLevelChange} activityLevel={this.state.activityLevel} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 6:
-                return <SLevel6 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel6 exception={this.props.exception.ac6} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 7:
-                return <SLevel7 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel7 exception={this.props.exception.ac7} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 8:
-                return <SLevel8 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel8 exception={this.props.exception.ac8} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 9:
-                return <SLevel9 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel9 exception={this.props.exception.ac9} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             //doingLevel is level that the patient that doing , read from server
             case 10:
-                return <SLevel10 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel10 exception={this.props.exception.ac10} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             //doingLevel is level that the patient that doing , read from server
             case 11:
-                return <SLevel11 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel11 exception={this.props.exception.ac11} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             //doingLevel is level that the patient that doing , read from server
             case 12:
-                return <SLevel12 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel12 exception={this.props.exception.ac12} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             //doingLevel is level that the patient that doing , read from server
             case 13:
-                return <SLevel13 systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
+                return <SLevel13 exception={this.props.exception.ac13} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             //doingLevel is level that the patient that doing , read from server
         }
     }
 
     render() {
-
         return (
             <View style={styles.container}>
                 <ScrollView>
