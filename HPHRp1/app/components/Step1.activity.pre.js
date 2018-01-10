@@ -11,7 +11,7 @@ let Form = t.form.Form
 let options = {
     fields: {
         preHr: {
-            label: 'อัตราการเต้นหัวใจ'
+            label: 'อัตราการเต้นหัวใจ (หน่วย bpm)'
         },
         preBp: {
             label: 'ความดันเลือด (Systolic/Diastolic)'
@@ -42,7 +42,7 @@ let preBp = t.refinement(t.String, function (n) {
 
 })
 preBp.getValidationErrorMessage = function (value, path, context) {
-    return 'ความดันเลือดไม่ถูกต้อง'
+    return 'ความดันเลือดไม่ถูกต้อง ex. 80/120'
 }
 
 let input = t.struct({
