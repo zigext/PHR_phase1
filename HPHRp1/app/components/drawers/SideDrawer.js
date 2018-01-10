@@ -1,8 +1,14 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Drawer from 'react-native-drawer'
 import SideDrawerContent from './SideDrawerContent'
 
 export default class SideDrawer extends Component {
+	static propTypes = {
+		children: PropTypes.node,
+		route: PropTypes.object,
+	}
+
 	render() {
 		return (
 			<Drawer
@@ -16,19 +22,14 @@ export default class SideDrawer extends Component {
 				styles={drawerStyles}
 				tweenHandler={(ratio) => ({ main: { opacity: (2 - ratio) / 2 } })}
 			>
-        {
+				{
 					React.Children.map(
-						this.props.children, c => React.cloneElement(c, {route: this.props.route})
+						this.props.children, c => React.cloneElement(c, { route: this.props.route })
 					)
 				}
 			</Drawer>
-    )
+		)
 	}
-}
-
-SideDrawer.propTypes = {
-	children: PropTypes.node,
-	route: PropTypes.object,
 }
 
 var drawerStyles = {
