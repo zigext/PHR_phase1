@@ -88,8 +88,21 @@ export default class Step6Pre extends React.Component {
     }
 
     //Back to state 1
-    onBackToStarter = () => {
-        this.props.resetState()
+    //Save only pre-activity's test result
+    onBackToStarter = async () => {
+        Alert.alert(
+            'แบบทดสอบก่อนทำกิจกรรม',
+            'ต้องการย้อนกลับสู่หน้าแรกหรือไม่?',
+            [
+                {
+                    text: 'ใช่', onPress: async () => {
+                        await this.props.saveOnlyPreActivity(this.props.dataStore)
+                        this.props.resetState()
+                    }
+                },
+                { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+            ]
+        )
     }
 
     onSelectActivityPress = () => {
@@ -97,7 +110,7 @@ export default class Step6Pre extends React.Component {
             status: 'choosing'
         })
     }
-    
+
     //Failed pre-test and want to do activities 
     //Done selecting activities
     onStartActivityAfterSelect = () => {
@@ -111,19 +124,19 @@ export default class Step6Pre extends React.Component {
                         text: 'ใช่', onPress: async () => {
                             //For final system's level activity that patient has to do
                             let finalSystemLevel
-                            if(value.ac1)   finalSystemLevel = 1
-                            if(value.ac2)   finalSystemLevel = 2
-                            if(value.ac3)   finalSystemLevel = 3
-                            if(value.ac4)   finalSystemLevel = 4
-                            if(value.ac5)   finalSystemLevel = 5
-                            if(value.ac6)   finalSystemLevel = 6
-                            if(value.ac7)   finalSystemLevel = 7
-                            if(value.ac8)   finalSystemLevel = 8
-                            if(value.ac9)   finalSystemLevel = 9
-                            if(value.ac10)   finalSystemLevel = 10
-                            if(value.ac11)   finalSystemLevel = 11
-                            if(value.ac12)   finalSystemLevel = 12
-                            if(value.ac13)   finalSystemLevel = 13
+                            if (value.ac1) finalSystemLevel = 1
+                            if (value.ac2) finalSystemLevel = 2
+                            if (value.ac3) finalSystemLevel = 3
+                            if (value.ac4) finalSystemLevel = 4
+                            if (value.ac5) finalSystemLevel = 5
+                            if (value.ac6) finalSystemLevel = 6
+                            if (value.ac7) finalSystemLevel = 7
+                            if (value.ac8) finalSystemLevel = 8
+                            if (value.ac9) finalSystemLevel = 9
+                            if (value.ac10) finalSystemLevel = 10
+                            if (value.ac11) finalSystemLevel = 11
+                            if (value.ac12) finalSystemLevel = 12
+                            if (value.ac13) finalSystemLevel = 13
 
                             this.props.onSelectActivity(value, finalSystemLevel)
                             this.props.onPreActivityDone(this.props.dataStore)
@@ -141,7 +154,7 @@ export default class Step6Pre extends React.Component {
     renderSelectActivity = () => {
         return (
             <View>
-                <Text style={[_styles.text, {fontWeight: 'bold'}]}>เลือกกิจกรรมฟื้นฟูหัวใจที่สามารถทำได้</Text>
+                <Text style={[_styles.text, { fontWeight: 'bold' }]}>เลือกกิจกรรมฟื้นฟูหัวใจที่สามารถทำได้</Text>
                 <View style={_styles.formContainer}>
                     <Form ref='form' type={input} options={options} />
                 </View>

@@ -48,23 +48,9 @@ class PreActivity extends React.Component {
         }
         this.baseState = this.state
     }
-    componentDidMount() {
-    }
-
-    // setTimeStart = async () => {
-    //     await this.setState({ timeStart: new Date() })
-    //      console.log("Time start = ", this.state.timeStart)
-    // }
-
-    // onPreActivityDone = (value) => {
-    //     this.setState({
-    //         state: 'doing activity'
-    //     })
-    // }
 
     resetState = () => {
         this.setState(this.baseState)
-        // this.setState()
     }
 
     onStepChange = async (step) => {
@@ -97,18 +83,16 @@ class PreActivity extends React.Component {
                 dataStore['highDbp'] = false
             }
         }
-        console.log("STEP = ", this.state.step)
-        console.log("DATA STORE = ", dataStore)
-        console.log("STATE = ", this.state)
     }
 
+    //Calculate pre-test result
     calculatePreActivity = async () => {
-        console.log("CAL")
+        //If any condition is true
+        //Not passed
         for (let property in dataStore) {
             if (dataStore[property] === true) {
                 await this.setState({ passed: false })
                 dataStore.passed = false
-                console.log("NOT PASS = ", dataStore)
                 return
             }
         }
@@ -143,7 +127,7 @@ class PreActivity extends React.Component {
                     calculatePreActivity={this.calculatePreActivity}
                 />
             case 3:
-                return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} onSelectActivity={this.props.onSelectActivity} />
+                return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} onSelectActivity={this.props.onSelectActivity} saveOnlyPreActivity={this.props.saveOnlyPreActivity} />
         }
     }
 

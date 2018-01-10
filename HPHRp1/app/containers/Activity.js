@@ -112,32 +112,64 @@ class Activity extends React.Component {
             .then(responseData => {
                 console.log("Save activity success ")
                 ToastAndroid.showWithGravity('บันทึกผลการทำกิจกรรมเสร็จสิ้น', ToastAndroid.SHORT, ToastAndroid.CENTER)
-                // callback(null)
                 this.props.dispatchSaveActivity(results, date, time)
 
             })
             .catch(error => {
                 console.log("Error in saveActivity = ", error)
                 ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
-                // callback(error)
+            })
+    }
+
+    //Save only result of pre-activity test
+    saveOnlyPreActivity = async (value) => {
+        await this.setState({
+            preActivity: value
+        })
+        let obj = {}
+        obj.preActivity = Object.assign({}, this.state.preActivity)
+        obj.result = {}
+        obj.postActivity = {}
+        let date = moment(this.state.timeStart).format("YYYY-MM-DD")
+        let time = moment(this.state.timeStart).format("kk:mm:ss")
+
+        const path = `${SERVER_IP}${ACTIVITY_RESULT_1}`
+        await fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userid: '1416382941765846', //this.props.default.user.uid
+                appid: 'PHRapp', //this.props.defalt.appId
+                results: obj,
+                date: date,
+                time: time
+            })
+        })
+            .then(ApiUtils.checkStatus)
+            .then(responseData => {
+                ToastAndroid.showWithGravity('บันทึกผลการทดสอบก่อนทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
+
+            })
+            .catch(error => {
+                ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทดสอบก่อนทำ', ToastAndroid.SHORT, ToastAndroid.CENTER)
             })
     }
 
     setTimeStart = async () => {
         await this.setState({ timeStart: new Date() })
-        console.log("Time start = ", this.state.timeStart)
     }
 
     setTimeStop = async () => {
         await this.setState({ timeStop: new Date() })
-        console.log("Time stop = ", this.state.timeStop)
     }
 
     setDuration = async () => {
         let durationMillis = this.calculateDuration(this.state.timeStart, this.state.timeStop, 'millis')
         let durationMinutes = this.calculateDuration(this.state.timeStart, this.state.timeStop, 'minutes')
         await this.setState({ durationMillis, durationMinutes })
-        console.log("duration = ", this.state.durationMillis, this.state.durationMinutes)
     }
 
     //calculate duration from local time (new Date())
@@ -147,7 +179,7 @@ class Activity extends React.Component {
         if (format === 'millis')
             return duration.asMilliseconds()
         else if (format === 'minutes')
-            return duration.asMinutes().toFixed(2)
+            return duration.asMinutes().toFixed(2) //fixed to 2 decimal
     }
 
     onPreActivityDone = async (value) => {
@@ -163,7 +195,7 @@ class Activity extends React.Component {
             state: 'post activity', //cause warning
             result: value,
         })
-        
+
         console.log("RESULT = ", this.state.result)
     }
 
@@ -181,7 +213,7 @@ class Activity extends React.Component {
     //In case of patient doesn't pass the pre-test, patient can select which activities to do
     onSelectActivity = async (selected, finalSystemLevel) => {
         await this.setState({
-            exception: {...selected, finalSystemLevel}
+            exception: { ...selected, finalSystemLevel }
         })
         console.log("select = ", this.state.exception)
     }
@@ -238,8 +270,8 @@ class Activity extends React.Component {
 
     renderPreActivity = () => {
         return (
-            // <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
-            <PreActivity onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
+            // <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
+            <PreActivity onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
         )
     }
 
@@ -252,7 +284,7 @@ class Activity extends React.Component {
     renderPostActivity = () => {
         return (
             // <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} result={this.state.result}/>
-            <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result}/>
+            <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
         )
     }
 
