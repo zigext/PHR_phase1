@@ -10,6 +10,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.wenkesj.voice.VoicePackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 
 
 import java.util.Arrays;
@@ -67,7 +68,8 @@ public class MainApplication extends Application implements ReactApplication {
           new ImageResizerPackage(),
               new TextToSpeechPackage(),
               new VoicePackage(),
-              new MPAndroidChartPackage() 
+              new MPAndroidChartPackage(),
+              new ReactNativePushNotificationPackage() 
       );
     }
   };
