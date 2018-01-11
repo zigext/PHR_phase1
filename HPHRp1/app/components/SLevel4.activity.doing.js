@@ -40,7 +40,8 @@ export default class SLevel4 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: 'doing'
+            status: 'doing',
+            showDescription: false
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -48,6 +49,7 @@ export default class SLevel4 extends React.Component {
     }
 
     componentDidMount = () => {
+        Voice.start('th-TH')
         //If patient can't do this activity
         if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
             this.props.onSystemLevelChange(this.props.systemLevel + 1)
@@ -55,8 +57,8 @@ export default class SLevel4 extends React.Component {
     }
 
     componentWillUnmount() {
-        Voice.destroy().then(Voice.removeAllListeners)
-        Tts.stop()
+        // Voice.destroy().then(Voice.removeAllListeners)
+        // Tts.stop()
     }
 
     onSpeechStartHandler(e) {
@@ -103,6 +105,12 @@ export default class SLevel4 extends React.Component {
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
         }
+    }
+
+    onShowDescriptionPress = () => {
+        this.setState({
+            showDescription: !this.state.showDescription
+        })
     }
 
     renderForm = () => {
@@ -175,6 +183,26 @@ export default class SLevel4 extends React.Component {
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
+
+                <View style={_styles.descriptionContainer}>
+                    <Button
+                        raised
+                        backgroundColor={common.primaryColorDark}
+                        title='ดูรายละเอียด'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.onShowDescriptionPress}
+                    />
+                    {this.state.showDescription ?
+                        (<View>
+                            <Text style={_styles.descriptionText}>▪ ใช้มือทั้งสองข้าง หมอน หรือผ้าห่มประคองแผลผ่าตัดที่หน้าอก </Text>
+                            <Text style={_styles.descriptionText}>▪ อยู่ในท่านั่ง โน้มตัวมาด้านหน้าเล็กน้อย</Text>
+                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าให้ลึกพอควร แล้วพยายามไอเพื่อขับเสมหะออก อาจรู้สึกเจ็บแผลพอสมควรขณะไอ</Text>
+                        </View>)
+                        : null}
+                </View>
+
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
                 {/*<Icon
@@ -219,8 +247,8 @@ const _styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        padding: 20,
-        paddingHorizontal: 50,
+        margin: 20,
+        marginHorizontal: 25,
 
     },
     exitContainer: {
@@ -228,6 +256,13 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
+    },
+    descriptionContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignSelf: 'stretch',
+        marginRight: 180
     },
     topic: {
         fontSize: 20,
@@ -241,6 +276,11 @@ const _styles = StyleSheet.create({
         color: common.grey,
         marginTop: 20,
         marginRight: 15,
+    },
+    descriptionText: {
+        fontSize: 18,
+        color: common.grey,
+        lineHeight: 35,
     },
     image: {
         resizeMode: 'center',

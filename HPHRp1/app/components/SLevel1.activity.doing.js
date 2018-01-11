@@ -40,7 +40,8 @@ export default class SLevel1 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: 'doing'
+            status: 'doing',
+            showDescription: false
         }
         Voice.onSpeechStart = this.onSpeechStart.bind(this)
         Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this)
@@ -61,8 +62,8 @@ export default class SLevel1 extends React.Component {
     }
 
     componentWillUnmount() {
-        Voice.destroy().then(Voice.removeAllListeners)
-        Tts.stop()
+        // Voice.destroy().then(Voice.removeAllListeners)
+        // Tts.stop()
     }
 
     onSpeechStart(e) {
@@ -129,6 +130,12 @@ export default class SLevel1 extends React.Component {
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
         }
+    }
+
+    onShowDescriptionPress = () => {
+        this.setState({
+            showDescription: !this.state.showDescription
+        })
     }
 
 
@@ -202,6 +209,27 @@ export default class SLevel1 extends React.Component {
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
+
+                <View style={_styles.descriptionContainer}>
+                    <Button
+                        raised
+                        backgroundColor={common.primaryColorDark}
+                        title='ดูรายละเอียด'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.onShowDescriptionPress}
+                    />
+                    {this.state.showDescription ?
+                        (<View>
+                            <Text style={_styles.descriptionText}>▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างวางบริเวณหน้าท้อง ขณะหายใจเข้าท้องจะป่องจนรู้สึกได้ แต่มือบนทรวงอกจะไม่รู้สึก เพราะหน้าอกจะไม่ขยับหรือขยับน้อยมาก</Text>
+                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางจมูกช้าๆจนท้องป่องออก</Text>
+                            <Text style={_styles.descriptionText}>▪ ค่อยๆ ผ่อนลมหายใจออกทางปากช้าๆ จนสุด พักสักครู่</Text>
+                            <Text style={_styles.descriptionText}>▪ ทำจนรู้สึกผ่อนคลาย</Text>
+                        </View>) 
+                        : null}
+                </View>
+
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
                 {/*<Icon
@@ -247,15 +275,21 @@ const _styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        padding: 20,
-        paddingHorizontal: 50,
-
+        margin: 20,
+        marginHorizontal: 25,
     },
     exitContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
+    },
+    descriptionContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignSelf: 'stretch',
+        marginRight: 180
     },
     topic: {
         fontSize: 20,
@@ -269,6 +303,11 @@ const _styles = StyleSheet.create({
         color: common.grey,
         marginTop: 20,
         marginRight: 15,
+    },
+    descriptionText: {
+        fontSize: 18,
+        color: common.grey,
+        lineHeight: 35,
     },
     image: {
         resizeMode: 'center',
