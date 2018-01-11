@@ -68,9 +68,9 @@ export default class Profile extends React.Component {
                             <Text style={_styles.text}>เบอร์โทรศัพท์ : {this.props.profile.phone}</Text>
                             <Text style={_styles.text}>ชื่อญาติ : {this.props.profile.cousin_name}</Text>
                             <Text style={_styles.text}>เบอร์โทรศัพท์ญาติ : {this.props.profile.cousin_phone}</Text>
-                            <Text style={_styles.text}>อาหารที่แพ้ : {this.props.profile.allergic_food ? this.formatString(this.props.profile.allergic_food) : '-'}</Text>
-                            <Text style={_styles.text}>ยาที่แพ้ : {this.props.profile.allergic_medicine ? this.formatString(this.props.profile.allergic_medicine) : '-'}</Text>
-                            <Text style={_styles.text}>ยาปัจจุบัน : {this.props.profile.current_medicine ? this.formatString(this.props.profile.current_medicine) : '-'}</Text>
+                            <Text style={_styles.text}>อาหารที่แพ้ : {this.props.profile.allergic_food ? this.props.profile.allergic_food : '-'}</Text>
+                            <Text style={_styles.text}>ยาที่แพ้ : {this.props.profile.allergic_medicine ? this.props.profile.allergic_medicine : '-'}</Text>
+                            <Text style={_styles.text}>ยาปัจจุบัน : {this.props.profile.current_medicine ? this.props.profile.current_medicine : '-'}</Text>
                         </View>
 
 
@@ -91,7 +91,7 @@ export default class Profile extends React.Component {
                             <Text style={_styles.text}>ดัชนีมวลกาย : {this.props.profile.bmi}</Text>
                             <Text style={_styles.text}>ระดับความรุนแรงของหัวใจตามเกณฑ์สมาคมโรคหัวใจนิวยอร์ก  : {this.props.profile.nyha_class}</Text>
                             <Text style={_styles.text}>ประสิทธิภาพการบีบตัวของกล้ามเนื้อหัวใจ  : {this.props.profile.ejection_fraction}</Text>
-                            <Text style={_styles.text}>โรคประจำตัว : {this.props.profile.medical_condition ? this.formatString(this.props.profile.medical_condition) : '-'}</Text>
+                            <Text style={_styles.text}>โรคประจำตัว : {this.props.profile.medical_condition ? this.props.profile.medical_condition : '-'}</Text>
                             <Text style={_styles.text}>ประวัติการสูบบุหรี่ : {this.props.profile.is_smoking ? 'สูบบุหรี่' : 'ไม่สูบบุหรี่'}</Text>
                             <Text style={_styles.text}>ประเภทโรคหัวใจ : {this.props.profile.cardiac_type}</Text>
                             <Text style={_styles.text}>ประเภทผ่าตัดหัวใจ : {this.props.profile.surgery_type}</Text>
