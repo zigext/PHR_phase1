@@ -33,7 +33,7 @@ class Activity extends React.Component {
         //fetch profile if empty
         if (isEmpty(this.state.profile)) {
             console.log("empty")
-            // await this.fetchProfile()
+            await this.fetchProfile()
         }
     }
 
@@ -54,28 +54,36 @@ class Activity extends React.Component {
             })
     }
 
-    //Save max level to user's profile
-    saveProfile = async (newProfile) => {
-        // const path = `${SERVER_IP}${PROFILE}`
-        // await fetch(path, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         userid: '1416382941765846', //this.props.default.user.uid
-        //         appid: 'PHRapp', //this.props.defalt.appId
-        //         profile: newProfile //{level : this.state.result.nextLevel}
-        //     })
-        // })
-        //     .then(ApiUtils.checkStatus)
-        //     .then(responseData => {
-        //         callback(null)
-        //     })
-        //     .catch(error => {
-        //         callback(error)
-        //     })
+    //Save next level to user's profile
+    //Save only next level that greater than patient's current level
+    saveProfile = async () => {
+        if(this.state.result.nextLevel >= this.state.profile.level) {
+            console.log("next level that greater than patient's current level")
+            const path = `${SERVER_IP}${PROFILE}`
+        await fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userid: '1416382941765846', //this.props.default.user.uid
+                appid: 'PHRapp', //this.props.defalt.appId
+                profile: {level : this.state.result.nextLevel}
+            })
+        })
+            .then(ApiUtils.checkStatus)
+            .then(responseData => {
+                console.log("Save level in profile success")
+            })
+            .catch(error => {
+                console.log("Save level in profile failed")
+                ToastAndroid.showWithGravity('ผิดพลาด! บันทึกระดับการทำกิจกรรมล้มเหลว', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            })
+        }
+        else {
+            return
+        }
     }
 
     //Save activity's result to server
@@ -206,7 +214,7 @@ class Activity extends React.Component {
         })
         console.log("POST TEST = ", this.state.postActivity)
         console.log("ALL = ", this.state)
-        // this.saveProfile()
+        this.saveProfile()
         this.saveActivity()
     }
 
@@ -303,6 +311,7 @@ class Activity extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+    console.log("mapStateToProps in Activity", state)
     return state
 }
 
