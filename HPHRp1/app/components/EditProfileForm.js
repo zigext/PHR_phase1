@@ -73,18 +73,38 @@ export default class EditProfileForm extends React.Component {
         super(props)
         this.state = {
             loading: false,
-            
             path: '',
             filename: '',
             timestamp: '',
-            // imageSource: 'https://firebasestorage.googleapis.com/v0/b/cardiac-surgery-phr.appspot.com/o/images%2FScreenshot_2017-09-30-16-15-40.png%2Bundefined?alt=media&token=e50f6a4e-3b8f-4686-8b79-143f8e84b199' 
         }
-        
-
     }
+
     onSubmitPress = () => {
         this.setState({ loading: true })
+        let str
         let newProfile = this.refs.form.getValue() || {}
+        //Server can't receive array ,so change array to string
+        if(newProfile.current_medicine) {
+            str = _.join(_.compact(newProfile.current_medicine), ', ')
+            newProfile = _.omit(newProfile, ['current_medicine'])
+            newProfile.current_medicine = str
+        }
+        if(newProfile.medical_condition) {
+            str = _.join(_.compact(newProfile.medical_condition), ', ')
+            newProfile = _.omit(newProfile, ['medical_condition'])
+            newProfile.medical_condition = str
+        }
+        if(newProfile.allergic_medicine) {
+            str = _.join(_.compact(newProfile.allergic_medicine), ', ')
+            newProfile = _.omit(newProfile, ['allergic_medicine'])
+            newProfile.allergic_medicine = str
+        }
+        if(newProfile.allergic_food) {
+            str = _.join(_.compact(newProfile.allergic_food), ', ')
+            newProfile = _.omit(newProfile, ['allergic_food'])
+            newProfile.allergic_food = str
+        }
+
         let formattedProfile = _.pickBy(newProfile, _.identity) //remove keys that are null or undefined
         this.props.onEditProfilePress(formattedProfile, this.state.path, this.state.filename, this.state.timestamp, (err) => {
             this.setState({ loading: false })
@@ -100,8 +120,6 @@ export default class EditProfileForm extends React.Component {
 
     onChoosePhotoPress = () => {
         ImagePicker.showImagePicker(imageOptions, response => {
-            console.log('Response = ', response)
-
             if (response.didCancel) {
                 console.log('User cancelled image picker')
             } else if (response.error) {
@@ -111,9 +129,7 @@ export default class EditProfileForm extends React.Component {
             } else {
                    
                 let imageSource = { uri: 'data:image/jpeg;base64,' + response.data }
-                console.log('source', imageSource)
                 let imageUri = response.uri + ''
-                console.log('imageUri', imageUri)
                 let filename = response.fileName + ''
                 let timestamp = response.timestamp + ''
                 ImageResizer.createResizedImage(imageUri, 328, 495, 'JPEG', 60).then(response => {
@@ -121,16 +137,15 @@ export default class EditProfileForm extends React.Component {
                     this.setState({ path, filename, timestamp})
                      this.setState({ imageSource: imageUri })
                 })
-                // .catch(err => {
-                //   console.log('err', err)
-                //   Alert.alert('Oops, something went wrong', err)
-                // })
+                .catch(err => {
+                  console.log('error in choose photo ', err)
+                  Alert.alert('ผิดพลาด! ไม่สามารถเลือกรูปภาพ')
+                })
             }
         })
     }
 
     render() {
-        console.log("Prev profile = ", this.props.prevProfile)
         return (
             <View style={_styles.container}>
                 <ScrollView>
