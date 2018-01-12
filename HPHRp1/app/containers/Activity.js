@@ -6,7 +6,9 @@ import ApiUtils from '../components/ApiUtils'
 import PreActivity from './PreActivity'
 import DoingActivity from './DoingActivity'
 import PostActivity from './PostActivity'
-import { saveActivity } from '../actions/userAction'
+import { saveActivity,  getProfile, editProfile } from '../actions/userAction'
+import * as userActions from '../actions/userAction'
+import { bindActionCreators } from 'redux'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
@@ -17,7 +19,7 @@ class Activity extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            state: 'pre activity',
+            state: 'post activity',
             level: 0,
             profile: {},
             preActivity: {},
@@ -29,12 +31,12 @@ class Activity extends React.Component {
     componentDidMount = async () => {
         Orientation.lockToLandscape()
         //Always fetch new profile
-        // await this.fetchProfile()
+        await this.fetchProfile()
         //fetch profile if empty
-        if (isEmpty(this.state.profile)) {
-            console.log("empty")
-            await this.fetchProfile()
-        }
+        // if (isEmpty(this.state.profile)) {
+        //     console.log("empty")
+        //     await this.fetchProfile()
+        // }
     }
 
     fetchProfile = async () => {
@@ -44,8 +46,8 @@ class Activity extends React.Component {
             .then(response => response.json())
             .then(responseData => {
                 this.profile = responseData.data.profile
-                this.setState({ profile: this.profile })
-                // this.props.dispatchProfile(this.state.profile)
+                this.setState({ profile: this.profile, level: this.profile.level })
+                this.props.userActions.getProfile(this.state.profile)
                 console.log("Fetch profile success")
 
             })
@@ -58,7 +60,7 @@ class Activity extends React.Component {
     //Save only next level that greater than patient's current level
     saveProfile = async () => {
         if(this.state.result.nextLevel >= this.state.profile.level) {
-            console.log("next level that greater than patient's current level")
+            console.log("next level that equal or greater than patient's current level, next = ",this.state.result.nextLevel)
             const path = `${SERVER_IP}${PROFILE}`
         await fetch(path, {
             method: 'POST',
@@ -69,15 +71,18 @@ class Activity extends React.Component {
             body: JSON.stringify({
                 userid: '1416382941765846', //this.props.default.user.uid
                 appid: 'PHRapp', //this.props.defalt.appId
-                profile: {level : this.state.result.nextLevel}
+                profile: {level : this.state.result.nextLevel.toString()}
             })
         })
             .then(ApiUtils.checkStatus)
             .then(responseData => {
                 console.log("Save level in profile success")
+                this.setState({
+                    level: this.state.result.nextLevel
+                })
             })
             .catch(error => {
-                console.log("Save level in profile failed")
+                console.log("Save level in profile failed = ", error)
                 ToastAndroid.showWithGravity('ผิดพลาด! บันทึกระดับการทำกิจกรรมล้มเหลว', ToastAndroid.SHORT, ToastAndroid.CENTER)
             })
         }
@@ -97,9 +102,11 @@ class Activity extends React.Component {
         results.durationMillis = this.state.durationMillis
         results.durationMinutes = this.state.durationMinutes
         results.timestamp = Math.floor(Date.now())
+        results.date = moment(this.state.timeStart).format("YYYY-MM-DD")
+        results.time = moment(this.state.timeStart).format("kk:mm:ss")
         let date = moment(this.state.timeStart).format("YYYY-MM-DD")
         let time = moment(this.state.timeStart).format("kk:mm:ss")
-        console.log("results = ", results)
+        console.log("results = ", results, date, time)
 
         const path = `${SERVER_IP}${ACTIVITY_RESULT_1}`
         await fetch(path, {
@@ -120,7 +127,8 @@ class Activity extends React.Component {
             .then(responseData => {
                 console.log("Save activity success ")
                 ToastAndroid.showWithGravity('บันทึกผลการทำกิจกรรมเสร็จสิ้น', ToastAndroid.SHORT, ToastAndroid.CENTER)
-                this.props.dispatchSaveActivity(results, date, time)
+                // this.props.dispatchSaveActivity(results, date, time)
+                this.props.userActions.saveActivity(results, date, time)
 
             })
             .catch(error => {
@@ -162,16 +170,20 @@ class Activity extends React.Component {
 
             })
             .catch(error => {
-                ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทดสอบก่อนทำ', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทดสอบก่อนทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
             })
     }
 
     setTimeStart = async () => {
+        //ISO 
         await this.setState({ timeStart: new Date() })
     }
 
     setTimeStop = async () => {
+        //ISO 
         await this.setState({ timeStop: new Date() })
+        // Thu Jan 11 2018 21:11:30 GMT+0700 (Local Standard Time)
+        // await this.setState({ timeStop: new Date(Math.floor(Date.now())).toString() })
     }
 
     setDuration = async () => {
@@ -214,8 +226,8 @@ class Activity extends React.Component {
         })
         console.log("POST TEST = ", this.state.postActivity)
         console.log("ALL = ", this.state)
-        this.saveProfile()
-        this.saveActivity()
+        await this.saveProfile()
+        await this.saveActivity()
     }
 
     //In case of patient doesn't pass the pre-test, patient can select which activities to do
@@ -285,7 +297,7 @@ class Activity extends React.Component {
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity exception={this.state.exception} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.profile.level} />
+            <DoingActivity exception={this.state.exception} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
         )
     }
 
@@ -316,9 +328,11 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatchSaveActivity: (results, date, time) => dispatch(saveActivity(results, date, time))
-    }
+  return { userActions: bindActionCreators(userActions, dispatch) }
+    // return {
+    //     dispatchSaveActivity: (results, date, time) => dispatch(saveActivity(results, date, time))
+    // }
+    // return bindActionCreators({ addTodo }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Activity)
