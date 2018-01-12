@@ -16,7 +16,7 @@ let options = {
             autoCorrect: false,
             secureTextEntry: true,
             password: true,
-            recorder: '',
+            recorder: null,
         },
     }
 }
@@ -35,32 +35,38 @@ export default class Step1Post extends React.Component {
     }
 
     onForward = async () => {
-        await this.checkNursePin()
-        if (this.state.authorized === true) {
-            if (this.state.authorized === true) {
-                this.props.onDataChange('recorder', this.state.recorder)
-                this.props.onStepChange(this.props.step + 1)
-            }
-            // let value = this.refs.form.getValue()
-            // if (value) {
-            //     if (this.state.authorized === true) {
-            //         this.props.onDataChange('recorder', value)
-            //         this.props.onStepChange(this.props.step + 1)
-            //     }
-            // }
-        }
+        // await this.checkNursePin()
+        // if (this.state.authorized === true) {
+        //     this.props.onDataChange('recorder', this.state.recorder)
+        //         this.props.onStepChange(this.props.step + 1)
+        //     // if (this.state.authorized === true) {
+        //     //     this.props.onDataChange('recorder', this.state.recorder)
+        //     //     this.props.onStepChange(this.props.step + 1)
+        //     // }
+        //     // let value = this.refs.form.getValue()
+        //     // if (value) {
+        //     //     if (this.state.authorized === true) {
+        //     //         this.props.onDataChange('recorder', value)
+        //     //         this.props.onStepChange(this.props.step + 1)
+        //     //     }
+        //     // }
+        // }
         // else {
         //     ToastAndroid.showWithGravity('กรุณาตรวจสอบรหัสประจำตัว', ToastAndroid.SHORT, ToastAndroid.CENTER)
         // }
+        this.checkNursePin()
     }
 
     checkNursePin = () => {
         this.setState({ loading: true })
         var { recorder } = this.refs.form.getValue()
+        //User doesn't input pin
         if (!recorder) {
             this.setState({ loading: false })
             ToastAndroid.showWithGravity('กรุณากรอกข้อมูล', ToastAndroid.SHORT, ToastAndroid.CENTER)
-        } else {
+        } 
+        //User input pin
+        else {
             this.props.checkNursePin(recorder, async (result, error) => {
                 this.setState({ loading: false })
                 if (error !== null) {
@@ -71,32 +77,30 @@ export default class Step1Post extends React.Component {
                         ToastAndroid.showWithGravity('รหัสประจำตัวถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
                         await this.setState({ authorized: true, recorder })
                         console.log("state = ", this.state)
+                         this.props.onDataChange('recorder', this.state.recorder)
+                         this.props.onStepChange(this.props.step + 1)
                     }
                     else {
                         ToastAndroid.showWithGravity('รหัสประจำตัวไม่ถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
-                        this.setState({ authorized: false })
+                        await this.setState({ authorized: false, recorder: null})
+                        
                     }
                 }
             })
         }
     }
 
+    onChange(recorder) {
+        this.setState({ recorder })
+  }
+
     render() {
         return (
             <View style={_styles.container}>
                 <ScrollView>
                     <Text style={_styles.text}>กรุณากรอกรหัสประจำตัวพยาบาลผู้บันทึกข้อมูล</Text>
-                        {this.state.recorder ? <Form ref='form' type={input} options={options} value={this.state.recorder} /> : <Form ref='form' type={input} options={options} />}
-
-                        {/*<TouchableHighlight
-                            style={this.state.loading ? _styles.disabledButton : _styles.button}
-                            onPress={this.checkNursePin}
-                            underlayColor='#99d9f4'
-                            disabled={this.state.loading}
-                        >
-                            <Text style={_styles.buttonText}>ตรวจสอบเลขประจำตัว</Text>
-                        </TouchableHighlight>*/}
-                    
+                        {/*{this.state.recorder ? <Form ref='form' type={input} options={options} value={this.state.recorder} onChange={this.onChange.bind(this)} /> : <Form ref='form' type={input} options={options} onChange={this.onChange.bind(this)} value={this.state.recorder} />}*/}
+                        <Form ref='form' type={input} options={options} value={this.state.recorder}/>
                     <Icon
                         raised
                         reverse

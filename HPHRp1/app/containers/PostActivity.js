@@ -108,27 +108,28 @@ class PostActivity extends React.Component {
     }
 
     //Check nurse pin with server
-    checkNursePin = (pin, callback) => {
+    checkNursePin = async (pin, callback) => {
         console.log("pin = ", pin)
-        if (pin === 1234)
-            callback(true, null)
-        else
-            callback(false, null)
-        // const path = `${SERVER_IP}${PIN_CODE}?pin_code=1416382941765846&appid=HPHR` //pin_code=${pin}&appid=${this.props.default.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
-        // await fetch(path)
-        //     .then(ApiUtils.checkStatus)
-        //     .then(response => response.json())
-        //     .then(responseData => {
-        //         console.log("Check pin success")
-        //         let success = responseData.success
-        //         if (success)
-        //             callback(true, null)
-        //         else
-        //             callback(false, null)
-        //     })
-        //     .catch(error => {
-        //         console.log("Error in checkNursePin = ", error)
-        //     })
+        // if (pin === 1234)
+        //     callback(true, null)
+        // else
+        //     callback(false, null)
+        const path = `${SERVER_IP}${PIN_CODE}?pin_code=${pin}&appid=PHRapp` //pin_code=${pin}&appid=${this.props.default.appId}  //appid=${this.props.UserReducer.appId}
+        await fetch(path)
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .then(responseData => {
+                let success = responseData.success
+                console.log("Check pin success = ", success)
+                if (success === 'true')
+                    callback(true, null)
+                else
+                    callback(false, null)
+            })
+            .catch(error => {
+                console.log("Error in checkNursePin = ", error)
+                callback(false, error)
+            })
     }
 
 
