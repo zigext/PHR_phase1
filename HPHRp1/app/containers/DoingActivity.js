@@ -21,10 +21,19 @@ import VoiceTest from '../components/VoiceTest'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
+import PropTypes from 'prop-types'
 
 let dataStore = {}
 
 class DoingActivity extends React.Component {
+    static propTypes = {
+        exception: PropTypes.object,
+        onDoingActivityDone: PropTypes.func,
+        setTimeStop: PropTypes.func,
+        setDuration: PropTypes.func,
+        doingLevel: PropTypes.string
+    }
+
     constructor(props) {
         super(props)
         this.state = {
@@ -110,7 +119,7 @@ class DoingActivity extends React.Component {
                 return <SLevel8 exception={this.props.exception.ac8} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             case 9:
                 return <SLevel9 exception={this.props.exception.ac9} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
-            //doingLevel is level that the patient that doing , read from server
+            //doingLevel is level that the patient that doing , read from server {this.props.doingLevel}
             case 10:
                 return <SLevel10 exception={this.props.exception.ac10} finalSystemLevel={this.props.exception.finalSystemLevel} resultForPassedOn={this.state.resultForPassedOn} systemLevel={this.state.systemLevel} activityLevel={this.state.activityLevel} onSystemLevelChange={this.onSystemLevelChange} onActivityLevelChange={this.onActivityLevelChange} doingLevel={1} onDoingActivityDone={this.props.onDoingActivityDone} setTimeStop={this.props.setTimeStop} setDuration={this.props.setDuration} onDataChange={this.onDataChange} dataStore={dataStore}/>
             //doingLevel is level that the patient that doing , read from server
@@ -127,6 +136,7 @@ class DoingActivity extends React.Component {
     }
 
     render() {
+        console.log("Patient current level = ", this.props.doingLevel)
         return (
             <View style={styles.container}>
                 <ScrollView>
@@ -138,28 +148,6 @@ class DoingActivity extends React.Component {
                             </View>
                             {this.renderBody()}
                         </View>
-
-
-
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            {/*<Icon
-                            raised
-                            reverse
-                            name='ios-arrow-forward'
-                            type='ionicon'
-                            color={common.accentColor}
-                            size={35}
-                            onPress={this.levelUp}
-                        />*/}
-                        </View>
-                    </View>
-                    <View>
-                        {/*<Button
-                             raised
-                             backgroundColor='#f49842'
-                             title='สิ้นสุด'
-                             fontSize={22}
-                             onPress={this.finish} />*/}
                     </View>
                 </ScrollView>
             </View>
@@ -182,7 +170,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(DoingActivity)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 20,
+        marginVertical: 20,
 
     }
 })
