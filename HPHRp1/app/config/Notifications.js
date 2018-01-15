@@ -33,7 +33,7 @@ const dailyImportanceReminder = {
 }
 
 const reachLevel4 = {
-    id: '2', 
+    id: '0', 
     largeIcon: "ic_launcher", 
     smallIcon: "ic_notification", 
     ticker: "มาได้ครึ่งทางแล้วนะ",
@@ -42,11 +42,10 @@ const reachLevel4 = {
     message: "มาได้ครึ่งทางแล้วนะ", 
     playSound: true, 
     soundName: 'default',
-    date: new Date(Date.now() + (5 * 1000)), 
 }
 
 const reachLevel6 = {
-    id: '2',  
+    id: '1',  
     largeIcon: "ic_launcher", 
     smallIcon: "ic_notification", 
     ticker: "ทำกิจกรรมถึงขั้นที่ 6 แล้ว อีกนิดเดียว!",
@@ -55,7 +54,6 @@ const reachLevel6 = {
     message: "ทำกิจกรรมถึงขั้นที่ 6 แล้ว อีกนิดเดียว!", 
     playSound: true, 
     soundName: 'default',
-    date: new Date(Date.now() + (5 * 1000)), 
 }
 
 const reachLevel7 = {
@@ -68,7 +66,6 @@ const reachLevel7 = {
     message: "ยินดีด้วย! ทำได้ครบทุกขั้นแล้ว", 
     playSound: true, 
     soundName: 'default',
-    date: new Date(Date.now() + (5 * 1000)), 
 }
 
 //Notifications for patients who smoke or have lung disease
@@ -121,4 +118,17 @@ const reminderForSapheneousVeinPatient = {
     date: new Date(Date.now() + (15 * 1000)), 
 }
 
-export { dailyActivityReminder, dailyReminderForBreathing, dailyImportanceReminder, reachLevel4, reminderForHighRiskPatient, reminderForSapheneousVeinPatient }
+const reminderForNotDoingActivityYet = {
+    id: '3', 
+    largeIcon: "ic_launcher", 
+    smallIcon: "ic_notification", 
+    ticker: "ยังไม่ได้ทำกิจกรรมเลยนะ อย่าลืมทำล่ะ",
+    ongoing: false,
+    tag: 'condition', 
+    title: "ยังไม่ได้ทำกิจกรรมเลยนะ อย่าลืมทำล่ะ",  
+    message: "ยังไม่ได้ทำกิจกรรมเลยนะ อย่าลืมทำล่ะ", 
+    playSound: true, 
+    soundName: 'default',
+}
+
+export { dailyActivityReminder, dailyReminderForBreathing, dailyImportanceReminder, reachLevel4, reachLevel6, reachLevel7,reminderForHighRiskPatient, reminderForSapheneousVeinPatient, reminderForNotDoingActivityYet }
