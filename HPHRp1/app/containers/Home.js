@@ -1,6 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, BackHandler } from 'react-native'
+import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, BackHandler, DeviceEventEmitter, NetInfo, ToastAndroid } from 'react-native'
 import firebase from '../config/Firebase'
+import PushNotification from '../config/PushNotification'
+import * as notifications from '../config/Notifications'
 import LogInForm from '../components/Login'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
@@ -8,27 +10,111 @@ import ActivityButton from '../components/ActivityButton'
 import AdvicesButton from '../components/AdvicesButton'
 import ProgressButton from '../components/ProgressButton'
 import Orientation from 'react-native-orientation'
+import moment from 'moment'
+import { last } from 'lodash'
 
 let scene
-const test = 0
+
 class Home extends React.Component {
     constructor() {
         super()
+        this.state = {
+            test: false,
+            
+        }
+    }
 
+    //Handle notification actions
+    componentWillMount() {
+        PushNotification.registerNotificationActions(['Yes', 'No']);
+        DeviceEventEmitter.addListener('notificationActionReceived', function (action) {
+            console.log('Notification action received: ' + action);
+            const info = JSON.parse(action.dataJSON);
+            if (info.action == 'Yes') {
+                Actions.tab_activity()
+            }
+        });
     }
 
     componentDidMount() {
         // this locks the view to Portrait Mode
         // const initial = Orientation.getInitialOrientation()
+
+        //Check for internet connection
+        NetInfo.isConnected.fetch().then(isConnected => {
+            this.setState({ isConnected })
+            if(!isConnected){
+                 ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
+            }
+        })
+        NetInfo.isConnected.addEventListener('change', (isConnected) => {
+            if(!isConnected) ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
+        })
+
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton)
         Orientation.lockToLandscape();
         scene = this.props.title
         console.log("route ", Actions.currentScene)
         console.log("focus ", this.props.focused)
+
+        this.setNotifications()
+        
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton)
+    }
+
+    //Set notifications for patients with extra conditions
+    componentWillReceiveProps(nextProps) {
+        console.log("receive props", this.props.default.user.profile)
+        this.setNotificationsByConditions()
+    }
+
+    setNotifications() {
+        //Schedule notifications for every patients
+        PushNotification.localNotificationSchedule(notifications.dailyActivityReminder)
+        PushNotification.localNotificationSchedule(notifications.dailyImportanceReminder)
+    }
+
+    setNotificationsByConditions() {
+        let { is_smoking, nyha_class, ejection_fraction, medical_condition, surgery_sapheneous_vein, level } = this.props.default.user.profile
+        //Smoking
+        //What's about lung disease??????????????????
+        if(is_smoking === 'true' )   
+            PushNotification.localNotificationSchedule(notifications.dailyReminderForBreathing)
+        //Use sapheneous veins from leg
+        if(surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4')   
+            PushNotification.localNotificationSchedule(notifications.reminderForSapheneousVeinPatient)
+        //High risk
+        //What's about EF??????????????????
+        if(nyha_class >= 3 || ejection_fraction === '1')      
+            PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
+        
+        //Set notifications when patient reaches goal level at Activity scene
+        if(level === '4' )   
+            PushNotification.localNotification(notifications.reachLevel4)
+        else if(level === '6')  
+            PushNotification.localNotification(notifications.reachLevel6)
+        else if(level === '7')  
+            PushNotification.localNotification(notifications.reachLevel7)
+
+        //If patient hasn't done any activity in the last 6 hours
+        let hr = (new Date()).getHours()
+        //If it's day, notify patient
+        if(hr >= 6 && hr <= 20) {
+            let timeOfLastActivity = last(this.props.default.activity).results.timeStart
+            let timeNow = moment()
+            let duration = moment.duration(timeNow.diff(timeOfLastActivity)).asHours()
+            console.log("duration between last activity = ", duration)
+            if(duration >= 6) {
+                PushNotification.localNotification(notifications.reminderForNotDoingActivityYet)
+            }
+        }
+        //If it's night, does nothing
+        else {
+            
+        }
     }
 
     //if focus on Home screen then disable back button
@@ -42,11 +128,13 @@ class Home extends React.Component {
         }
     }
 
-    onActivityPress = (callback) => {
+    onActivityPress = (callback) => {       
         Actions.tab_activity()
     }
 
     onAdvicesPress = (callback) => {
+        // PushNotification.cancelLocalNotifications({id: '1'})
+        PushNotification.cancelAllLocalNotifications() //Cancle all notifications
         Actions.tab_advices()
     }
 
@@ -62,11 +150,6 @@ class Home extends React.Component {
                 <ActivityButton onActivityPress={this.onActivityPress} />
                 <ProgressButton onProgressPress={this.onProgressPress} />
             </View>
-            // <View style={styles.container1}>
-            //     {/*<View style={styles.container2}></View>
-            //     <View style={styles.container3}></View>*/}
-            //     {/*<ActivityButton />*/}
-            // </View>
         )
     }
 }
