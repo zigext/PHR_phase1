@@ -19,7 +19,7 @@ class Activity extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            state: 'post activity',
+            state: 'pre activity',
             level: 0,
             profile: {},
             preActivity: {},
@@ -37,6 +37,10 @@ class Activity extends React.Component {
         //     console.log("empty")
         //     await this.fetchProfile()
         // }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log("receive props in Activity", this.props.default.user.profile)
     }
 
     fetchProfile = async () => {
@@ -124,11 +128,14 @@ class Activity extends React.Component {
             })
         })
             .then(ApiUtils.checkStatus)
-            .then(responseData => {
+            .then(async responseData => {
                 console.log("Save activity success ")
                 ToastAndroid.showWithGravity('บันทึกผลการทำกิจกรรมเสร็จสิ้น', ToastAndroid.SHORT, ToastAndroid.CENTER)
-                // this.props.dispatchSaveActivity(results, date, time)
                 this.props.userActions.saveActivity(results, date, time)
+                //Clear patient's exception
+                await this.setState({
+                    exception: {}
+                })
 
             })
             .catch(error => {
@@ -166,7 +173,7 @@ class Activity extends React.Component {
         })
             .then(ApiUtils.checkStatus)
             .then(responseData => {
-                ToastAndroid.showWithGravity('บันทึกผลการทดสอบก่อนทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                ToastAndroid.showWithGravity('บันทึกผลการทดสอบก่อนทำกิจกรรมเสร็จสิ้น', ToastAndroid.SHORT, ToastAndroid.CENTER)
 
             })
             .catch(error => {
