@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, StyleSheet, AsyncStorage } from 'react-native'
+import { AppRegistry, Text, View, Button, TextInput, ToastAndroid, StyleSheet, NetInfo } from 'react-native'
 import firebase from '../config/Firebase'
 import LogInForm from '../components/Login'
 import { Icon } from 'react-native-elements'
@@ -14,28 +14,20 @@ import Stepper from '../components/Stepper'
 class LogIn extends React.Component {
     constructor() {
         super()
-
     }
 
     componentDidMount = async () => {
-        console.log("XXXXXXXXXXX")
+         NetInfo.isConnected.fetch().then(isConnected => {
+            this.setState({ isConnected })
+            if(!isConnected){
+                 ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
+            }
+        })
         const currentUser = firebase.auth().currentUser
-
-        // let auth = await this.getAuthenticationFromAsyncStorage()
-        // console.log("auth in login = ", auth)
-        // if (auth) {
-        //     Actions.drawer()
-        // }
-        // if (currentUser) {
-        //     Actions.homePage()
-        // }
         let auth = this.props.default.isLoggedIn
         if (auth) {
             Actions.drawer()
         }
-        // if (currentUser) {
-        //     Actions.homePage()
-        // }
     }
 
     onLoginPress = (email, password, callback) => {
@@ -53,10 +45,6 @@ class LogIn extends React.Component {
                 console.log('User successfully logged in', user)
                 this.props.dispatchLogIn(email, uid)
                 this.saveUserToFirebase(uid, email)
-                // this.setUserToAsyncStorage(userTmp)
-                // this.props.dispatchLogIn({
-                //     user
-                // })
                 Actions.drawer()
             })
             .catch(err => {
@@ -68,42 +56,14 @@ class LogIn extends React.Component {
         firebase.database().ref(`users/${uid}`).set({ email: email }).
             then((data) => {
                 console.log("add user to Firebase success")
-                // dispatch({ type: "FULFILLED" })
             }).
             catch((err) => {
                 console.log("add user to Firebase failed")
-                // dispatch({ type: "REJECTED" })
             });
     }
 
-    // setUserToAsyncStorage = async (userTmp) => {
-    //     await AsyncStorage.setItem('user', JSON.stringify({ ...userTmp }))
-    //     await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: true }))
-    // }
-
-    // getAuthenticationFromAsyncStorage = async () => {
-    //     const value = await AsyncStorage.getItem('authentication')
-    //     if (value !== null) {
-    //         if (value === 'null') {
-    //             console.log("return null")
-    //             return null
-    //         }
-    //         else {
-    //             const auth = JSON.parse(value)
-    //             console.log("Auth");
-    //             console.log(auth)
-    //             return auth
-    //         }
-    //     }
-    //     return
-    // }
-
     onForgotPasswordPress = () => {
         Actions.forgotPassword()
-    }
-
-    onPressActionButton = () => {
-        Actions.addSurgery()
     }
 
     // createUsersDatabase (uid) {
@@ -126,12 +86,6 @@ class LogIn extends React.Component {
         return (
             <View>
                 <LogInForm onLoginPress={this.onLoginPress} onForgotPasswordPress={this.onForgotPasswordPress} />
-                {/*<Timer start={Date.now()} />*/}
-                {/*<Icon name='home' type='font-awesome' />
-                <Icon name='bar-graph' type='entypo' />
-                <Icon name='file-document-box' type='material-community' />
-                <Icon name='heartbeat' type='font-awesome' />*/}
-                <Stepper></Stepper>
             </View>
         )
     }
@@ -150,14 +104,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn)
 
 const styles = StyleSheet.create({
-    item: {
-        padding: 10,
-        fontSize: 20,
-        height: 50,
-        fontWeight: 'bold'
-    },
-    actionButtonIcon: {
-
-
-    }
 })
