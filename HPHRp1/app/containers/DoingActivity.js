@@ -21,19 +21,10 @@ import VoiceTest from '../components/VoiceTest'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
-import PropTypes from 'prop-types'
 
 let dataStore = {}
 
 class DoingActivity extends React.Component {
-    static propTypes = {
-        exception: PropTypes.object,
-        onDoingActivityDone: PropTypes.func,
-        setTimeStop: PropTypes.func,
-        setDuration: PropTypes.func,
-        doingLevel: PropTypes.string
-    }
-
     constructor(props) {
         super(props)
         this.state = {
