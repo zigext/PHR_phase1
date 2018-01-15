@@ -138,9 +138,12 @@ class Activity extends React.Component {
                 })
 
             })
-            .catch(error => {
+            .catch(async error => {
                 console.log("Error in saveActivity = ", error)
                 ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                 await this.setState({
+                    exception: {}
+                })
             })
     }
 
