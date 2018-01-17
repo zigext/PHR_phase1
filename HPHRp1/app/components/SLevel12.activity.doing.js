@@ -19,6 +19,12 @@ let options = {
     fields: {
         amount: {
             label: 'จำนวนขั้นที่เดินได้'
+        },
+        disorder: {
+            label: 'เกิดอาการผิดปกติ'
+        },
+        patientNotWilling: {
+            label: 'ผู้ป่วยไม่ประสงค์ทำกิจกรรมต่อ'
         }
     },
     stylesheet: myCustomStylesheet
@@ -31,7 +37,9 @@ amount.getValidationErrorMessage = function (value, path, context) {
 }
 
 let input = t.struct({
-    amount: amount
+    amount: amount,
+    disorder: t.Boolean,
+    patientNotWilling: t.Boolean
 })
 
 const LEVEL = 12
@@ -42,7 +50,8 @@ export default class SLevel12 extends React.Component {
         this.state = {
             status: 'doing',
             doingLevel: this.props.doingLevel,
-            completedLevel: false
+            completedLevel: false,
+            type: 'physical'
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -50,6 +59,7 @@ export default class SLevel12 extends React.Component {
     }
 
     componentDidMount = () => {
+        Voice.start('th-TH')
         //If patient can't do this activity
         if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
             this.props.onSystemLevelChange(this.props.systemLevel + 1)
@@ -57,7 +67,9 @@ export default class SLevel12 extends React.Component {
     }
 
     componentWillUnmount() {
-        Voice.destroy().then(Voice.removeAllListeners)
+        // Voice.destroy().then(Voice.removeAllListeners)
+
+        //Call only in the last step
         Tts.stop()
     }
 
@@ -72,13 +84,14 @@ export default class SLevel12 extends React.Component {
         Voice.start('en')
     }
 
-    onSystemLevelChange = () => {
-        this.props.onSystemLevelChange(this.props.systemLevel + 1)
-        this.props.onActivityLevelChange(this.props.activityLevel + 1)
-    }
+    // onSystemLevelChange = () => {
+    //     this.props.setPhysicalExercise('stairWalking', true)
+    //     this.props.onActivityLevelChange(this.props.activityLevel + 1)
+    //     this.props.onSystemLevelChange(this.props.systemLevel + 1)
+    // }
 
     onActivityDone = () => {
-        Alert.alert(
+     Alert.alert(
             'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
             'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
             [
@@ -95,16 +108,15 @@ export default class SLevel12 extends React.Component {
                                             completedLevel: true,
                                             status: 'done'
                                         })
-                                        // let result = {
-                                        //     maxLevel: this.props.activityLevel + 1
-                                        // }
-                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
-                                        // await this.props.setTimeStop()
-                                        // this.props.setDuration()
-                                        // this.props.onDoingActivityDone(result)
+                                        this.props.setPhysicalExercise('stairWalking', true)
+                        
                                     }
                                 },
-                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
+                                { text: 'ไม่ ', onPress: () => {
+                                    this.setState({ status: 'done' })
+                                    this.props.setPhysicalExercise('stairWalking', false)
+                                }
+                                }
                             ]
                         )
                     }
@@ -117,96 +129,119 @@ export default class SLevel12 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {}
-            //Not completed
+           let result = {}
+            //End but activity not completed
             if (!this.state.completedLevel) {
                 result.maxLevel = this.props.activityLevel
                 result.levelTitle = 'เดินขึ้นลงบันได'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
-                result.nextLevel = this.props.activityLevel
+                result.nextLevel = this.props.doingLevel
+                result.physicalExercise =  this.props.physicalExercise
+                result.breathingExercise =  this.props.breathingExercise
+                result.completedAllPhysical = this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing
+                result.reasonToStop =  {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
             }
-            //Completed
+            //End and activity completed
             else {
+                await this.props.onAllPhysicalCompleted()
+
                 result.maxLevel = this.props.activityLevel
                 result.levelTitle = 'เดินขึ้นลงบันได'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
-                result.nextLevel = this.props.activityLevel + 1
-                this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                //Max level is 7
+                if (this.props.doingLevel === 7) {
+                    result.nextLevel = this.props.doingLevel
+                }
+                else {
+                    result.nextLevel = this.props.doingLevel + 1
+                }
+                result.physicalExercise = this.props.physicalExercise
+                result.breathingExercise = this.props.breathingExercise
+                result.completedAllPhysical =  this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing,
+                result.reasonToStop =  {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
+                //Complete all level activities
+                // this.props.onActivityLevelChange(this.props.activityLevel + 1)
             }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
-            // console.log("amount = ", result)
-            // await this.props.setTimeStop()
-            // this.props.setDuration()
-            // this.props.onDoingActivityDone(result)
         }
     }
 
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Form ref='form' type={input} options={options} />
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color='#d6d4e0'
-                    size={35}
-                    onPress={this.onInputFilled}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-            </View>
-        )
-    }
-
-    renderNormalButton = () => {
-        return (
             <View>
-                <Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
-                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
                     <Icon
                         raised
                         reverse
                         name='exit-to-app'
                         color='#d6d4e0'
                         size={35}
-                        onPress={this.onActivityDone}
+                        onPress={this.onInputFilled}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
-                </View>
-            </View>
+           </View>
         )
     }
 
-    renderButtonWhenFinal = () => {
-        return (
-            <View style={_styles.exitContainer}>
-                <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onActivityDone}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-            </View>
-        )
-    }
+    // renderNormalButton = () => {
+    //     return (
+    //         <View>
+    //             <Icon
+    //                 raised
+    //                 reverse
+    //                 name='ios-arrow-forward'
+    //                 type='ionicon'
+    //                 color={common.accentColor}
+    //                 size={35}
+    //                 onPress={this.onSystemLevelChange}
+    //                 containerStyle={{ alignSelf: 'flex-end' }}
+    //             />
+    //             <View style={_styles.exitContainer}>
+    //                 <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+    //                 <Icon
+    //                     raised
+    //                     reverse
+    //                     name='exit-to-app'
+    //                     color='#d6d4e0'
+    //                     size={35}
+    //                     onPress={this.onActivityDone}
+    //                     containerStyle={{ alignSelf: 'flex-end' }}
+    //                 />
+    //             </View>
+    //         </View>
+    //     )
+    // }
+
+    // renderButtonWhenFinal = () => {
+    //     return (
+    //         <View style={_styles.exitContainer}>
+    //             <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
+    //             <Icon
+    //                 raised
+    //                 reverse
+    //                 name='exit-to-app'
+    //                 color={common.accentColor}
+    //                 size={35}
+    //                 onPress={this.onActivityDone}
+    //                 containerStyle={{ alignSelf: 'flex-end' }}
+    //             />
+    //         </View>
+    //     )
+    // }
 
     renderActivity = () => {
         Tts.speak('เดินขึ้นลงบันได')
@@ -215,30 +250,18 @@ export default class SLevel12 extends React.Component {
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
-                {/*Check if this is the final activity that patient can do*/}
-                {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
-                {/*<Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
+                   <View style={_styles.exitContainer}>
                     <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
                     <Icon
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.accentColor}
                         size={35}
                         onPress={this.onActivityDone}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
-                </View>*/}
+                </View>
             </View>
         )
     }
@@ -253,13 +276,35 @@ export default class SLevel12 extends React.Component {
                 totalTimes = 'เดินลงบันได 1 ชั้นแบบพักขา'
                 break
             case 7:
-                totalTimes = 'เดินขึ้นลงบันได 10-15 ขั้น และเดินขึ้นบันได 1-2 ชั้นแบบสลับขา'
+                totalTimes = 'เดินขึ้นลงบันได 10-15 ขั้น แบบสลับขา ถ้าอาการทางคลินิกคงที่ให้ขึ้นบันไดแบบพักขา และเดินขึ้นบันได 1-2 ชั้นแบบสลับขา'
                 break
             default:
                 totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'
         }
         return (
             <View style={_styles.container}>
+                <View style={_styles.typeExerciseContainer}>
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        title='Physical'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+
+                    />
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        title='Breathing'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={() => ToastAndroid.showWithGravity('ทำ Breathing exercise สำเร็จครบแล้ว', ToastAndroid.SHORT, ToastAndroid.CENTER)}
+                    />
+                </View>
                 <Text style={_styles.topic}>{totalTimes}</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
@@ -273,8 +318,8 @@ const _styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        padding: 20,
-        paddingHorizontal: 50,
+        margin: 20,
+        marginHorizontal: 25,
 
     },
     exitContainer: {
@@ -282,6 +327,15 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
+    },
+    typeExerciseContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    formContainer: {
+        marginTop: 30,
+        marginRight: 75,
     },
     topic: {
         fontSize: 20,

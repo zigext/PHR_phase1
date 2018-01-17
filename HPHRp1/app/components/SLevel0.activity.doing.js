@@ -17,9 +17,6 @@ myCustomStylesheet.controlLabel.normal.fontWeight = 'normal'
 myCustomStylesheet.controlLabel.normal.fontSize = 20
 let options = {
     fields: {
-        amount: {
-            label: 'จำนวนครั้งที่ทำได้'
-        },
         disorder: {
             label: 'เกิดอาการผิดปกติ'
         },
@@ -30,33 +27,29 @@ let options = {
     stylesheet: myCustomStylesheet
 }
 
-//amount must be positive value
-let amount = t.refinement(t.Number, function (n) { return n >= 0 })
-amount.getValidationErrorMessage = function (value, path, context) {
-    return 'จำนวนไม่ถูกต้อง'
-}
-
 let input = t.struct({
-    amount: amount,
     disorder: t.Boolean,
     patientNotWilling: t.Boolean
 })
 
-const LEVEL = 11
+const LEVEL = 0
 
-export default class SLevel11 extends React.Component {
+export default class SLevel1 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             status: 'doing',
-            doingLevel: this.props.doingLevel,
-            completedLevel: false,
+            showDescription: false,
             type: 'physical'
         }
-        Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
-        Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
-        // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this)
+        Voice.onSpeechStart = this.onSpeechStart.bind(this)
+        Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this)
+        Voice.onSpeechEnd = this.onSpeechEnd.bind(this)
+        Voice.onSpeechError = this.onSpeechError.bind(this)
+        Voice.onSpeechResults = this.onSpeechResults.bind(this);
+        Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this)
     }
+
 
     componentDidMount = () => {
         Voice.start('th-TH')
@@ -71,20 +64,38 @@ export default class SLevel11 extends React.Component {
         // Tts.stop()
     }
 
-    onSpeechStartHandler(e) {
+    onSpeechStart(e) {
         console.log("Speech start")
     }
-    onSpeechEndHandler(e) {
+    onSpeechRecognized(e) {
+        console.log("Speech recognized")
+    }
+    onSpeechEnd(e) {
         console.log("Speech end")
+    }
+    onSpeechError(e) {
+        console.log("Speech error = ", JSON.stringify(e.error))
+    }
+    onSpeechResults(e) {
+        console.log("Speech results = ", e.value)
+    }
+    onSpeechPartialResults(e) {
+        console.log("Speech partial results = ", e.value)
     }
 
     onStartButtonPress(e) {
-        Voice.start('en')
+        Voice.start('th-TH')
     }
 
     onSystemLevelChange = () => {
-        this.props.setPhysicalExercise('tiptoeing', true)
-        this.props.onActivityLevelChange(this.props.activityLevel + 1)
+        // let result = {
+        //         maxLevel: this.props.activityLevel,
+        //         levelTitle: 'Breathing control',
+        //         completedLevel: true,
+        //         nextLevel: this.props.activityLevel
+        //     }
+        this.props.setLastPhysicalLevel(3) //Set to leg exercise's level. In case of user doesn't switch. So it will go to systemLevel 3
+        this.props.setPhysicalExercise('fowlerPosition', true)
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
@@ -95,34 +106,8 @@ export default class SLevel11 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        Alert.alert(
-                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
-                            [
-                                {
-                                    text: 'ใช่', onPress: async () => {
-                                        //In case of activity is completed
-                                        this.setState({
-                                            completedLevel: true,
-                                            status: 'done'
-                                        })
-                                        this.props.setPhysicalExercise('tiptoeing', true)
-                                        //  let result = {
-                                        //     maxLevel: this.props.activityLevel + 1
-                                        // }
-                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
-                                        // await this.props.setTimeStop()
-                                        // this.props.setDuration()
-                                        // this.props.onDoingActivityDone(result)
-                                    }
-                                },
-                                { text: 'ไม่ ', onPress: () => {
-                                    this.setState({ status: 'done' })
-                                    this.props.setPhysicalExercise('tiptoeing', false)
-                                }
-                                }
-                            ]
-                        )
+                        this.setState({ status: 'done' })
+                        this.props.setPhysicalExercise('fowlerPosition', false)
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -131,55 +116,29 @@ export default class SLevel11 extends React.Component {
     }
     //In case of activity is not completed
     onInputFilled = async () => {
+        let result = {}
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {}
-            //End but activity not completed
-            if (!this.state.completedLevel) {
-                result.maxLevel = this.props.activityLevel
-                result.levelTitle = 'เขย่งเท้าขึ้นลง'
-                result.amount = value.amount
-                result.completedLevel = this.state.completedLevel
-                result.nextLevel = this.props.doingLevel
-                result.physicalExercise =  this.props.physicalExercise
-                result.breathingExercise =  this.props.breathingExercise
-                result.completedAllPhysical = this.props.completedAllPhysical
-                result.completedAllBreathing = this.props.completedAllBreathing
-                result.reasonToStop =  {
+            result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'นั่งหัวสูง',
+                // amount: value.amount,
+                completedLevel: false,
+                nextLevel: this.props.activityLevel,
+                physicalExercise: this.props.physicalExercise,
+                breathingExercise: this.props.breathingExercise,
+                completedAllPhysical: this.props.completedAllPhysical,
+                completedAllBreathing: this.props.completedAllBreathing,
+                reasonToStop: {
                     disorder: value.disorder,
                     patientNotWilling: value.patientNotWilling
                 }
             }
-            //End and activity completed
-            else {
-                await this.props.onAllPhysicalCompleted()
+            
 
-                result.maxLevel = this.props.activityLevel
-                result.levelTitle = 'เขย่งเท้าขึ้นลง'
-                result.amount = value.amount
-                result.completedLevel = this.state.completedLevel
-                //Max level is 7
-                if (this.props.doingLevel === 7) {
-                    result.nextLevel = this.props.doingLevel
-                }
-                else {
-                    result.nextLevel = this.props.doingLevel + 1
-                }
-                result.physicalExercise = this.props.physicalExercise
-                result.breathingExercise = this.props.breathingExercise
-                result.completedAllPhysical =  this.props.completedAllPhysical
-                result.completedAllBreathing = this.props.completedAllBreathing,
-                result.reasonToStop =  {
-                    disorder: value.disorder,
-                    patientNotWilling: value.patientNotWilling
-                }
-
-                this.props.onActivityLevelChange(this.props.activityLevel + 1)
-            }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
-            
         }
     }
 
@@ -249,58 +208,21 @@ export default class SLevel11 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('เขย่งเท้าขึ้นลง')
+        Tts.speak('นั่งหัวสูงบนเตียง 45 ถึง 60 องศา')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
                 </View>
+
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
-                {/*<Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
-                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onActivityDone}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-                </View>*/}
             </View>
         )
     }
 
     render() {
-        let totalTimes
-        switch (this.props.doingLevel) {
-            case 4:
-                totalTimes = '10 ครั้ง'
-                break
-            case 5:
-                totalTimes = '20 ครั้ง'
-                break
-            case 6:
-                totalTimes = '20-30 ครั้ง'
-                break
-            case 7:
-                totalTimes = '20-30 ครั้ง'
-                break
-            default:
-                totalTimes = '10 ครั้ง'
-        }
+
         return (
             <View style={_styles.container}>
                 <View style={_styles.typeExerciseContainer}>
@@ -312,7 +234,6 @@ export default class SLevel11 extends React.Component {
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
                         buttonStyle={{ borderRadius: 10 }}
-
                     />
                     <Button
                         raised
@@ -322,10 +243,10 @@ export default class SLevel11 extends React.Component {
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
                         buttonStyle={{ borderRadius: 10 }}
-                        onPress={() => ToastAndroid.showWithGravity('ทำ Breathing exercise สำเร็จครบแล้ว', ToastAndroid.SHORT, ToastAndroid.CENTER)}
+                        onPress={() => ToastAndroid.showWithGravity('ไม่สามารถสลับไปทำ Breathing exercise ได้', ToastAndroid.SHORT, ToastAndroid.CENTER)}
                     />
                 </View>
-                <Text style={_styles.topic}>เขย่งเท้าขึ้นลง {totalTimes}</Text>
+                <Text style={_styles.topic}>นั่งหัวสูงบนเตียง 45-60 องศา</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -340,13 +261,19 @@ const _styles = StyleSheet.create({
         alignSelf: 'stretch',
         margin: 20,
         marginHorizontal: 25,
-
     },
     exitContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
+    },
+    descriptionContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignSelf: 'stretch',
+        marginRight: 180
     },
     typeExerciseContainer: {
         flexDirection: 'row',
@@ -364,17 +291,16 @@ const _styles = StyleSheet.create({
         color: common.grey,
         marginBottom: 15,
     },
-    detail: {
-        fontSize: 20,
-        color: common.grey,
-        marginTop: 20,
-        marginRight: 15,
-    },
     text: {
         fontSize: 20,
         color: common.grey,
         marginTop: 20,
         marginRight: 15,
+    },
+    descriptionText: {
+        fontSize: 18,
+        color: common.grey,
+        lineHeight: 35,
     },
     image: {
         resizeMode: 'center',

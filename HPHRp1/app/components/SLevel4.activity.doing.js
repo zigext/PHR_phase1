@@ -19,6 +19,12 @@ let options = {
     fields: {
         amount: {
             label: 'จำนวนครั้งที่ทำได้'
+        },
+        disorder: {
+            label: 'เกิดอาการผิดปกติ'
+        },
+        patientNotWilling: {
+            label: 'ผู้ป่วยไม่ประสงค์ทำกิจกรรมต่อ'
         }
     },
     stylesheet: myCustomStylesheet
@@ -31,7 +37,9 @@ amount.getValidationErrorMessage = function (value, path, context) {
 }
 
 let input = t.struct({
-    amount: amount
+    amount: amount,
+    disorder: t.Boolean,
+    patientNotWilling: t.Boolean
 })
 
 const LEVEL = 4
@@ -41,7 +49,9 @@ export default class SLevel4 extends React.Component {
         super(props)
         this.state = {
             status: 'doing',
-            showDescription: false
+            showDescription: false,
+            type: 'physical',
+            completedLevel: false
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -72,8 +82,19 @@ export default class SLevel4 extends React.Component {
         Voice.start('en')
     }
 
-    onSystemLevelChange = () => {
-        this.props.onSystemLevelChange(this.props.systemLevel + 1)
+    onSystemLevelChange = async () => {
+        this.props.setPhysicalExercise('armsExercise', true)
+        //If all breathing exercises also completed
+        if(this.props.completedAllBreathing){
+            this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        }
+        //If not
+        else {
+            await this.props.onAllPhysicalCompleted()
+            ToastAndroid.showWithGravity('กรุณาทำ Breathing exercise ก่อน', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+        
     }
 
     onActivityDone = () => {
@@ -83,7 +104,35 @@ export default class SLevel4 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        this.setState({ status: 'done' })
+                        Alert.alert(
+                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
+                            [
+                                {
+                                    text: 'ใช่', onPress: async () => {
+                                        //In case of activity is completed
+                                        this.setState({
+                                            completedLevel: true,
+                                            status: 'done'
+                                        })
+                                        this.props.setPhysicalExercise('armsExercise', true)
+                                        // let result = {
+                                        //     maxLevel: this.props.activityLevel + 1
+                                        // }
+                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                                        // await this.props.setTimeStop()
+                                        // this.props.setDuration()
+                                        // this.props.onDoingActivityDone(result)
+                                    }
+                                },
+                                { text: 'ไม่ ', onPress: () => {
+                                    this.setState({ status: 'done' })
+                                    this.props.setPhysicalExercise('armsExercise', false)
+                                }
+                            }
+                            ]
+                        )
+                        //    this.setState({status: 'done'})
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -94,13 +143,71 @@ export default class SLevel4 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {
-                maxLevel: this.props.activityLevel,
-                levelTitle: 'ไออย่างมีประสิทธิภาพ',
-                amount: value.amount,
-                completedLevel: false,
-                nextLevel: this.props.activityLevel
+            let result = {}
+            //End but activity not completed
+            if (!this.state.completedLevel) {
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'บริหารแขน ข้อมือ ข้อศอก หัวไหล่'
+                result.amount = value.amount
+                result.completedLevel = this.state.completedLevel
+                result.nextLevel = this.props.activityLevel
+                result.physicalExercise =  this.props.physicalExercise
+                result.breathingExercise =  this.props.breathingExercise
+                result.completedAllPhysical = this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing
+                result.reasonToStop =  {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
+             
+             
             }
+            //End and activity completed
+            else {
+                await this.props.onAllPhysicalCompleted()
+
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'บริหารแขน ข้อมือ ข้อศอก หัวไหล่'
+                result.amount = value.amount
+                result.nextLevel = this.props.activityLevel + 1
+                result.physicalExercise = this.props.physicalExercise
+                result.breathingExercise = this.props.breathingExercise
+                result.completedAllPhysical =  this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing,
+                result.reasonToStop =  {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
+
+                //If all breathing exercises in this level are completed, then activity level 1 is completed
+                if(this.props.completedAllBreathing) {
+                    result.completedLevel = this.state.completedLevel
+                    result.nextLevel = this.props.activityLevel + 1
+                    this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                }
+                //If any breathing exercise in this level is not completed, then activity level 1 is  not completed
+                else {
+                    result.completedLevel = false
+                    result.nextLevel = this.props.activityLevel
+                }
+
+                // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            }
+            // let result = {
+            //     maxLevel: this.props.activityLevel,
+            //     levelTitle: 'บริหารแขน',
+            //     amount: value.amount,
+            //     completedLevel: false,
+            //     nextLevel: this.props.activityLevel,
+            //     physicalExercise: this.props.physicalExercise,
+            //     breathingExercise: this.props.breathingExercise,
+            //     completedAllPhysical: false,
+            //     completedAllBreathing: false,
+            //     reasonToStop: {
+            //         disorder: value.disorder,
+            //         patientNotWilling: value.patientNotWilling
+            //     }
+            // }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
@@ -113,20 +220,36 @@ export default class SLevel4 extends React.Component {
         })
     }
 
+    changeToPhysicalPress = () => {
+        this.setState({
+            type: 'physical'
+        })
+    }
+
+    changeToBreathingPress = () => {
+        this.setState({
+            type: 'breathing'
+        })
+        this.props.setLastPhysicalLevel(this.props.systemLevel) //For switching back to physical this level
+        this.props.onSystemLevelChange(this.props.lastBreathingLevel) //Back to last breathing 
+    }
+
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Form ref='form' type={input} options={options} />
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color='#d6d4e0'
-                    size={35}
-                    onPress={this.onInputFilled}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-            </View>
+            <View>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onInputFilled}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+           </View>
         )
     }
 
@@ -177,7 +300,7 @@ export default class SLevel4 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('ไออย่างมีประสิทธิภาพ')
+        Tts.speak('บริหารแขน ข้อมือ ข้อศอก และหัวไหล่')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -196,9 +319,9 @@ export default class SLevel4 extends React.Component {
                     />
                     {this.state.showDescription ?
                         (<View>
-                            <Text style={_styles.descriptionText}>▪ ใช้มือทั้งสองข้าง หมอน หรือผ้าห่มประคองแผลผ่าตัดที่หน้าอก </Text>
-                            <Text style={_styles.descriptionText}>▪ อยู่ในท่านั่ง โน้มตัวมาด้านหน้าเล็กน้อย</Text>
-                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าให้ลึกพอควร แล้วพยายามไอเพื่อขับเสมหะออก อาจรู้สึกเจ็บแผลพอสมควรขณะไอ</Text>
+                            <Text style={_styles.descriptionText}>▪ กำมือสลับแบมือ 10 ครั้ง </Text>
+                            <Text style={_styles.descriptionText}>▪ เหยียดแขนไปด้านหน้า งอศอกสลับกับเหยียดศอก 10 ครั้ง</Text>
+                            <Text style={_styles.descriptionText}>▪ เหยียดแขนตรง ยกเหนือศีรษะทีละข้างๆละ 5 ครั้ง</Text>
                         </View>)
                         : null}
                 </View>
@@ -234,7 +357,32 @@ export default class SLevel4 extends React.Component {
     render() {
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>ไออย่างมีประสิทธิภาพ</Text>
+                <View style={_styles.typeExerciseContainer}>
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        title='Physical'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.changeToPhysicalPress}
+                    />
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        title='Breathing'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.changeToBreathingPress}
+                    />
+                </View>
+                <Text style={_styles.topic}>บริหารแขน-ข้อศอก-ข้อมือ-หัวไหล่</Text>
+                <Text style={_styles.detail}>กำสลับแบมือ 10 ครั้ง</Text>
+                <Text style={_styles.detail}>เหยียดแขนแล้วงอศอกสลับเหยียดศอก 10 ครั้ง</Text>
+                <Text style={_styles.detail}>เหยียดแขนตรงเหนือศีรษะทีละข้างๆละ 5 ครั้ง</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -264,6 +412,15 @@ const _styles = StyleSheet.create({
         alignSelf: 'stretch',
         marginRight: 180
     },
+    typeExerciseContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    formContainer: {
+        marginTop: 30,
+        marginRight: 75,
+    },
     topic: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -281,6 +438,12 @@ const _styles = StyleSheet.create({
         fontSize: 18,
         color: common.grey,
         lineHeight: 35,
+    },
+    detail: {
+        fontSize: 20,
+        color: common.grey,
+        marginTop: 20,
+        marginRight: 15,
     },
     image: {
         resizeMode: 'center',

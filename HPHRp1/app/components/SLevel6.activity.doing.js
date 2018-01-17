@@ -19,6 +19,12 @@ let options = {
     fields: {
         amount: {
             label: 'จำนวนครั้งที่ทำได้'
+        },
+        disorder: {
+            label: 'เกิดอาการผิดปกติ'
+        },
+        patientNotWilling: {
+            label: 'ผู้ป่วยไม่ประสงค์ทำกิจกรรมต่อ'
         }
     },
     stylesheet: myCustomStylesheet
@@ -31,7 +37,9 @@ amount.getValidationErrorMessage = function (value, path, context) {
 }
 
 let input = t.struct({
-    amount: amount
+    amount: amount,
+    disorder: t.Boolean,
+    patientNotWilling: t.Boolean
 })
 
 const LEVEL = 6
@@ -42,7 +50,8 @@ export default class SLevel6 extends React.Component {
         this.state = {
             status: 'doing',
             completedLevel: false,
-            showDescription: false
+            showDescription: false,
+            type: 'physical'
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -74,8 +83,8 @@ export default class SLevel6 extends React.Component {
     }
 
     onSystemLevelChange = () => {
+        this.props.setPhysicalExercise('legsSwing', true)
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
-        this.props.onActivityLevelChange(this.props.activityLevel + 1)
     }
 
     onActivityDone = () => {
@@ -85,30 +94,8 @@ export default class SLevel6 extends React.Component {
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        Alert.alert(
-                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
-                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
-                            [
-                                {
-                                    text: 'ใช่', onPress: async () => {
-                                        //In case of activity is completed
-                                        this.setState({
-                                            completedLevel: true,
-                                            status: 'done'
-                                        })
-                                        // let result = {
-                                        //     maxLevel: this.props.activityLevel + 1
-                                        // }
-                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
-                                        // await this.props.setTimeStop()
-                                        // this.props.setDuration()
-                                        // this.props.onDoingActivityDone(result)
-                                    }
-                                },
-                                { text: 'ไม่ ', onPress: () => this.setState({ status: 'done' }) }
-                            ]
-                        )
-                        //    this.setState({status: 'done'})
+                        this.setState({ status: 'done' })
+                        this.props.setPhysicalExercise('legsSwing', false)
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -119,31 +106,25 @@ export default class SLevel6 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {}
-            //Not completed
-            if (!this.state.completedLevel) {
-                result.maxLevel = this.props.activityLevel
-                result.levelTitle = 'บริหารแขน ข้อมือ ข้อศอก หัวไหล่'
-                result.amount = value.amount
-                result.completedLevel = this.state.completedLevel
-                result.nextLevel = this.props.activityLevel
-            }
-            //Completed
-            else {
-                result.maxLevel = this.props.activityLevel
-                result.levelTitle = 'บริหารแขน ข้อมือ ข้อศอก หัวไหล่'
-                result.amount = value.amount
-                result.completedLevel = this.state.completedLevel
-                result.nextLevel = this.props.activityLevel + 1
-                this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            let result = {
+                maxLevel: this.props.activityLevel,
+                levelTitle: 'แกว่งเท้า',
+                amount: value.amount,
+                completedLevel: false,
+                nextLevel: this.props.activityLevel,
+                physicalExercise: this.props.physicalExercise,
+                breathingExercise: this.props.breathingExercise,
+                completedAllPhysical: this.props.completedAllPhysical,
+                completedAllBreathing: this.props.completedAllBreathing,
+                reasonToStop: {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
             }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
-            // console.log("amount = ", result)
-            // await this.props.setTimeStop()
-            // this.props.setDuration()
-            // this.props.onDoingActivityDone(result)
+            
         }
     }
 
@@ -155,17 +136,19 @@ export default class SLevel6 extends React.Component {
 
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Form ref='form' type={input} options={options} />
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color='#d6d4e0'
-                    size={35}
-                    onPress={this.onInputFilled}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
+            <View>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onInputFilled}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
             </View>
         )
     }
@@ -217,30 +200,11 @@ export default class SLevel6 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('บริหารแขน ข้อมือ ข้อศอก และหัวไหล่')
+        Tts.speak('แกว่งเท้าข้างละ 20 ครั้ง')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
                     <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
-                </View>
-
-                <View style={_styles.descriptionContainer}>
-                    <Button
-                        raised
-                        backgroundColor={common.primaryColorDark}
-                        title='ดูรายละเอียด'
-                        fontSize={18}
-                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
-                        buttonStyle={{ borderRadius: 10 }}
-                        onPress={this.onShowDescriptionPress}
-                    />
-                    {this.state.showDescription ?
-                        (<View>
-                            <Text style={_styles.descriptionText}>▪ กำมือสลับแบมือ 10 ครั้ง </Text>
-                            <Text style={_styles.descriptionText}>▪ เหยียดแขนไปด้านหน้า งอศอกสลับกับเหยียดศอก 10 ครั้ง</Text>
-                            <Text style={_styles.descriptionText}>▪ เหยียดแขนตรง ยกเหนือศีรษะทีละข้างๆละ 5 ครั้ง</Text>
-                        </View>)
-                        : null}
                 </View>
 
                 {/*Check if this is the final activity that patient can do*/}
@@ -274,10 +238,29 @@ export default class SLevel6 extends React.Component {
     render() {
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>บริหารแขน ข้อมือ ข้อศอก หัวไหล่</Text>
-                <Text style={_styles.detail}>กำสลับแบมือ 10 ครั้ง</Text>
-                <Text style={_styles.detail}>เหยียดแขนแล้วงอศอกสลับเหยียดศอก 10 ครั้ง</Text>
-                <Text style={_styles.detail}>เหยียดแขนตรงเหนือศีรษะทีละข้างๆละ 5 ครั้ง</Text>
+                <View style={_styles.typeExerciseContainer}>
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        title='Physical'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+
+                    />
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        title='Breathing'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={() => ToastAndroid.showWithGravity('ทำ Breathing exercise สำเร็จครบแล้ว', ToastAndroid.SHORT, ToastAndroid.CENTER)}
+                    />
+                </View>
+                <Text style={_styles.topic}>แกว่งเท้าข้างละ 20 ครั้ง</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -306,6 +289,15 @@ const _styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
         marginRight: 180
+    },
+    typeExerciseContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    formContainer: {
+        marginTop: 30,
+        marginRight: 75,
     },
     topic: {
         fontSize: 20,

@@ -19,7 +19,12 @@ let options = {
     fields: {
         amount: {
             label: 'จำนวนครั้งที่ทำได้',
-            showDescription: false
+        },
+        disorder: {
+            label: 'เกิดอาการผิดปกติ'
+        },
+        patientNotWilling: {
+            label: 'ผู้ป่วยไม่ประสงค์ทำกิจกรรมต่อ'
         }
     },
     stylesheet: myCustomStylesheet
@@ -32,7 +37,9 @@ amount.getValidationErrorMessage = function (value, path, context) {
 }
 
 let input = t.struct({
-    amount: amount
+    amount: amount,
+    disorder: t.Boolean,
+    patientNotWilling: t.Boolean
 })
 
 const LEVEL = 2
@@ -41,7 +48,10 @@ export default class SLevel2 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: 'doing'
+            status: 'doing',
+            completedLevel: false,
+            showDescription: false,
+            type: 'breathing'
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -73,17 +83,56 @@ export default class SLevel2 extends React.Component {
     }
 
     onSystemLevelChange = () => {
-        this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        this.props.onAllBreathingCompleted()
+        this.props.setBreathingExercise('effectiveCough', true)
+        //If other physical exercises in this level are completed, then go to next activityLevel
+        if(this.props.completedAllPhysical) {
+            this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            this.props.onSystemLevelChange(5) //go to sit with free legs position
+        }
+        else {
+            this.props.onSystemLevelChange(this.props.lastPhysicalLevel) //go to last physical level
+        }
+        
+        
     }
 
     onActivityDone = () => {
-        Alert.alert(
+         Alert.alert(
             'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
             'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        this.setState({ status: 'done' })
+                        Alert.alert(
+                            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+                            'ทำกิจกรรมได้สำเร็จตามเป้าหมายหรือไม่?',
+                            [
+                                {
+                                    text: 'ใช่', onPress: async () => {
+                                        //In case of activity is completed
+                                        this.setState({
+                                            completedLevel: true,
+                                            status: 'done'
+                                        })
+                                        this.props.setBreathingExercise('effectiveCough', true)
+                                        // let result = {
+                                        //     maxLevel: this.props.activityLevel + 1
+                                        // }
+                                        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                                        // await this.props.setTimeStop()
+                                        // this.props.setDuration()
+                                        // this.props.onDoingActivityDone(result)
+                                    }
+                                },
+                                { text: 'ไม่ ', onPress: () => {
+                                    this.setState({ status: 'done' })
+                                    this.props.setBreathingExercise('effectiveCough', false)
+                                }
+                            }
+                            ]
+                        )
+                        //    this.setState({status: 'done'})
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -94,14 +143,73 @@ export default class SLevel2 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {
-                maxLevel: this.props.activityLevel,
-                levelTitle: 'Deep breathing',
-                amount: value.amount,
-                completedLevel: false,
-                nextLevel: this.props.activityLevel
+                let result = {}
+
+            //End but activity not completed
+            if (!this.state.completedLevel) {
+                // await this.props.onAllPhysicalCompleted()
+
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'ไออย่างมีประสิทธิภาพ'
+                result.amount = value.amount
+                result.completedLevel = this.state.completedLevel
+                result.nextLevel = this.props.activityLevel
+                result.physicalExercise =  this.props.physicalExercise
+                result.breathingExercise =  this.props.breathingExercise
+                result.completedAllPhysical = this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing
+                result.reasonToStop =  {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
+               
+
             }
-            console.log("amount = ", result)
+            //End and activity completed
+            else {
+                
+                await this.props.onAllBreathingCompleted()
+
+                result.maxLevel = this.props.activityLevel
+                result.levelTitle = 'ไออย่างมีประสิทธิภาพ'
+                result.amount = value.amount
+                result.physicalExercise = this.props.physicalExercise
+                result.breathingExercise = this.props.breathingExercise
+                result.completedAllPhysical =  this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing
+                result.reasonToStop =  {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
+                //If all physical exercises in this level are completed, then activity level 1 is completed
+                if(this.props.completedAllPhysical) {
+                    result.completedLevel = this.state.completedLevel
+                    result.nextLevel = this.props.activityLevel + 1
+                    this.props.onActivityLevelChange(this.props.activityLevel + 1)
+                }
+                //If any physical exercise in this level is not completed, then activity level 1 is  not completed
+                else {
+                    result.completedLevel = false
+                    result.nextLevel = this.props.activityLevel
+                }
+            }
+
+            // let result = {
+            //     maxLevel: this.props.activityLevel,
+            //     levelTitle: 'ไออย่างมีประสิทธิภาพ',
+            //     amount: value.amount,
+            //     completedLevel: false,
+            //     nextLevel: this.props.activityLevel,
+            //     physicalExercise: this.props.physicalExercise,
+            //     breathingExercise: this.props.breathingExercise,
+            //     completedAllPhysical: this.props.completedAllPhysical,
+            //     completedAllBreathing: this.props.completedAllBreathing,
+            //     reasonToStop: {
+            //         disorder: value.disorder,
+            //         patientNotWilling: value.patientNotWilling
+            //     }
+            // }
+            
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
@@ -114,21 +222,38 @@ export default class SLevel2 extends React.Component {
         })
     }
 
+    //The next physical exercise is on systemLevel 3
+    changeToPhysicalPress = () => {
+        this.setState({
+            type: 'physical'
+        })
+        this.props.setLastBreathingLevel(this.props.systemLevel) //For switching back to breathing
+        this.props.onSystemLevelChange(this.props.lastPhysicalLevel) //Switch to last physical level
+    }
+
+    changeToBreathingPress = () => {
+        this.setState({
+            type: 'breathing'
+        })
+    }
+
     //In case of activity is not completed
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Form ref='form' type={input} options={options} />
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color='#d6d4e0'
-                    size={35}
-                    onPress={this.onInputFilled}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-            </View>
+            <View>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onInputFilled}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+           </View>
         )
     }
 
@@ -179,7 +304,7 @@ export default class SLevel2 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('บริหารปอดด้วยวิธี Deep breathing')
+        Tts.speak('ไออย่างมีประสิทธิภาพ')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -198,9 +323,9 @@ export default class SLevel2 extends React.Component {
                     />
                     {this.state.showDescription ?
                         (<View>
-                            <Text style={_styles.descriptionText}>▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างวางบริเวณหน้าท้อง</Text>
-                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางจมูกช้าๆ จนท้องป่องออกทำให้มือที่วางบนหน้าท้องรู้สึกได้ จนเกือบสุด แล้วค่อยๆสูดหายใจเข้าอีกพร้อมกับยกหน้าอกและหัวไหล่ขึ้นจนมือที่วางบนทรวงอกรู้สึกได้</Text>
-                            <Text style={_styles.descriptionText}>▪ ค่อยๆ ผ่อนลมหายใจออกทางปากช้าๆ จนสุด พักสักครู่</Text>
+                            <Text style={_styles.descriptionText}>▪ ใช้มือทั้งสองข้าง หมอน หรือผ้าห่มประคองแผลผ่าตัดที่หน้าอก </Text>
+                            <Text style={_styles.descriptionText}>▪ อยู่ในท่านั่ง โน้มตัวมาด้านหน้าเล็กน้อย</Text>
+                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าให้ลึกพอควร แล้วพยายามไอเพื่อขับเสมหะออก อาจรู้สึกเจ็บแผลพอสมควรขณะไอ</Text>
                         </View>)
                         : null}
                 </View>
@@ -236,7 +361,29 @@ export default class SLevel2 extends React.Component {
     render() {
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>บริหารปอดด้วยวิธี Deep breathing 5-10 ครั้ง</Text>
+                <View style={_styles.typeExerciseContainer}>
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'breathing' ? 'white' : common.primaryColor }
+                        color={this.state.type === 'breathing' ? common.primaryColor : 'white' }
+                        title='Physical'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.changeToPhysicalPress}
+                    />
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'breathing' ? common.primaryColor : 'white' }
+                        color={this.state.type === 'breathing' ?  'white' : common.primaryColor }
+                        title='Breathing'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.changeToBreathingPress}
+                    />
+                </View>
+                <Text style={_styles.topic}>ไออย่างมีประสิทธิภาพ</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -265,6 +412,15 @@ const _styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
         marginRight: 180
+    },
+    typeExerciseContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    formContainer: {
+        marginTop: 30,
+        marginRight: 75,
     },
     topic: {
         fontSize: 20,

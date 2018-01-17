@@ -19,6 +19,12 @@ let options = {
     fields: {
         amount: {
             label: 'จำนวนครั้งที่ทำได้'
+        },
+        disorder: {
+            label: 'เกิดอาการผิดปกติ'
+        },
+        patientNotWilling: {
+            label: 'ผู้ป่วยไม่ประสงค์ทำกิจกรรมต่อ'
         }
     },
     stylesheet: myCustomStylesheet
@@ -31,7 +37,9 @@ amount.getValidationErrorMessage = function (value, path, context) {
 }
 
 let input = t.struct({
-    amount: amount
+    amount: amount,
+    disorder: t.Boolean,
+    patientNotWilling: t.Boolean
 })
 
 const LEVEL = 9
@@ -42,6 +50,7 @@ export default class SLevel9 extends React.Component {
         this.state = {
             status: 'doing',
             doingLevel: this.props.doingLevel,
+            type: 'physical'
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -49,6 +58,7 @@ export default class SLevel9 extends React.Component {
     }
 
     componentDidMount = () => {
+        Voice.start('th-TH')
         //If patient can't do this activity
         if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
             this.props.onSystemLevelChange(this.props.systemLevel + 1)
@@ -56,8 +66,8 @@ export default class SLevel9 extends React.Component {
     }
 
     componentWillUnmount() {
-        Voice.destroy().then(Voice.removeAllListeners)
-        Tts.stop()
+        // Voice.destroy().then(Voice.removeAllListeners)
+        // Tts.stop()
     }
 
     onSpeechStartHandler(e) {
@@ -72,6 +82,7 @@ export default class SLevel9 extends React.Component {
     }
 
     onSystemLevelChange = () => {
+        this.props.setPhysicalExercise('marching', true)
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
@@ -83,6 +94,7 @@ export default class SLevel9 extends React.Component {
                 {
                     text: 'ใช่', onPress: () => {
                         this.setState({ status: 'done' })
+                        this.props.setPhysicalExercise('marching', false)
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -93,14 +105,21 @@ export default class SLevel9 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-            let result = {
+             let result = {
                 maxLevel: this.props.activityLevel,
-                levelTitle: 'ย่ำเท้า',
+                levelTitle: 'เดินย่ำอยู่กับที่',
                 amount: value.amount,
                 completedLevel: false,
-                nextLevel: this.props.activityLevel
+                nextLevel: this.props.activityLevel,
+                physicalExercise: this.props.physicalExercise,
+                breathingExercise: this.props.breathingExercise,
+                completedAllPhysical: this.props.completedAllPhysical,
+                completedAllBreathing: this.props.completedAllBreathing,
+                reasonToStop: {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
             }
-            console.log("amount = ", result)
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
@@ -109,18 +128,20 @@ export default class SLevel9 extends React.Component {
 
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Form ref='form' type={input} options={options} />
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color='#d6d4e0'
-                    size={35}
-                    onPress={this.onInputFilled}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-            </View>
+            <View>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onInputFilled}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+           </View>
         )
     }
 
@@ -171,7 +192,7 @@ export default class SLevel9 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('ยืนย่ำเท้าอยู่กับที่')
+        Tts.speak('เดินย่ำอยู่กับที่ 20 ครั้ง')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -206,29 +227,31 @@ export default class SLevel9 extends React.Component {
     }
 
     render() {
-        let totalTimes
-        switch (this.props.doingLevel) {
-            case 3:
-                totalTimes = '20 ครั้ง'
-                break
-            case 4:
-                totalTimes = '30 ครั้ง'
-                break
-            case 5:
-                totalTimes = '30 ครั้ง'
-                break
-            case 6:
-                totalTimes = '2 นาที'
-                break
-            case 7:
-                totalTimes = '2 นาที'
-                break
-            default:
-                totalTimes = '20 ครั้ง'
-        }
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>ยืนย่ำเท้าอยู่กับที่ {totalTimes}</Text>
+                <View style={_styles.typeExerciseContainer}>
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        title='Physical'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+
+                    />
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        title='Breathing'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={() => ToastAndroid.showWithGravity('ทำ Breathing exercise สำเร็จครบแล้ว', ToastAndroid.SHORT, ToastAndroid.CENTER)}
+                    />
+                </View>
+                <Text style={_styles.topic}>เดินย่ำอยู่กับที่ 20 ครั้ง</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -241,8 +264,8 @@ const _styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        padding: 20,
-        paddingHorizontal: 50,
+        margin: 20,
+        marginHorizontal: 25,
 
     },
     exitContainer: {
@@ -250,6 +273,15 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
+    },
+    typeExerciseContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    formContainer: {
+        marginTop: 30,
+        marginRight: 75,
     },
     topic: {
         fontSize: 20,

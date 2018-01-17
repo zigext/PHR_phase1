@@ -19,6 +19,12 @@ let options = {
     fields: {
         amount: {
             label: 'จำนวนครั้งที่ทำได้'
+        },
+        disorder: {
+            label: 'เกิดอาการผิดปกติ'
+        },
+        patientNotWilling: {
+            label: 'ผู้ป่วยไม่ประสงค์ทำกิจกรรมต่อ'
         }
     },
     stylesheet: myCustomStylesheet
@@ -31,7 +37,9 @@ amount.getValidationErrorMessage = function (value, path, context) {
 }
 
 let input = t.struct({
-    amount: amount
+    amount: amount,
+    disorder: t.Boolean,
+    patientNotWilling: t.Boolean
 })
 
 const LEVEL = 1
@@ -41,7 +49,8 @@ export default class SLevel1 extends React.Component {
         super(props)
         this.state = {
             status: 'doing',
-            showDescription: false
+            showDescription: false,
+            type: 'breathing'
         }
         Voice.onSpeechStart = this.onSpeechStart.bind(this)
         Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this)
@@ -96,6 +105,7 @@ export default class SLevel1 extends React.Component {
         //         completedLevel: true,
         //         nextLevel: this.props.activityLevel
         //     }
+        this.props.setBreathingExercise('deepBreathing', true)
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
@@ -107,6 +117,7 @@ export default class SLevel1 extends React.Component {
                 {
                     text: 'ใช่', onPress: () => {
                         this.setState({ status: 'done' })
+                        this.props.setBreathingExercise('deepBreathing', false)
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -120,10 +131,18 @@ export default class SLevel1 extends React.Component {
         if (value) {
             result = {
                 maxLevel: this.props.activityLevel,
-                levelTitle: 'Breathing control',
+                levelTitle: 'Deep breathing',
                 amount: value.amount,
                 completedLevel: false,
-                nextLevel: this.props.activityLevel
+                nextLevel: this.props.activityLevel,
+                physicalExercise: this.props.physicalExercise,
+                breathingExercise: this.props.breathingExercise,
+                completedAllPhysical: this.props.completedAllPhysical,
+                completedAllBreathing: this.props.completedAllBreathing,
+                reasonToStop: {
+                    disorder: value.disorder,
+                    patientNotWilling: value.patientNotWilling
+                }
             }
 
             await this.props.setTimeStop()
@@ -138,21 +157,37 @@ export default class SLevel1 extends React.Component {
         })
     }
 
+    //The next physical exercise is on systemLevel 3
+    changeToPhysicalPress = () => {
+        this.setState({
+            type: 'physical'
+        })
+        this.props.setLastBreathingLevel(this.props.systemLevel) //For switching back to breathing
+        this.props.onSystemLevelChange(this.props.systemLevel + 2)
+    }
+
+    changeToBreathingPress = () => {
+        this.setState({
+            type: 'breathing'
+        })
+    }
 
     renderForm = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Form ref='form' type={input} options={options} />
-                <Icon
-                    raised
-                    reverse
-                    name='exit-to-app'
-                    color='#d6d4e0'
-                    size={35}
-                    onPress={this.onInputFilled}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-            </View>
+             <View>
+                <View style={_styles.formContainer}>
+                    <Form ref='form' type={input} options={options} />
+                </View>
+                    <Icon
+                        raised
+                        reverse
+                        name='exit-to-app'
+                        color='#d6d4e0'
+                        size={35}
+                        onPress={this.onInputFilled}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+           </View>
         )
     }
 
@@ -203,7 +238,7 @@ export default class SLevel1 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('บริหารปอดด้วยวิธี Breathing control')
+        Tts.speak('บริหารปอดด้วยการหายใจเข้าออกลึกๆ 10 ครั้ง ใช้หรือไม่ใช้อุปกรณ์ก็ได้')
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -222,10 +257,16 @@ export default class SLevel1 extends React.Component {
                     />
                     {this.state.showDescription ?
                         (<View>
-                            <Text style={_styles.descriptionText}>▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างวางบริเวณหน้าท้อง ขณะหายใจเข้าท้องจะป่องจนรู้สึกได้ แต่มือบนทรวงอกจะไม่รู้สึก เพราะหน้าอกจะไม่ขยับหรือขยับน้อยมาก</Text>
-                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางจมูกช้าๆจนท้องป่องออก</Text>
+                            <Text style={[_styles.descriptionText, {fontWeight: 'bold'}]}>กรณีไม่ใช้อุปกรณ์</Text>
+                            <Text style={_styles.descriptionText}>▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างวางบริเวณหน้าท้อง</Text>
+                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางจมูกช้าๆ จนท้องป่องออกทำให้มือที่วางบนหน้าท้องรู้สึกได้ จนเกือบสุด แล้วค่อยๆสูดหายใจเข้าอีกพร้อมกับยกหน้าอกและหัวไหล่ขึ้นจนมือที่วางบนทรวงอกรู้สึกได้</Text>
                             <Text style={_styles.descriptionText}>▪ ค่อยๆ ผ่อนลมหายใจออกทางปากช้าๆ จนสุด พักสักครู่</Text>
-                            <Text style={_styles.descriptionText}>▪ ทำจนรู้สึกผ่อนคลาย</Text>
+                            <Text> </Text>
+                            <Text style={[_styles.descriptionText, {fontWeight: 'bold'}]}>กรณีใช้อุปกรณ์ Triflow</Text>
+                            <Text style={_styles.descriptionText}>▪ ควบคุมการหายใจเข้าออก 1-2 ครั้ง </Text>
+                            <Text style={_styles.descriptionText}>▪ ใช้ริมฝีปากอมอุปกรณ์ส่วนท่อของเครื่อง</Text>
+                            <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางปากให้เต็มที่จนลูกบอลลอยขึ้น และให้ลอยคงไว้ให้นานที่สุด แล้วค่อยๆผ่านหายใจออก แล้วหายใจปกติ 3-4 ครั้ง</Text>
+                            <Text style={_styles.descriptionText}>▪ ทำซ้ำจนครบ 10 ครั้ง หยุดพัก ควรทำทุก 1-2 ชั่วโมงขณะตื่น</Text>
                         </View>) 
                         : null}
                 </View>
@@ -262,7 +303,29 @@ export default class SLevel1 extends React.Component {
 
         return (
             <View style={_styles.container}>
-                <Text style={_styles.topic}>บริหารปอดด้วยวิธี Breathing control 5-10 ครั้ง</Text>
+                <View style={_styles.typeExerciseContainer}>
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'breathing' ? 'white' : common.primaryColor }
+                        color={this.state.type === 'breathing' ? common.primaryColor : 'white' }
+                        title='Physical'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.changeToPhysicalPress}
+                    />
+                    <Button
+                        raised
+                        backgroundColor={this.state.type === 'breathing' ? common.primaryColor : 'white' }
+                        color={this.state.type === 'breathing' ?  'white' : common.primaryColor }
+                        title='Breathing'
+                        fontSize={18}
+                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        onPress={this.changeToBreathingPress}
+                    />
+                </View>
+                <Text style={_styles.topic}>บริหารปอดด้วยการหายใจเข้าออกลึกๆ 10 ครั้ง ใช้หรือไม่ใช้อุปกรณ์ก็ได้ </Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
         )
@@ -290,6 +353,15 @@ const _styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
         marginRight: 180
+    },
+    typeExerciseContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    formContainer: {
+        marginTop: 30,
+        marginRight: 75,
     },
     topic: {
         fontSize: 20,
