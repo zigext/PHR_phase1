@@ -68,6 +68,9 @@ export default class SLevel1 extends React.Component {
             console.log("DONT")
             this.props.onSystemLevelChange(this.props.systemLevel + 1)
         }
+        else {
+            Tts.speak('บริหารปอดด้วยการหายใจเข้าออกลึกๆ 10 ครั้ง ใช้หรือไม่ใช้อุปกรณ์ก็ได้')
+        }
     }
 
     componentWillUnmount() {
@@ -238,7 +241,7 @@ export default class SLevel1 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('บริหารปอดด้วยการหายใจเข้าออกลึกๆ 10 ครั้ง ใช้หรือไม่ใช้อุปกรณ์ก็ได้')
+        
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>

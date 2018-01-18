@@ -64,6 +64,9 @@ export default class SLevel11 extends React.Component {
         if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
             this.props.onSystemLevelChange(this.props.systemLevel + 1)
         }
+        else {
+             Tts.speak('เขย่งเท้าขึ้นลง')
+        }
     }
 
     componentWillUnmount() {
@@ -249,7 +252,7 @@ export default class SLevel11 extends React.Component {
     }
 
     renderActivity = () => {
-        Tts.speak('เขย่งเท้าขึ้นลง')
+       
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
