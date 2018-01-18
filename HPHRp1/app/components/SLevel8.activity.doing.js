@@ -118,10 +118,15 @@ export default class SLevel8 extends React.Component {
                     patientNotWilling: value.patientNotWilling
                 }
             }
+            //If patient select his own activity, then define maxLevel and nextLevel = 1
+            if (this.props.finalSystemLevel === LEVEL) {
+                result.nextLevel = 1
+                result.maxLevel = 1
+            }
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
-            
+
         }
     }
 
@@ -131,16 +136,16 @@ export default class SLevel8 extends React.Component {
                 <View style={_styles.formContainer}>
                     <Form ref='form' type={input} options={options} />
                 </View>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onInputFilled}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-           </View>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color='#d6d4e0'
+                    size={35}
+                    onPress={this.onInputFilled}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
         )
     }
 
@@ -191,7 +196,7 @@ export default class SLevel8 extends React.Component {
     }
 
     renderActivity = () => {
-        
+
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -232,8 +237,8 @@ export default class SLevel8 extends React.Component {
                 <View style={_styles.typeExerciseContainer}>
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
-                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor}
                         title='Physical'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -242,8 +247,8 @@ export default class SLevel8 extends React.Component {
                     />
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
-                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                        color={this.state.type === 'physical' ? common.primaryColor : 'white'}
                         title='Breathing'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}

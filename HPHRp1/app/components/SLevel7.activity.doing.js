@@ -118,11 +118,12 @@ export default class SLevel7 extends React.Component {
                                         // this.props.onDoingActivityDone(result)
                                     }
                                 },
-                                { text: 'ไม่ ', onPress: () => {
-                                    this.setState({ status: 'done' })
-                                    this.props.setPhysicalExercise('sitting', false)
+                                {
+                                    text: 'ไม่ ', onPress: () => {
+                                        this.setState({ status: 'done' })
+                                        this.props.setPhysicalExercise('sitting', false)
+                                    }
                                 }
-                            }
                             ]
                         )
                     }
@@ -144,16 +145,21 @@ export default class SLevel7 extends React.Component {
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
                 result.nextLevel = this.props.activityLevel
-                result.physicalExercise =  this.props.physicalExercise
-                result.breathingExercise =  this.props.breathingExercise
+                result.physicalExercise = this.props.physicalExercise
+                result.breathingExercise = this.props.breathingExercise
                 result.completedAllPhysical = this.props.completedAllPhysical
                 result.completedAllBreathing = this.props.completedAllBreathing
-                result.reasonToStop =  {
+                result.reasonToStop = {
                     disorder: value.disorder,
                     patientNotWilling: value.patientNotWilling
                 }
+                //If patient select his own activity, then define maxLevel and nextLevel = 1
+                if (this.props.finalSystemLevel === LEVEL) {
+                    result.nextLevel = 1
+                    result.maxLevel = 1
+                }
             }
-               //End and activity completed
+            //End and activity completed
             else {
                 await this.props.onAllPhysicalCompleted()
 
@@ -164,16 +170,20 @@ export default class SLevel7 extends React.Component {
                 result.nextLevel = this.props.activityLevel + 1
                 result.physicalExercise = this.props.physicalExercise
                 result.breathingExercise = this.props.breathingExercise
-                result.completedAllPhysical =  this.props.completedAllPhysical
-                result.completedAllBreathing = this.props.completedAllBreathing,
-                result.reasonToStop =  {
+                result.completedAllPhysical = this.props.completedAllPhysical
+                result.completedAllBreathing = this.props.completedAllBreathing
+                result.reasonToStop = {
                     disorder: value.disorder,
                     patientNotWilling: value.patientNotWilling
                 }
-
+                //If patient select his own activity, then define maxLevel and nextLevel = 1
+                if (this.props.finalSystemLevel === LEVEL) {
+                    result.nextLevel = 1
+                    result.maxLevel = 1
+                }
                 this.props.onActivityLevelChange(this.props.activityLevel + 1)
             }
-            
+
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
@@ -198,15 +208,15 @@ export default class SLevel7 extends React.Component {
                 <View style={_styles.formContainer}>
                     <Form ref='form' type={input} options={options} />
                 </View>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onInputFilled}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color='#d6d4e0'
+                    size={35}
+                    onPress={this.onInputFilled}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
             </View>
         )
     }
@@ -258,7 +268,7 @@ export default class SLevel7 extends React.Component {
     }
 
     renderActivity = () => {
-        
+
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -298,8 +308,8 @@ export default class SLevel7 extends React.Component {
                 <View style={_styles.typeExerciseContainer}>
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
-                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor}
                         title='Physical'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -308,8 +318,8 @@ export default class SLevel7 extends React.Component {
                     />
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
-                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                        color={this.state.type === 'physical' ? common.primaryColor : 'white'}
                         title='Breathing'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}

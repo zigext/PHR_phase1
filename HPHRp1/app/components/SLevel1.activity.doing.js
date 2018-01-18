@@ -148,6 +148,12 @@ export default class SLevel1 extends React.Component {
                 }
             }
 
+            //If patient select his own activity, then define maxLevel and nextLevel = 1
+            if (this.props.finalSystemLevel === LEVEL) {
+                result.nextLevel = 1
+                result.maxLevel = 1
+            }
+
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)

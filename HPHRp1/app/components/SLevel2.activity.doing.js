@@ -86,22 +86,28 @@ export default class SLevel2 extends React.Component {
     }
 
     onSystemLevelChange = () => {
-        this.props.onAllBreathingCompleted()
+        if (!this.props.breathingExercise.hasOwnProperty("deepBreathing")) {
+            this.props.setCompletedAllBreathingExercise(false)
+        }
+        else {
+            this.props.onAllBreathingCompleted()
+        }
+        
         this.props.setBreathingExercise('effectiveCough', true)
         //If other physical exercises in this level are completed, then go to next activityLevel
-        if(this.props.completedAllPhysical) {
+        if (this.props.completedAllPhysical) {
             this.props.onActivityLevelChange(this.props.activityLevel + 1)
             this.props.onSystemLevelChange(5) //go to sit with free legs position
         }
         else {
             this.props.onSystemLevelChange(this.props.lastPhysicalLevel) //go to last physical level
         }
-        
-        
+
+
     }
 
     onActivityDone = () => {
-         Alert.alert(
+        Alert.alert(
             'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
             'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
             [
@@ -128,11 +134,12 @@ export default class SLevel2 extends React.Component {
                                         // this.props.onDoingActivityDone(result)
                                     }
                                 },
-                                { text: 'ไม่ ', onPress: () => {
-                                    this.setState({ status: 'done' })
-                                    this.props.setBreathingExercise('effectiveCough', false)
+                                {
+                                    text: 'ไม่ ', onPress: () => {
+                                        this.setState({ status: 'done' })
+                                        this.props.setBreathingExercise('effectiveCough', false)
+                                    }
                                 }
-                            }
                             ]
                         )
                         //    this.setState({status: 'done'})
@@ -146,7 +153,7 @@ export default class SLevel2 extends React.Component {
     onInputFilled = async () => {
         let value = this.refs.form.getValue()
         if (value) {
-                let result = {}
+            let result = {}
 
             //End but activity not completed
             if (!this.state.completedLevel) {
@@ -157,20 +164,26 @@ export default class SLevel2 extends React.Component {
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
                 result.nextLevel = this.props.activityLevel
-                result.physicalExercise =  this.props.physicalExercise
-                result.breathingExercise =  this.props.breathingExercise
+                result.physicalExercise = this.props.physicalExercise
+                result.breathingExercise = this.props.breathingExercise
                 result.completedAllPhysical = this.props.completedAllPhysical
                 result.completedAllBreathing = this.props.completedAllBreathing
-                result.reasonToStop =  {
+                result.reasonToStop = {
                     disorder: value.disorder,
                     patientNotWilling: value.patientNotWilling
                 }
-               
+
+                //If patient select his own activity, then define maxLevel and nextLevel = 1
+                if (this.props.finalSystemLevel === LEVEL) {
+                    result.nextLevel = 1
+                    result.maxLevel = 1
+                }
+
 
             }
             //End and activity completed
             else {
-                
+
                 await this.props.onAllBreathingCompleted()
 
                 result.maxLevel = this.props.activityLevel
@@ -178,14 +191,14 @@ export default class SLevel2 extends React.Component {
                 result.amount = value.amount
                 result.physicalExercise = this.props.physicalExercise
                 result.breathingExercise = this.props.breathingExercise
-                result.completedAllPhysical =  this.props.completedAllPhysical
+                result.completedAllPhysical = this.props.completedAllPhysical
                 result.completedAllBreathing = this.props.completedAllBreathing
-                result.reasonToStop =  {
+                result.reasonToStop = {
                     disorder: value.disorder,
                     patientNotWilling: value.patientNotWilling
                 }
                 //If all physical exercises in this level are completed, then activity level 1 is completed
-                if(this.props.completedAllPhysical) {
+                if (this.props.completedAllPhysical) {
                     result.completedLevel = this.state.completedLevel
                     result.nextLevel = this.props.activityLevel + 1
                     this.props.onActivityLevelChange(this.props.activityLevel + 1)
@@ -195,24 +208,20 @@ export default class SLevel2 extends React.Component {
                     result.completedLevel = false
                     result.nextLevel = this.props.activityLevel
                 }
+
+                //If patient select his own activity, then define maxLevel and nextLevel = 1
+                if (this.props.finalSystemLevel === LEVEL) {
+                    result.nextLevel = 1
+                    result.maxLevel = 1
+                    if (!this.props.breathingExercise.hasOwnProperty("deepBreathing")) {
+                        await this.props.setCompletedAllBreathingExercise(false)
+                        result.completedAllBreathing = this.props.completedAllBreathing
+                    }
+                }
             }
 
-            // let result = {
-            //     maxLevel: this.props.activityLevel,
-            //     levelTitle: 'ไออย่างมีประสิทธิภาพ',
-            //     amount: value.amount,
-            //     completedLevel: false,
-            //     nextLevel: this.props.activityLevel,
-            //     physicalExercise: this.props.physicalExercise,
-            //     breathingExercise: this.props.breathingExercise,
-            //     completedAllPhysical: this.props.completedAllPhysical,
-            //     completedAllBreathing: this.props.completedAllBreathing,
-            //     reasonToStop: {
-            //         disorder: value.disorder,
-            //         patientNotWilling: value.patientNotWilling
-            //     }
-            // }
-            
+
+
             await this.props.setTimeStop()
             this.props.setDuration()
             this.props.onDoingActivityDone(result)
@@ -247,16 +256,16 @@ export default class SLevel2 extends React.Component {
                 <View style={_styles.formContainer}>
                     <Form ref='form' type={input} options={options} />
                 </View>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onInputFilled}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-           </View>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color='#d6d4e0'
+                    size={35}
+                    onPress={this.onInputFilled}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
         )
     }
 
@@ -307,7 +316,7 @@ export default class SLevel2 extends React.Component {
     }
 
     renderActivity = () => {
-        
+
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
@@ -367,8 +376,8 @@ export default class SLevel2 extends React.Component {
                 <View style={_styles.typeExerciseContainer}>
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'breathing' ? 'white' : common.primaryColor }
-                        color={this.state.type === 'breathing' ? common.primaryColor : 'white' }
+                        backgroundColor={this.state.type === 'breathing' ? 'white' : common.primaryColor}
+                        color={this.state.type === 'breathing' ? common.primaryColor : 'white'}
                         title='Physical'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -377,8 +386,8 @@ export default class SLevel2 extends React.Component {
                     />
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'breathing' ? common.primaryColor : 'white' }
-                        color={this.state.type === 'breathing' ?  'white' : common.primaryColor }
+                        backgroundColor={this.state.type === 'breathing' ? common.primaryColor : 'white'}
+                        color={this.state.type === 'breathing' ? 'white' : common.primaryColor}
                         title='Breathing'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
