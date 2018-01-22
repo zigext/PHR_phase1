@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, BackHandler, DeviceEventEmitter, NetInfo, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, Button, TextInput, BackHandler, DeviceEventEmitter, NetInfo, ToastAndroid } from 'react-native'
 import firebase from '../config/Firebase'
 import PushNotification from '../config/PushNotification'
 import * as notifications from '../config/Notifications'
@@ -20,7 +20,7 @@ class Home extends React.Component {
         super()
         this.state = {
             test: false,
-            
+           
         }
     }
 
@@ -43,12 +43,12 @@ class Home extends React.Component {
         //Check for internet connection
         NetInfo.isConnected.fetch().then(isConnected => {
             this.setState({ isConnected })
-            if(!isConnected){
-                 ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
+            if (!isConnected) {
+                ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
             }
         })
         NetInfo.isConnected.addEventListener('change', (isConnected) => {
-            if(!isConnected) ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
+            if (!isConnected) ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.LONG, ToastAndroid.CENTER)
         })
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton)
@@ -57,8 +57,8 @@ class Home extends React.Component {
         console.log("route ", Actions.currentScene)
         console.log("focus ", this.props.focused)
 
-        this.setNotifications()
-        
+        // this.setNotifications()
+
     }
 
     componentWillUnmount() {
@@ -81,39 +81,41 @@ class Home extends React.Component {
         let { is_smoking, nyha_class, ejection_fraction, medical_condition, surgery_sapheneous_vein, level } = this.props.default.user.profile
         //Smoking
         //What's about lung disease??????????????????
-        if(is_smoking === 'true' )   
+        if (is_smoking === 'true')
             PushNotification.localNotificationSchedule(notifications.dailyReminderForBreathing)
         //Use sapheneous veins from leg
-        if(surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4')   
+        if (surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4')
             PushNotification.localNotificationSchedule(notifications.reminderForSapheneousVeinPatient)
         //High risk
         //What's about EF??????????????????
-        if(nyha_class >= 3 || ejection_fraction === '1')      
+        if (nyha_class >= 3 || ejection_fraction === '1')
             PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
-        
+        //Reminder for daily life's activity
+        if(level >= 2)
+            PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
         //Set notifications when patient reaches goal level at Activity scene
-        if(level === '4' )   
+        if (level === '4')
             PushNotification.localNotification(notifications.reachLevel4)
-        else if(level === '6')  
+        else if (level === '6')
             PushNotification.localNotification(notifications.reachLevel6)
-        else if(level === '7')  
+        else if (level === '7')
             PushNotification.localNotification(notifications.reachLevel7)
 
         //If patient hasn't done any activity in the last 6 hours
         let hr = (new Date()).getHours()
         //If it's day, notify patient
-        if(hr >= 6 && hr <= 20) {
+        if (hr >= 6 && hr <= 20) {
             let timeOfLastActivity = last(this.props.default.activity).results.timeStart
             let timeNow = moment()
             let duration = moment.duration(timeNow.diff(timeOfLastActivity)).asHours()
             console.log("duration between last activity = ", duration)
-            if(duration >= 6) {
+            if (duration >= 6) {
                 PushNotification.localNotification(notifications.reminderForNotDoingActivityYet)
             }
         }
         //If it's night, does nothing
         else {
-            
+
         }
     }
 
@@ -128,7 +130,7 @@ class Home extends React.Component {
         }
     }
 
-    onActivityPress = (callback) => {       
+    onActivityPress = (callback) => {
         Actions.tab_activity()
     }
 
@@ -150,6 +152,7 @@ class Home extends React.Component {
                 <ActivityButton onActivityPress={this.onActivityPress} />
                 <ProgressButton onProgressPress={this.onProgressPress} />
             </View>
+  
         )
     }
 }
