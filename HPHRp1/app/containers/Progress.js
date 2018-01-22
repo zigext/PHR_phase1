@@ -1,130 +1,438 @@
 import React from 'react'
-import { AppRegistry, StyleSheet, Text, View, processColor } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View, processColor, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { BarChart } from 'react-native-charts-wrapper'
 import { last } from 'lodash'
 import moment from 'moment'
-import LineChart from '../components/LineChart'
+import update from 'immutability-helper'
 import InitialProgress from './InitialProgress'
 import SearchProgress from './SearchProgress'
 import common from '../styles/common'
+import { SERVER_IP, ACTIVITY_RESULT_1 } from '../config/Const'
+import ApiUtils from '../components/ApiUtils'
 
-let array = ['2017-02-02', '2017-02-03', '2017-02-04']
+let dataStore = {}
+
 class Progress extends React.Component {
     constructor(props) {
         super(props)
-
         this.state = {
             status: 'initial',
-            recentActivity: null,
+            recentActivity: last(this.props.activity),
+            activity: this.props.activity,
+            dataRecentActivities: {},
+            legendRecentActivities: {
+                enabled: true,
+                textColor: processColor('black'),
+                textSize: 12,
+                position: 'BELOW_CHART_RIGHT',
+                form: 'SQUARE',
+                formSize: 14,
+                xEntrySpace: 10,
+                yEntrySpace: 5,
+                formToTextSpace: 5,
+                wordWrapEnabled: true,
+                maxSizePercent: 0.5,
+                custom: {
+                    colors: [processColor('red'), processColor('blue'), processColor('green')],
+                    labels: ['Company Dashed'] //the rectangle represent label at the bottom
+                }
+            },
+            markerRecentActivities: {
+                enabled: true,
+                digits: 2,
+                backgroundTint: processColor('teal'),
+                markerColor: processColor(common.grey),
+                textColor: processColor('white'),
+            },
+            dataActivities: {},
+            legendActivities: {
+                enabled: true,
+                textColor: processColor('black'),
+                textSize: 12,
+                position: 'BELOW_CHART_RIGHT',
+                form: 'SQUARE',
+                formSize: 14,
+                xEntrySpace: 10,
+                yEntrySpace: 5,
+                formToTextSpace: 5,
+                wordWrapEnabled: true,
+                maxSizePercent: 0.5,
+                custom: {
+                    colors: [processColor('red'), processColor('blue'), processColor('green')],
+                    labels: ['Company Dashed'] //the rectangle represent label at the bottom
+                }
+            },
+            markerActivities: {
+                enabled: true,
+                digits: 2,
+                backgroundTint: processColor('teal'),
+                markerColor: processColor(common.grey),
+                textColor: processColor('white'),
+            }
         }
+        this.baseState = this.state
+    }
+
+    componentDidMount = async () => {
+        let dataSets = await this.prepareYAxisForRecentLevelChart()
+        let xAxis = await this.prepareXAxisForRecentLevelChart()
+        this.setUpRecentChart(dataSets, xAxis)
     }
 
     //Check for the most recent activity
     componentWillReceiveProps = async (nextProps) => {
         console.log("receive props in progress ", nextProps.activity)
-        if(last(nextProps.activity) !== this.state.recentActivity) {
-             console.log("not equal")
-             await this.setState({
-                 recentActivity: last(nextProps.activity) //last activity is the last element
-             })
-              console.log("last ", this.state.recentActivity)
+        //If lastest activity is not the same, set state.recentActivity
+        //It also means activity history is not the same, also set state.activity
+        if (last(nextProps.activity) !== this.state.recentActivity) {
+            console.log("not equal")
+            await this.setState({
+                recentActivity: last(nextProps.activity), //last activity is the last element
+                activity: nextProps.activity
+            })
+            let dataSets = await this.prepareYAxisForRecentLevelChart()
+            let xAxis = await this.prepareXAxisForRecentLevelChart()
+            this.setUpRecentChart(dataSets, xAxis)
         }
         else {
             console.log("equal")
         }
     }
 
-    handleSelect(event) {
-        let entry = event.nativeEvent
-        if (entry == null) {
-            this.setState({ ...this.state, selectedEntry: null })
-        } else {
-            this.setState({ ...this.state, selectedEntry: JSON.stringify(entry) })
-        }
-
-        console.log(event.nativeEvent)
+    //Go back to InitialProgress scene. And set up the new recent activity chart
+    resetState = async () => {
+        this.setState(this.baseState)
+        let dataSets = await this.prepareYAxisForRecentLevelChart()
+        let xAxis = await this.prepareXAxisForRecentLevelChart()
+        this.setUpRecentChart(dataSets, xAxis)
     }
+
+    // handleSelect(event) {
+    //     let entry = event.nativeEvent
+    //     if (entry == null) {
+    //         this.setState({ ...this.state, selectedEntry: null })
+    //     } else {
+    //         this.setState({ ...this.state, selectedEntry: JSON.stringify(entry) })
+    //     }
+
+    //     console.log(event.nativeEvent)
+    // }
 
     formatDate = (date, format) => {
         return moment(date).format(format)
     }
 
-    formatTime = (time, format) => {
-        return moment(time).format(format)
-}
+    //Change to SearchProgress
+    startSearching = () => {
+        this.setState({ status: 'searching' })
+    }
+    //Prepare data for searching
+    searching = async (callback) => {
+        //If user doesn't pick type, set it to default (maxLevel)
+        if (!this.state.type) {
+            this.setState({
+                type: 'maxLevel'
+            })
+        }
+        //this.state.startDate & this.state.endDate is for using as placeholder in DatePicker
+        let startDate
+        let endDate
+        //Change date from 'dd/mm/yyyy' to 'yyyy-mm-dd' so it can be query from database
+        //User picks date
+        if (this.state.startDate || this.state.endDate) {
+            //Picks both date
+            if (this.state.startDate && this.state.endDate) {
+                let tmpStart = this.state.startDate.split("/")
+                startDate = `${tmpStart[2]}-${tmpStart[1]}-${tmpStart[0]}`
+                let tmpEnd = this.state.endDate.split("/")
+                endDate = `${tmpEnd[2]}-${tmpEnd[1]}-${tmpEnd[0]}`
+            }
+            //Picks startDate
+            else if (this.state.startDate) {
+                let tmpStart = this.state.startDate.split("/")
+                startDate = `${tmpStart[2]}-${tmpStart[1]}-${tmpStart[0]}`
+                endDate = moment(this.state.endDate).format('YYYY-MM-DD')
+            }
+            //Picks endDate
+            else if (this.state.endDate) {
+                startDate = moment(this.state.startDate).format('YYYY-MM-DD')
+                let tmpEnd = this.state.endDate.split("/")
+                endDate = `${tmpEnd[2]}-${tmpEnd[1]}-${tmpEnd[0]}`
+            }
+        }
+        //User uses default date, both this.state.startDate and this.state.endDate are undefined 
+        //Moment will use Date() instead
+        else {
+            startDate = moment(this.state.startDate).format('YYYY-MM-DD')
+            endDate = moment(this.state.endDate).format('YYYY-MM-DD')
+        }
+        //If endDate is before startDate
+        if (endDate < startDate) {
+            ToastAndroid.showWithGravity('กรุณาเลือกวันที่ที่ถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            callback(true)
+        }
+        else {
+            this.prepareChart(startDate, endDate)
+            callback(false)
+        }
 
-    renderLastActivity = () => {
-        
-        if(this.state.recentActivity)
-        {
-            console.log("XXXXXXXXX ", this.state.recentActivity.time)
-              return (
-                <View style={styles.recentActivityContainer}>
-                    <Text style={styles.text}>{this.formatDate(this.state.recentActivity.date, 'DD MMM')} เวลา {this.formatTime(this.state.recentActivity.results.timeStart, 'HH:mm')} ขั้นที่ {this.state.recentActivity.results.result.maxLevel} 
-                        กิจกรรม {this.state.recentActivity.results.result.levelTitle}
-                    </Text>
-                </View>
+    }
+
+    prepareChart = async (startDate, endDate) => {
+        await this.fetchActivityResult(startDate, endDate)
+        let dataSets = await this.prepareYAxisForChart()
+        let xAxis = await this.prepareXAxisForChart()
+        this.setUpChart(dataSets, xAxis)
+    }
+
+    fetchActivityResult = async (startDate, endDate) => {
+        const path = `${SERVER_IP}${ACTIVITY_RESULT_1}?userid=1416382941765846&appid=PHRapp&start_date=${startDate}&end_date=${endDate}` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}  
+        await fetch(path)
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .then(async responseData => {
+                await this.setState({
+                    activityResult: responseData
+                })
+                console.log("Fetch activity result success", responseData)
+            })
+            .catch(error => {
+                console.log("Error in fetchActivityResult = ", error)
+            })
+    }
+
+    handleSearchChange = (name, value) => {
+        this.setState({ [name]: value })
+        dataStore[name] = value
+
+    }
+
+    prepareYAxisForRecentLevelChart = () => {
+        let dataSets = []
+        for (let index in this.state.activity) {
+            let data = {}
+            data.y = this.state.activity[index].results.result.maxLevel //y-axis is max level
+            dataSets.push(data)
+        }
+        return dataSets
+    }
+
+    prepareXAxisForRecentLevelChart = () => {
+        let xAxis = []
+        for (let index in this.state.activity) {
+            xAxis.push(moment(this.state.activity[index].results.timeStart).format('D MMM, kk:mm')) //x-axis is date and time
+        }
+        return xAxis
+    }
+
+    setUpRecentChart = (dataSets, xAxis) => {
+        this.setState(
+            update(this.state, {
+                dataRecentActivities: {
+                    $set: {
+                        dataSets: [
+                            {
+                                values: dataSets,
+                                label: 'ขั้นของกิจกรรมที่ทำสำเร็จ',
+                                config: {
+                                    color: processColor(common.primaryColor),
+                                    drawFilled: true,
+                                    fillColor: processColor(common.primaryColor),
+                                    fillAlpha: 50,
+                                    valueFormatter: '#' //Doesn't display the decimal
+                                }
+                            }],
+                    }
+                },
+                xAxisRecentActivities: {
+                    $set: {
+                        valueFormatter: xAxis,
+                        textSize: 14,
+                        avoidFirstLastClipping: true,
+                        position: 'BOTTOM',
+                        granularityEnabled: true,
+                        granularity: 1,
+                    }
+                },
+                yAxisRecentActivities: {
+                    $set: {
+                        left: {
+                            axisMaximum: 7,
+                            axisMinimum: 0
+                        },
+                        right: {
+                            enabled: false
+                        }
+                    }
+                }
+            })
+        )
+    }
+
+    prepareYAxisForChart = () => {
+        let dataSets = []
+        if (this.state.type === 'maxLevel') {
+            for (let index in this.state.activityResult.data) {
+                let key = Object.keys(this.state.activityResult.data[index])[0]
+                let data = {}
+                data.y = this.state.activityResult.data[index][key].activity_result_1.result.result.maxLevel //y-axis is max level
+                dataSets.push(data)
+            }
+        }
+        else if (this.state.type === 'duration') {
+            let minAndSec
+            for (let index in this.state.activityResult.data) {
+                let key = Object.keys(this.state.activityResult.data[index])[0]
+                let data = {}
+                minAndSec = this.millisToMinutesAndSeconds(this.state.activityResult.data[index][key].activity_result_1.result.durationMillis)
+                minAndSec = parseFloat(minAndSec) //Change string to float
+                // data.y = this.state.activityResult.data[index][key].activity_result_1.result.durationMillis //y-axis is duration
+                data.y = minAndSec
+                dataSets.push(data)
+            }
+        }
+        return dataSets
+    }
+
+    prepareXAxisForChart = () => {
+        let xAxis = []
+        for (let index in this.state.activityResult.data) {
+            let key = Object.keys(this.state.activityResult.data[index])[0]
+            xAxis.push(moment(this.state.activityResult.data[index][key].activity_result_1.result.timeStart).format('D MMM, kk:mm')) //x-axis is date and time
+        }
+        return xAxis
+    }
+
+    setUpChart = async (dataSets, xAxis) => {
+        console.log("datasets = ", dataSets)
+        console.log("xaxis = ", xAxis)
+        if (this.state.type === 'maxLevel') {
+            this.setState(
+                update(this.state, {
+                    dataActivities: {
+                        $set: {
+                            dataSets: [
+                                {
+                                    values: dataSets,
+                                    label: 'ขั้นของกิจกรรมที่ทำสำเร็จ',
+                                    config: {
+                                        color: processColor(common.primaryColor),
+                                        drawFilled: true,
+                                        fillColor: processColor(common.primaryColor),
+                                        fillAlpha: 50,
+                                        valueFormatter: '#' //Doesn't display the decimal
+                                    }
+                                }],
+                        }
+                    },
+                    xAxisActivities: {
+                        $set: {
+                            valueFormatter: xAxis,
+                            textSize: 14,
+                            avoidFirstLastClipping: true,
+                            position: 'BOTTOM',
+                            granularityEnabled: true,
+                            granularity: 1,
+                        }
+                    },
+                    yAxisActivities: {
+                        $set: {
+                            left: {
+                                axisMaximum: 7,
+                                axisMinimum: 0
+                            },
+                            right: {
+                                enabled: false
+                            }
+                        }
+                    }
+                })
             )
         }
-          
-        else {
-            return <Text style={styles.text}>ยังไม่เริ่มทำกิจกรรมฟื้นฟูหัวใจ</Text>
+        else if (this.state.type === 'duration') {
+            this.setState(
+                update(this.state, {
+                    dataActivities: {
+                        $set: {
+                            dataSets: [
+                                {
+                                    values: dataSets,
+                                    label: 'ระยะเวลาที่ใช้ (นาที)',
+                                    config: {
+                                        color: processColor(common.primaryColor),
+                                        barSpacePercent: 40,
+                                        barShadowColor: processColor('lightgrey'),
+                                        highlightAlpha: 90,
+                                        highlightColor: processColor('red'),
+                                        valueFormatter: '#.##' //Display 2 decimal
+                                    }
+                                }],
+                        }
+                    },
+                    xAxisActivities: {
+                        $set: {
+                            valueFormatter: xAxis,
+                            textSize: 14,
+                            avoidFirstLastClipping: true,
+                            position: 'BOTTOM',
+                            granularityEnabled: true,
+                            granularity: 1,
+                        }
+                    },
+                    yAxisActivities: {
+                        $set: {
+                            left: {
+                                // axisMaximum: 7,
+                                axisMinimum: 0
+                            },
+                            right: {
+                                enabled: false
+                            }
+                        }
+                    }
+                })
+            )
         }
     }
 
-    startSearching = () => {
-        this.setState({status: 'searching'})
+millisToMinutesAndSeconds = (millis) => {
+    let minutes = Math.floor(millis / 60000)
+    let seconds = ((millis % 60000) / 1000).toFixed(0)
+    return minutes + "." + (seconds < 10 ? '0' : '') + seconds
+}
+
+renderBody = () => {
+    switch (this.state.status) {
+        case 'initial':
+            return <InitialProgress dataRecentActivities={this.state.dataRecentActivities} xAxisRecentActivities={this.state.xAxisRecentActivities} yAxisRecentActivities={this.state.yAxisRecentActivities} activity={this.state.activity} markerRecentActivities={this.state.markerRecentActivities} legendRecentActivities={this.state.legendRecentActivities} recentActivity={this.state.recentActivity} admitDate={this.props.profile.admit_date} startSearching={this.startSearching} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} />
+        case 'searching':
+            return <SearchProgress dataActivities={this.state.dataActivities} xAxisActivities={this.state.xAxisActivities} yAxisActivities={this.state.yAxisActivities} markerActivities={this.state.markerActivities} legendActivities={this.state.legendActivities} resetState={this.resetState} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} admitDate={this.props.profile.admit_date} />
     }
-
-    renderBody = () => {
-        switch (this.state.status) {
-            case 'initial': 
-                return <InitialProgress recentActivity={this.state.recentActivity} startSearching={this.startSearching} admitDate={this.props.profile.admit_date}/>
-            case 'searching': 
-                return <SearchProgress />
-        }
-    }
+}
 
 
-    render() {
-        // console.log("progress ", this.props.activity)
-        return (
-            <View style={{ flex: 1 }}>
-                {/*<View style={{ flex: 1, backgroundColor: 'green', flexDirection: 'row' }}>
-
-
-                    <View style={{ flex: 1, backgroundColor: 'pink' }}>
-                         <LineChart />
-                    </View>
-                    <View style={{ flex: 1, backgroundColor: 'yellow', flexDirection: 'column' }}>
-                        <View style={{ flex: 0.5, backgroundColor: 'orange' }}>
-                            <View style={styles.levelContainer}>
-                                <Text>level</Text>
-                            </View>
-                        </View>
-                        {this.renderLastActivity() }
-                        
-                    </View>
-                </View>*/}
-                {this.renderBody()}
-            </View>
-        );
-    }
-    }
+render() {
+    return (
+        <View style={styles.container}>
+            {this.renderBody()}
+        </View>
+    );
+}
+}
 
 const mapStateToProps = (state) => {
     console.log("mapStateToProps in progress ", state)
     // return state
-      return {
-        profile : state.default.user.profile,
-        activity : state.default.activity        
+    return {
+        profile: state.default.user.profile,
+        activity: state.default.activity
     }
 
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return { 
+    return {
     }
 }
 
@@ -133,27 +441,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(Progress)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF'
     },
-    chart: {
-        flex: 1
-    },
-    levelContainer: {
-        borderWidth: 10,
-        width: 100,
-        height: 100,
-        borderRadius: 100/2,
-        borderColor: common.primaryColor
-    },
-    recentActivityContainer: {
-        borderWidth: 3,
-        borderRadius: 10,
-        borderColor: common.primaryColor
-    },
-    text: {
-        fontSize: 20,
-        textAlign: 'center',
-        color: common.grey,
-        margin: 10
-    }
 })
