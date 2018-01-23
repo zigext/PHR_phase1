@@ -82,8 +82,8 @@ export default class Chart extends React.Component {
     }
 
     render() {
-        console.log("type ", this.props.type)
-        if (this.props.type === 'maxLevel') {
+        console.log("type ", this.props.dataActivities.dataSets)
+        if (this.props.search === 'maxLevel') {
             return (
                 <View style={{ flex: 1 }}>
                     <View style={styles.container}>
@@ -93,7 +93,7 @@ export default class Chart extends React.Component {
                 </View>
             );
         }
-        if (this.props.type === 'duration') {
+        if (this.props.search === 'duration') {
             return (
                 <View style={{ flex: 1 }}>
                     <View style={styles.container}>

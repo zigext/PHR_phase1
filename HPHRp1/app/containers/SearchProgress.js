@@ -114,7 +114,7 @@ export default class SearchProgress extends React.Component {
                         </View>
 
                         <View style={styles.chartContainer}>
-                            <Chart dataActivities={this.props.dataActivities} xAxisActivities={this.props.xAxisActivities} yAxisActivities={this.props.yAxisActivities} markerActivities={this.props.markerActivities} legendActivities={this.props.legendActivities} activityResult={this.props.activityResult} type={this.props.type} />
+                            <Chart dataActivities={this.props.dataActivities} xAxisActivities={this.props.xAxisActivities} yAxisActivities={this.props.yAxisActivities} markerActivities={this.props.markerActivities} legendActivities={this.props.legendActivities} activityResult={this.props.activityResult} type={this.props.type} search={this.props.search} />
                         </View>
                     </ScrollView>
 
