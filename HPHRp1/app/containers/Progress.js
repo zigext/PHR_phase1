@@ -2,7 +2,7 @@ import React from 'react'
 import { AppRegistry, StyleSheet, Text, View, processColor, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { BarChart } from 'react-native-charts-wrapper'
-import { last } from 'lodash'
+import { last, max, property } from 'lodash'
 import moment from 'moment'
 import update from 'immutability-helper'
 import InitialProgress from './InitialProgress'
@@ -12,6 +12,8 @@ import { SERVER_IP, ACTIVITY_RESULT_1 } from '../config/Const'
 import ApiUtils from '../components/ApiUtils'
 
 let dataStore = {}
+let search
+let yAxisMaximum //For seting axis maximum when render duration chart
 
 class Progress extends React.Component {
     constructor(props) {
@@ -75,9 +77,16 @@ class Progress extends React.Component {
     }
 
     componentDidMount = async () => {
-        let dataSets = await this.prepareYAxisForRecentLevelChart()
-        let xAxis = await this.prepareXAxisForRecentLevelChart()
-        this.setUpRecentChart(dataSets, xAxis)
+        //Patient hasn't done any activity yet
+        if (this.state.activity.length === 0) {
+            ToastAndroid.showWithGravity('ไม่มีผลการทำกิจกรรมที่ผ่านมา', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+        else {
+            let dataSets = await this.prepareYAxisForRecentLevelChart()
+            let xAxis = await this.prepareXAxisForRecentLevelChart()
+            this.setUpRecentChart(dataSets, xAxis)
+        }
+
     }
 
     //Check for the most recent activity
@@ -91,9 +100,18 @@ class Progress extends React.Component {
                 recentActivity: last(nextProps.activity), //last activity is the last element
                 activity: nextProps.activity
             })
-            let dataSets = await this.prepareYAxisForRecentLevelChart()
-            let xAxis = await this.prepareXAxisForRecentLevelChart()
-            this.setUpRecentChart(dataSets, xAxis)
+            if (this.state.activity.length === 0) {
+                ToastAndroid.showWithGravity('ไม่มีผลการทำกิจกรรมที่ผ่านมา', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            }
+            else {
+                let dataSets = await this.prepareYAxisForRecentLevelChart()
+                let xAxis = await this.prepareXAxisForRecentLevelChart()
+                this.setUpRecentChart(dataSets, xAxis)
+            }
+            // let dataSets = await this.prepareYAxisForRecentLevelChart()
+            // let xAxis = await this.prepareXAxisForRecentLevelChart()
+            // this.setUpRecentChart(dataSets, xAxis)
+
         }
         else {
             console.log("equal")
@@ -127,14 +145,19 @@ class Progress extends React.Component {
     startSearching = () => {
         this.setState({ status: 'searching' })
     }
+
     //Prepare data for searching
+    //Call when click searh button
     searching = async (callback) => {
         //If user doesn't pick type, set it to default (maxLevel)
         if (!this.state.type) {
-            this.setState({
+            await this.setState({
                 type: 'maxLevel'
             })
         }
+        //Use to define when to re-prepare data for chart
+        search = this.state.type
+        console.log("_______", search)
         //this.state.startDate & this.state.endDate is for using as placeholder in DatePicker
         let startDate
         let endDate
@@ -181,9 +204,17 @@ class Progress extends React.Component {
 
     prepareChart = async (startDate, endDate) => {
         await this.fetchActivityResult(startDate, endDate)
-        let dataSets = await this.prepareYAxisForChart()
-        let xAxis = await this.prepareXAxisForChart()
-        this.setUpChart(dataSets, xAxis)
+        console.log("this.state.activityResult = ", this.state.activityResult)
+        if (this.state.activityResult.data.length === 0) {
+            console.log("no result")
+            ToastAndroid.showWithGravity('ไม่มีผลการทำกิจกรรมในวันที่ค้นหา', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+        else {
+            let dataSets = await this.prepareYAxisForChart()
+            let xAxis = await this.prepareXAxisForChart()
+            this.setUpChart(dataSets, xAxis)
+        }
+
     }
 
     fetchActivityResult = async (startDate, endDate) => {
@@ -272,7 +303,7 @@ class Progress extends React.Component {
 
     prepareYAxisForChart = () => {
         let dataSets = []
-        if (this.state.type === 'maxLevel') {
+        if (search === 'maxLevel') {
             for (let index in this.state.activityResult.data) {
                 let key = Object.keys(this.state.activityResult.data[index])[0]
                 let data = {}
@@ -280,17 +311,18 @@ class Progress extends React.Component {
                 dataSets.push(data)
             }
         }
-        else if (this.state.type === 'duration') {
+        else if (search === 'duration') {
             let minAndSec
             for (let index in this.state.activityResult.data) {
                 let key = Object.keys(this.state.activityResult.data[index])[0]
                 let data = {}
-                minAndSec = this.millisToMinutesAndSeconds(this.state.activityResult.data[index][key].activity_result_1.result.durationMillis)
+                minAndSec = this.millisToMinutesAndSeconds(this.state.activityResult.data[index][key].activity_result_1.result.durationMillis) //y-axis is duration
                 minAndSec = parseFloat(minAndSec) //Change string to float
-                // data.y = this.state.activityResult.data[index][key].activity_result_1.result.durationMillis //y-axis is duration
                 data.y = minAndSec
                 dataSets.push(data)
             }
+            let tmp = max(dataSets, property('y'))
+            yAxisMaximum = Math.ceil(tmp.y) 
         }
         return dataSets
     }
@@ -307,7 +339,7 @@ class Progress extends React.Component {
     setUpChart = async (dataSets, xAxis) => {
         console.log("datasets = ", dataSets)
         console.log("xaxis = ", xAxis)
-        if (this.state.type === 'maxLevel') {
+        if (search === 'maxLevel') {
             this.setState(
                 update(this.state, {
                     dataActivities: {
@@ -350,7 +382,8 @@ class Progress extends React.Component {
                 })
             )
         }
-        else if (this.state.type === 'duration') {
+        else if (search === 'duration') {
+            console.log("set new axis")
             this.setState(
                 update(this.state, {
                     dataActivities: {
@@ -383,8 +416,8 @@ class Progress extends React.Component {
                     yAxisActivities: {
                         $set: {
                             left: {
-                                // axisMaximum: 7,
-                                axisMinimum: 0
+                                axisMinimum: 0,
+                                axisMaximum: yAxisMaximum
                             },
                             right: {
                                 enabled: false
@@ -396,29 +429,29 @@ class Progress extends React.Component {
         }
     }
 
-millisToMinutesAndSeconds = (millis) => {
-    let minutes = Math.floor(millis / 60000)
-    let seconds = ((millis % 60000) / 1000).toFixed(0)
-    return minutes + "." + (seconds < 10 ? '0' : '') + seconds
-}
-
-renderBody = () => {
-    switch (this.state.status) {
-        case 'initial':
-            return <InitialProgress dataRecentActivities={this.state.dataRecentActivities} xAxisRecentActivities={this.state.xAxisRecentActivities} yAxisRecentActivities={this.state.yAxisRecentActivities} activity={this.state.activity} markerRecentActivities={this.state.markerRecentActivities} legendRecentActivities={this.state.legendRecentActivities} recentActivity={this.state.recentActivity} admitDate={this.props.profile.admit_date} startSearching={this.startSearching} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} />
-        case 'searching':
-            return <SearchProgress dataActivities={this.state.dataActivities} xAxisActivities={this.state.xAxisActivities} yAxisActivities={this.state.yAxisActivities} markerActivities={this.state.markerActivities} legendActivities={this.state.legendActivities} resetState={this.resetState} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} admitDate={this.props.profile.admit_date} />
+    millisToMinutesAndSeconds = (millis) => {
+        let minutes = Math.floor(millis / 60000)
+        let seconds = ((millis % 60000) / 1000).toFixed(0)
+        return minutes + "." + (seconds < 10 ? '0' : '') + seconds
     }
-}
+
+    renderBody = () => {
+        switch (this.state.status) {
+            case 'initial':
+                return <InitialProgress dataRecentActivities={this.state.dataRecentActivities} xAxisRecentActivities={this.state.xAxisRecentActivities} yAxisRecentActivities={this.state.yAxisRecentActivities} activity={this.state.activity} markerRecentActivities={this.state.markerRecentActivities} legendRecentActivities={this.state.legendRecentActivities} recentActivity={this.state.recentActivity} admitDate={this.props.profile.admit_date} startSearching={this.startSearching} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} />
+            case 'searching':
+                return <SearchProgress dataActivities={this.state.dataActivities} xAxisActivities={this.state.xAxisActivities} yAxisActivities={this.state.yAxisActivities} markerActivities={this.state.markerActivities} legendActivities={this.state.legendActivities} resetState={this.resetState} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} admitDate={this.props.profile.admit_date} search={search} />
+        }
+    }
 
 
-render() {
-    return (
-        <View style={styles.container}>
-            {this.renderBody()}
-        </View>
-    );
-}
+    render() {
+        return (
+            <View style={styles.container}>
+                {this.renderBody()}
+            </View>
+        );
+    }
 }
 
 const mapStateToProps = (state) => {
