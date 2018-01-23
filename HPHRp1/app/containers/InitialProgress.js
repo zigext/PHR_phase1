@@ -48,9 +48,8 @@ export default class InitialProgress extends React.Component {
             return (
                 <View style={styles.recentActivityContainer}>
                     <Text style={[styles.text, { fontWeight: 'bold', textAlign: 'left' }]}>กิจกรรมครั้งล่าสุด</Text>
-                    <Text style={styles.text}>{this.formatDate(this.props.recentActivity.date, 'DD MMM')} เวลา {this.formatTime(this.props.recentActivity.results.timeStart, 'HH:mm')}  ขั้นที่ {this.props.recentActivity.results.result.maxLevel}  
-                        {this.props.recentActivity.results.result.levelTitle}
-                    </Text>
+                    <Text style={styles.text}>{this.formatDate(this.props.recentActivity.date, 'DD MMM')} เวลา {this.formatTime(this.props.recentActivity.results.timeStart, 'HH:mm')}  ขั้นที่ {this.props.recentActivity.results.result.maxLevel}</Text>
+                    <Text style={styles.text}>{this.props.recentActivity.results.result.levelTitle}</Text>
                 </View>
             )
         }
