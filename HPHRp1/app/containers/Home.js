@@ -57,7 +57,7 @@ class Home extends React.Component {
         console.log("route ", Actions.currentScene)
         console.log("focus ", this.props.focused)
 
-        // this.setNotifications()
+        this.setNotifications()
 
     }
 
@@ -75,6 +75,7 @@ class Home extends React.Component {
         //Schedule notifications for every patients
         PushNotification.localNotificationSchedule(notifications.dailyActivityReminder)
         PushNotification.localNotificationSchedule(notifications.dailyImportanceReminder)
+        PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
     }
 
     setNotificationsByConditions() {
@@ -91,8 +92,8 @@ class Home extends React.Component {
         if (nyha_class >= 3 || ejection_fraction === '1')
             PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
         //Reminder for daily life's activity
-        if(level >= 2)
-            PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
+        // if(level >= 2)
+        //     PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
         //Set notifications when patient reaches goal level at Activity scene
         if (level === '4')
             PushNotification.localNotification(notifications.reachLevel4)

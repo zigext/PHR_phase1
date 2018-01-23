@@ -32,6 +32,21 @@ const dailyImportanceReminder = {
     date: new Date(Date.now() + (10 * 1000)),
 }
 
+const reminderForDailyLife = {
+    id: '2',
+    largeIcon: "ic_launcher",
+    smallIcon: "ic_notification",
+    ticker: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
+    ongoing: false,
+    tag: 'daily',
+    title: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ!",
+    message: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
+    playSound: true,
+    soundName: 'default',
+    repeatType: 'daily',
+    date: new Date(Date.now() + (10 * 1000)),
+}
+
 const reachLevel4 = {
     id: '0',
     largeIcon: "ic_launcher",
@@ -132,19 +147,19 @@ const reminderForNotDoingActivityYet = {
 }
 
 //Notifications for patients who classified as high risk
-const reminderForDailyLife = {
-    id: '4',
-    largeIcon: "ic_launcher",
-    smallIcon: "ic_notification",
-    ticker: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
-    ongoing: false,
-    tag: 'condition',
-    title: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
-    message: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
-    playSound: true,
-    soundName: 'default',
-    repeatType: 'day',
-    date: new Date(Date.now() + (10 * 1000)),
-}
+// const reminderForDailyLife = {
+//     id: '4',
+//     largeIcon: "ic_launcher",
+//     smallIcon: "ic_notification",
+//     ticker: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
+//     ongoing: false,
+//     tag: 'condition',
+//     title: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
+//     message: "ถ้าทำได้ ก็ทำกิจวัตรประจำวันด้วยตัวเองนะ",
+//     playSound: true,
+//     soundName: 'default',
+//     repeatType: 'day',
+//     date: new Date(Date.now() + (10 * 1000)),
+// }
 
 export { dailyActivityReminder, dailyReminderForBreathing, dailyImportanceReminder, reachLevel4, reachLevel6, reachLevel7, reminderForHighRiskPatient, reminderForSapheneousVeinPatient, reminderForNotDoingActivityYet, reminderForDailyLife }
