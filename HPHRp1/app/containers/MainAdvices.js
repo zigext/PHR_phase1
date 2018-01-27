@@ -10,16 +10,14 @@ import InstructionAdvicesButton from '../components/InstructionAdvicesButton'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 
-
 class MainAdvices extends React.Component {
     constructor() {
         super()
     }
 
     componentDidMount() {
-        Orientation.lockToLandscape();
+        Orientation.lockToLandscape()
     }
-    
 
     onFoodPress = () => {
         Actions.tab_advices_food()
@@ -46,7 +44,7 @@ class MainAdvices extends React.Component {
                 <FoodAdvicesButton onFoodPress={this.onFoodPress} />
                 <ExerciseAdvicesButton onExercisePress={this.onExercisePress} />
                 <DailyAdvicesButton onDailyPress={this.onDailyPress} />
-                <ActivityAdvicesButton onActivityPress={this.onActivityPress}/>
+                <ActivityAdvicesButton onActivityPress={this.onActivityPress} />
                 <InstructionAdvicesButton />
                 <ProhibitAdvicesButton onProhibitPress={this.onProhibitPress} />
             </View>
