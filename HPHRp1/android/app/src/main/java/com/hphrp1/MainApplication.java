@@ -11,6 +11,7 @@ import com.facebook.soloader.SoLoader;
 import com.wenkesj.voice.VoicePackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import it.innove.BleManagerPackage; 
 
 
 import java.util.Arrays;
@@ -69,7 +70,8 @@ public class MainApplication extends Application implements ReactApplication {
               new TextToSpeechPackage(),
               new VoicePackage(),
               new MPAndroidChartPackage(),
-              new ReactNativePushNotificationPackage() 
+              new ReactNativePushNotificationPackage(),
+              new BleManagerPackage() 
       );
     }
   };
