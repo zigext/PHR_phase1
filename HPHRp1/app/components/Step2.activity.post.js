@@ -5,7 +5,7 @@ import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import common from '../styles/common'
 import { split } from 'lodash'
-
+import Heartrate from './Heartrate'
 
 let Form = t.form.Form
 let options = {
@@ -70,17 +70,33 @@ export default class Step2Post extends React.Component {
         this.props.onStepChange(this.props.step - 1)
     }
 
+    getHeartrate = async (name, value) => {
+        await this.setState({ [name]: value })
+    }
+
     render() {
+        ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
         let defaultValue = {}
         if (this.props.postHr && this.props.postBp) {
             let { postHr: postHr, postBp: postBp } = this.props
             defaultValue = { postHr, postBp }
         }
+        let dataFromBLE = {}
+        if (this.state.postHr) {
+            let { postHr: postHr } = this.state
+            dataFromBLE = { postHr }
+            if (this.props.postBp) {
+                let { postBp: postBp } = this.props
+                dataFromBLE = { postHr, postBp }
+            }
+        }
         return (
             <View style={_styles.container}>
                 <ScrollView>
+                    <Heartrate state="postActivity" getHeartrate={this.getHeartrate} />
                     <Text style={_styles.text}>ทดสอบหลังทำกิจกรรม</Text>
-                    {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    {dataFromBLE ? <Form ref='form' type={input} options={options} value={dataFromBLE} /> : <Form ref='form' type={input} options={options} />}
+                    {/*{defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}*/}
                     <View style={_styles.buttonContainer}>
                         <Icon
                             raised

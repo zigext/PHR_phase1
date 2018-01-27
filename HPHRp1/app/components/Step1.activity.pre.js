@@ -5,6 +5,7 @@ import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import common from '../styles/common'
 import { split } from 'lodash'
+import Heartrate from './Heartrate'
 
 
 let Form = t.form.Form
@@ -85,7 +86,7 @@ export default class Step1Pre extends React.Component {
     }
 
     onStepChange = () => {
-          let value = this.refs.form.getValue()
+        let value = this.refs.form.getValue()
         if (value) {
             let bp = split(value.bp, '/')
             this.props.onStepChange(this.props.step + 1)
@@ -98,16 +99,31 @@ export default class Step1Pre extends React.Component {
         }
     }
 
+    getHeartrate = async (name, value) => {
+        await this.setState({ [name]: value })
+    }
+
     render() {
+         ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
         let defaultValue = {}
-        if(this.props.preHr && this.props.preBp){
-            let {preHr: preHr, preBp: preBp} = this.props
-            defaultValue = { preHr, preBp}
+        if (this.props.preHr && this.props.preBp) {
+            let { preHr: preHr, preBp: preBp } = this.props
+            defaultValue = { preHr, preBp }
+        }
+        let dataFromBLE = {}
+        if (this.state.preHr) {
+            let { preHr: preHr } = this.state
+            dataFromBLE = { preHr }
+            if (this.props.preBp) {
+                let { preBp: preBp } = this.props
+                dataFromBLE = { preHr, preBp }
+            }
         }
         return (
             <View style={_styles.container}>
+                <Heartrate state="preActivity" getHeartrate={this.getHeartrate} />
                 <Text style={_styles.text}>ทดสอบก่อนทำกิจกรรม</Text>
-                {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue}/>: <Form ref='form' type={input} options={options} />}
+                {dataFromBLE ? <Form ref='form' type={input} options={options} value={dataFromBLE} /> : <Form ref='form' type={input} options={options} />}
                 <Icon
                     raised
                     reverse
