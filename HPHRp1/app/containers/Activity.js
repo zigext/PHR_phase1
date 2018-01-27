@@ -1,12 +1,13 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, Alert, ToastAndroid, NativeEventEmitter, NativeModules, Platform, TouchableHighlight } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { SERVER_IP, PROFILE, ACTIVITY_RESULT_1 } from '../config/Const'
 import ApiUtils from '../components/ApiUtils'
 import PreActivity from './PreActivity'
 import DoingActivity from './DoingActivity'
 import PostActivity from './PostActivity'
-import { saveActivity,  getProfile, editProfile } from '../actions/userAction'
+import ScanBLE from './ScanBLE'
+import { saveActivity, getProfile, editProfile } from '../actions/userAction'
 import * as userActions from '../actions/userAction'
 import { bindActionCreators } from 'redux'
 import { Actions } from 'react-native-router-flux'
@@ -14,6 +15,10 @@ import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
 import { isEmpty } from 'lodash'
+import BleManager from 'react-native-ble-manager'
+
+const BleManagerModule = NativeModules.BleManager
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule)
 
 class Activity extends React.Component {
     constructor(props) {
@@ -25,8 +30,11 @@ class Activity extends React.Component {
             preActivity: {},
             postActivity: {},
             result: {},
-            exception: {}
+            exception: {},
+            peripherals: new Map(),
+            connected: false
         }
+        this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(this)
     }
     componentDidMount = async () => {
         Orientation.lockToLandscape()
@@ -37,10 +45,31 @@ class Activity extends React.Component {
         //     console.log("empty")
         //     await this.fetchProfile()
         // }
+        this.handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnectedPeripheral);
+
     }
 
     componentWillReceiveProps(nextProps) {
         console.log("receive props in Activity", this.props.default.user.profile)
+    }
+
+    componentWillUnmount() {
+        this.handlerDisconnect.remove()
+    }
+
+    handleDisconnectedPeripheral(data) {
+        // let peripherals = this.state.peripherals;
+        // let peripheral = peripherals.get(data.peripheral);
+        // if (peripheral) {
+        //     peripheral.connected = false;
+        //     peripherals.set(peripheral.id, peripheral);
+        //     this.setState({ peripherals });
+        // }
+        ToastAndroid.showWithGravity('ไม่ได้เชื่อมต่อกับอุปกรณ์ Bluetooth', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        this.setState({
+            connected: false
+        })
+        console.log('Disconnected from ' + data.peripheral);
     }
 
     fetchProfile = async () => {
@@ -63,32 +92,32 @@ class Activity extends React.Component {
     //Save next level to user's profile
     //Save only next level that greater than patient's current level
     saveProfile = async () => {
-        if(this.state.result.nextLevel >= this.state.profile.level) {
-            console.log("next level that equal or greater than patient's current level, next = ",this.state.result.nextLevel)
+        if (this.state.result.nextLevel >= this.state.profile.level) {
+            console.log("next level that equal or greater than patient's current level, next = ", this.state.result.nextLevel)
             const path = `${SERVER_IP}${PROFILE}`
-        await fetch(path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userid: '1416382941765846', //this.props.default.user.uid
-                appid: 'PHRapp', //this.props.defalt.appId
-                profile: {level : this.state.result.nextLevel.toString()}
-            })
-        })
-            .then(ApiUtils.checkStatus)
-            .then(responseData => {
-                console.log("Save level in profile success")
-                this.setState({
-                    level: this.state.result.nextLevel
+            await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userid: '1416382941765846', //this.props.default.user.uid
+                    appid: 'PHRapp', //this.props.defalt.appId
+                    profile: { level: this.state.result.nextLevel.toString() }
                 })
             })
-            .catch(error => {
-                console.log("Save level in profile failed = ", error)
-                ToastAndroid.showWithGravity('ผิดพลาด! บันทึกระดับการทำกิจกรรมล้มเหลว', ToastAndroid.SHORT, ToastAndroid.CENTER)
-            })
+                .then(ApiUtils.checkStatus)
+                .then(responseData => {
+                    console.log("Save level in profile success")
+                    this.setState({
+                        level: this.state.result.nextLevel
+                    })
+                })
+                .catch(error => {
+                    console.log("Save level in profile failed = ", error)
+                    ToastAndroid.showWithGravity('ผิดพลาด! บันทึกระดับการทำกิจกรรมล้มเหลว', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                })
         }
         else {
             return
@@ -141,7 +170,7 @@ class Activity extends React.Component {
             .catch(async error => {
                 console.log("Error in saveActivity = ", error)
                 ToastAndroid.showWithGravity('ผิดพลาด! ไม่สามารถบันทึกผลการทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
-                 await this.setState({
+                await this.setState({
                     exception: {}
                 })
             })
@@ -154,10 +183,20 @@ class Activity extends React.Component {
         })
         let obj = {}
         obj.preActivity = Object.assign({}, this.state.preActivity)
-        obj.result = {}
+        obj.result = {
+            maxLevel: 0,
+            levelTitle: 'ไม่ได้ทำกิจกรรม',
+            physicalExercise: {},
+            breathingExercise: {},
+            completedAllPhysical: false,
+            completedAllBreathing: false,
+            completedLevel: false,
+            reasonToStop: {}
+        }
         obj.postActivity = {}
         let date = moment(this.state.timeStart).format("YYYY-MM-DD")
         let time = moment(this.state.timeStart).format("kk:mm:ss")
+        console.log("____", obj)
 
         const path = `${SERVER_IP}${ACTIVITY_RESULT_1}`
         await fetch(path, {
@@ -212,6 +251,12 @@ class Activity extends React.Component {
             return duration.asMinutes().toFixed(2) //fixed to 2 decimal
     }
 
+    onConnectToBLE = async () => {
+        await this.setState({
+            connected: true,
+        })
+    }
+
     onPreActivityDone = async (value) => {
         await this.setState({
             state: 'doing activity',
@@ -248,58 +293,15 @@ class Activity extends React.Component {
         console.log("select = ", this.state.exception)
     }
 
-    // onLevelChanged = (level) => {
-    //     this.setState({ level })
-    // }
-    // levelUp = async () => {
-    //     let progress = this.state.progress
-    //     progress += 0.1
-    //     if (progress >= 1) {
-    //         progress = 1
-    //     }
-    //     let level = this.state.level
-    //     level += 1
-    //     if (progress >= 10) {
-    //         progress = 10
-    //     }
-    //     await this.setState({ progress, level })
-    //     // this.props.onLevelChanged(this.state.level)
-    // }
-
-    // levelDown = async () => {
-    //     let progress = this.state.progress
-    //     progress -= 0.1
-    //     if (progress <= 0) {
-    //         progress = 0
-    //     }
-    //     let level = this.state.level
-    //     level -= 1
-    //     if (progress <= 0) {
-    //         progress = 0
-    //     }
-    //     await this.setState({ progress, level })
-    //     // this.props.onLevelChanged(this.state.level)
-    // }
-
-    // finish = () => {
-    //     Alert.alert(
-    //         'สิ้นสุดการทำกิจกรรม',
-    //         'ต้องการสิ้นสุดการทำกิจกรรมหรือไม่?',
-    //         [
-    //             {
-    //                 text: 'ใช่', onPress: () => {
-    //                     this.setState({ timeStop: new Date() })
-    //                     let duration = this.calculateDuration(this.state.timeStart, this.state.timeStop)
-    //                     this.setState({ duration })
-    //                 }
-    //             },
-    //             { text: 'ไม่', style: 'cancel' }
-    //         ]
-    //     )
-    // }
+    renderScanBLE = () => {
+        return (
+            <ScanBLE onConnectToBLE={this.onConnectToBLE} />
+        )
+    }
 
     renderPreActivity = () => {
         return (
+
             // <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
             <PreActivity onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
         )
@@ -307,7 +309,7 @@ class Activity extends React.Component {
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity exception={this.state.exception} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
+            <DoingActivity exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
         )
     }
 
@@ -318,15 +320,21 @@ class Activity extends React.Component {
         )
     }
 
+
     render() {
-        if (this.state.state === 'pre activity') {
-            return this.renderPreActivity()
+        if (this.state.connected === false) {
+            return this.renderScanBLE()
         }
-        else if (this.state.state === 'doing activity') {
-            return this.renderDoingActivity()
-        }
-        else if (this.state.state === 'post activity') {
-            return this.renderPostActivity()
+        else {
+            if (this.state.state === 'pre activity') {
+                return this.renderPreActivity()
+            }
+            else if (this.state.state === 'doing activity') {
+                return this.renderDoingActivity()
+            }
+            else if (this.state.state === 'post activity') {
+                return this.renderPostActivity()
+            }
         }
 
     }
@@ -338,7 +346,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return { userActions: bindActionCreators(userActions, dispatch) }
+    return { userActions: bindActionCreators(userActions, dispatch) }
     // return {
     //     dispatchSaveActivity: (results, date, time) => dispatch(saveActivity(results, date, time))
     // }
