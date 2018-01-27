@@ -22,6 +22,7 @@ import VoiceTest from '../components/VoiceTest'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
+import Heartrate from '../components/Heartrate'
 
 let dataStore = {}
 let physicalExercise = {}
@@ -186,7 +187,10 @@ class DoingActivity extends React.Component {
                     <View>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                                <Timer />
+                                <View>
+                                    <Timer style={{ flexDirection: 'row' }}/>
+                                    <Heartrate state="doingActivity" preHr={this.props.preHr} />
+                                </View>
                                 {/*doingLevel={this.props.doingLevel}*/}
                                 <ActivityProgress onLevelChanged={this.onLevelChanged} progress={this.state.activityLevel / 10} doingLevel={7} />
                             </View>
