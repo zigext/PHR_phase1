@@ -33,7 +33,8 @@ class Activity extends React.Component {
             exception: {},
             peripherals: new Map(),
             peripheral: {},
-            connected: false
+            connected: false,
+            useBLE: null
         }
         this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(this)
     }
@@ -68,17 +69,32 @@ class Activity extends React.Component {
         // }
         ToastAndroid.showWithGravity('ไม่ได้เชื่อมต่อกับอุปกรณ์ Bluetooth', ToastAndroid.SHORT, ToastAndroid.CENTER)
         this.setState({
-            connected: false
+            connected: false,
+            useBLE: null
         })
         console.log('Disconnected from ' + data.peripheral);
     }
 
+    setPeripheral = async (peripheral) => {
+        await this.setState({ peripheral })
+    }
+
+    setConnectToBLE = async (value) => {
+        await this.setState({
+            connected: value,
+        })
+    }
+
     disconnectBLE = () => {
-        console.log("xxxxxx")
         if (this.state.peripheral.connected) {
-            console.log("yyyyy", this.state.peripheral)
             BleManager.disconnect(this.state.peripheral.id)
         }
+    }
+
+    setUseBLE = async (value) => {
+        await this.setState({
+            useBLE: value
+        })
     }
 
     fetchProfile = async () => {
@@ -125,7 +141,7 @@ class Activity extends React.Component {
                 })
                 .catch(error => {
                     console.log("Save level in profile failed = ", error)
-                    ToastAndroid.showWithGravity('ผิดพลาด! บันทึกระดับการทำกิจกรรมล้มเหลว', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                    ToastAndroid.showWithGravity('ผิดพลาด! บันทึกระดับการทำกิจกรรมในประวัติส่วนตัวล้มเหลว', ToastAndroid.SHORT, ToastAndroid.CENTER)
                 })
         }
         else {
@@ -260,16 +276,7 @@ class Activity extends React.Component {
             return duration.asMinutes().toFixed(2) //fixed to 2 decimal
     }
 
-    setPeripheral = async (peripheral) => {
-        await this.setState({ peripheral })
-        console.log("peripheral in activity = ", this.state.peripheral)
-    }
 
-    onConnectToBLE = async () => {
-        await this.setState({
-            connected: true,
-        })
-    }
 
     onPreActivityDone = async (value) => {
         await this.setState({
@@ -309,37 +316,40 @@ class Activity extends React.Component {
 
     renderScanBLE = () => {
         return (
-            <ScanBLE onConnectToBLE={this.onConnectToBLE} setPeripheral={this.setPeripheral} />
+            <ScanBLE setConnectToBLE={this.setConnectToBLE} setPeripheral={this.setPeripheral} setUseBLE={this.setUseBLE} />
         )
     }
 
     renderPreActivity = () => {
         return (
 
-            // <PreActivity peripheral={this.state.peripheral} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
-            <PreActivity peripheral={this.state.peripheral} disconnectBLE={this.disconnectBLE} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
+            // <PreActivity useBLE={this.state.useBLE} setUseBLE={this.setUseBLE} setConnectToBLE={this.setConnectToBLE} peripheral={this.state.peripheral} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
+            <PreActivity useBLE={this.state.useBLE} setUseBLE={this.setUseBLE} setConnectToBLE={this.setConnectToBLE} peripheral={this.state.useBLE? this.state.peripheral: null} disconnectBLE={this.disconnectBLE} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
         )
     }
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity peripheral={this.state.peripheral} exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
+            <DoingActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
         )
     }
 
     renderPostActivity = () => {
         return (
-            // <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} result={this.state.result}/>
-            <PostActivity peripheral={this.state.peripheral} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
+            // <PostActivity useBLE={this.state.useBLE} peripheral={this.state.peripheral} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} result={this.state.result}/>
+            <PostActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
         )
     }
 
 
     render() {
-        if (this.state.connected === false) {
+        console.log("connect ble = ", this.state.connected, this.state.useBLE)
+        //Hasn't connected to BLE or Hasn't choose wheter to use BLE or not 
+        if (this.state.connected === false && this.state.useBLE === null) {
             return this.renderScanBLE()
         }
-        else {
+        //Connected to BLE or choose not to use BLE
+        else if(this.state.connected === true || this.state.useBLE === false){
             if (this.state.state === 'pre activity') {
                 return this.renderPreActivity()
             }
