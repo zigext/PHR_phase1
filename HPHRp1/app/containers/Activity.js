@@ -32,6 +32,7 @@ class Activity extends React.Component {
             result: {},
             exception: {},
             peripherals: new Map(),
+            peripheral: {},
             connected: false
         }
         this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(this)
@@ -70,6 +71,14 @@ class Activity extends React.Component {
             connected: false
         })
         console.log('Disconnected from ' + data.peripheral);
+    }
+
+    disconnectBLE = () => {
+        console.log("xxxxxx")
+        if (this.state.peripheral.connected) {
+            console.log("yyyyy", this.state.peripheral)
+            BleManager.disconnect(this.state.peripheral.id)
+        }
     }
 
     fetchProfile = async () => {
@@ -251,6 +260,11 @@ class Activity extends React.Component {
             return duration.asMinutes().toFixed(2) //fixed to 2 decimal
     }
 
+    setPeripheral = async (peripheral) => {
+        await this.setState({ peripheral })
+        console.log("peripheral in activity = ", this.state.peripheral)
+    }
+
     onConnectToBLE = async () => {
         await this.setState({
             connected: true,
@@ -295,28 +309,28 @@ class Activity extends React.Component {
 
     renderScanBLE = () => {
         return (
-            <ScanBLE onConnectToBLE={this.onConnectToBLE} />
+            <ScanBLE onConnectToBLE={this.onConnectToBLE} setPeripheral={this.setPeripheral} />
         )
     }
 
     renderPreActivity = () => {
         return (
 
-            // <PreActivity onPreActivityDone={this.onPreActivityDone} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
-            <PreActivity onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
+            // <PreActivity peripheral={this.state.peripheral} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
+            <PreActivity peripheral={this.state.peripheral} disconnectBLE={this.disconnectBLE} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
         )
     }
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
+            <DoingActivity peripheral={this.state.peripheral} exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
         )
     }
 
     renderPostActivity = () => {
         return (
             // <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} result={this.state.result}/>
-            <PostActivity onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
+            <PostActivity peripheral={this.state.peripheral} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
         )
     }
 

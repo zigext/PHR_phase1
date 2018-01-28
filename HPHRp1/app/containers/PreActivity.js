@@ -118,7 +118,7 @@ class PreActivity extends React.Component {
         // }
         switch (this.state.step) {
             case 1:
-                return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
+                return <Step1Pre peripheral={this.props.peripheral} setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
             case 2:
                 return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle}
                     st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment}
@@ -136,9 +136,21 @@ class PreActivity extends React.Component {
         return (
             <View style={{ flex: 1 }} >
                 <KeyboardAwareScrollView>
-                    <View style={styles.patientInfoContainer}>
-                        <Text style={styles.text}>{this.props.firstname} {this.props.lastname}  รหัสผู้ป่วย {this.props.patientCode}</Text>
-                        <Image source={{ uri: this.props.pictureUri }} style={styles.image}></Image>
+                    <View style={styles.headerContainer}>
+                        <Button
+                            raised
+                            backgroundColor='white'
+                            color={common.primaryColorDark}
+                            title='ยกเลิกการเชื่อมต่อกับอุปกรณ์ Bluetooth'
+                            fontSize={14}
+                            containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
+                            buttonStyle={{ borderRadius: 10 }}
+                            onPress={() => this.props.disconnectBLE()}
+                        />
+                        <View style={styles.patientInfoContainer}>
+                            <Text style={styles.text}>{this.props.firstname} {this.props.lastname}  รหัสผู้ป่วย {this.props.patientCode}</Text>
+                            <Image source={{ uri: this.props.pictureUri }} style={styles.image}></Image>
+                        </View>
                     </View>
                     <Stepper step={this.state.step} onStepChange={this.onStepChange} totalStep={3} />
                     <View style={styles.bodyContainer} >
@@ -167,9 +179,14 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 10
     },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flex: 1
+    },
     patientInfoContainer: {
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        // justifyContent: 'flex-end'
     },
     text: {
         fontSize: 20,
