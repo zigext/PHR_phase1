@@ -145,7 +145,18 @@ class PreActivity extends React.Component {
                             fontSize={14}
                             containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
                             buttonStyle={{ borderRadius: 10 }}
-                            onPress={() => this.props.disconnectBLE()}
+                            onPress={() => Alert.alert(
+                                    'ยกเลิกการเชื่อมต่ออุปกรณ์ Bluetooth',
+                                    `ต้องการยกเลิกการเชื่อมต่อกับ ${this.props.peripheral.name} หรือไม่?`,
+                                    [
+                                        {
+                                            text: 'ใช่', onPress: () => {
+                                                this.props.disconnectBLE()
+                                            }
+                                        },
+                                        { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+                                    ]
+                                )}
                         />
                         <View style={styles.patientInfoContainer}>
                             <Text style={styles.text}>{this.props.firstname} {this.props.lastname}  รหัสผู้ป่วย {this.props.patientCode}</Text>
