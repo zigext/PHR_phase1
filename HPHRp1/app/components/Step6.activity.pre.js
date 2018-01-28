@@ -13,33 +13,36 @@ myCustomStylesheet.controlLabel.normal.fontWeight = 'normal'
 
 let options = {
     fields: {
+        ac0: {
+            label: 'นั่งหัวสูง',
+        },
         ac1: {
-            label: 'บริหารปอดด้วยวิธี Breathing control',
+            label: 'บริหารปอดด้วยการหายใจเข้าออกลึกๆ 10 ครั้ง ใช้หรือไม่ใช้อุปกรณ์ก็ได้',
         },
         ac2: {
-            label: 'บริหารปอดด้วยวิธี Deep breathing',
+            label: 'ไออย่างมีประสิทธิภาพ',
         },
         ac3: {
-            label: 'บริหารปอดด้วยอุปกรณ์ Triflow',
+            label: 'บริหารขา-ข้อเท้า',
         },
 
         ac4: {
-            label: 'ไออย่างมีประสิทธิภาพ',
-        },
-        ac5: {
-            label: 'บริหารขา-ข้อเท้า',
-        },
-        ac6: {
             label: 'บริหารแขน-ข้อมือ',
         },
+        ac5: {
+            label: 'นั่งห้อยขาข้างเตียง โดยไม่พิงหลัง',
+        },
+        ac6: {
+            label: 'แกว่งเท้า',
+        },
         ac7: {
-            label: 'นั่งห้อยขาข้างเตียง แกว่งเท้า',
+            label: 'นั่งเก้าอี้ข้างเตียง',
         },
         ac8: {
-            label: 'ลุกและนั่งเก้าอี้ข้างเตียง',
+            label: 'ยืนข้างเตียง',
         },
         ac9: {
-            label: 'ยืนย่ำเท้ากับที่',
+            label: 'เดินย่ำอยู่กับที่',
         },
 
         ac10: {
@@ -50,15 +53,14 @@ let options = {
         },
         ac12: {
             label: 'เดินขึ้นลงบันได',
-        },
-        ac13: {
-            label: 'กางข้อศอก ยกไหล่ หมุนแขน',
         }
+       
     },
     stylesheet: myCustomStylesheet
 }
 
 let input = t.struct({
+    ac0: t.Boolean,
     ac1: t.Boolean,
     ac2: t.Boolean,
     ac3: t.Boolean,
@@ -70,8 +72,8 @@ let input = t.struct({
     ac9: t.Boolean,
     ac10: t.Boolean,
     ac11: t.Boolean,
-    ac12: t.Boolean,
-    ac13: t.Boolean,
+    ac12: t.Boolean
+
 })
 
 export default class Step6Pre extends React.Component {
@@ -124,6 +126,7 @@ export default class Step6Pre extends React.Component {
                         text: 'ใช่', onPress: async () => {
                             //For final system's level activity that patient has to do
                             let finalSystemLevel
+                            if (value.ac0) finalSystemLevel = 0
                             if (value.ac1) finalSystemLevel = 1
                             if (value.ac2) finalSystemLevel = 2
                             if (value.ac3) finalSystemLevel = 3
@@ -136,7 +139,7 @@ export default class Step6Pre extends React.Component {
                             if (value.ac10) finalSystemLevel = 10
                             if (value.ac11) finalSystemLevel = 11
                             if (value.ac12) finalSystemLevel = 12
-                            if (value.ac13) finalSystemLevel = 13
+                            // if (value.ac13) finalSystemLevel = 13
 
                             this.props.onSelectActivity(value, finalSystemLevel)
                             this.props.onPreActivityDone(this.props.dataStore)
