@@ -20,10 +20,10 @@ export default class Heartrate extends React.Component {
 
     componentDidMount = () => {
         this.handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValueForCharacteristic)
-        BleManager.retrieveServices("E4:B1:1E:1B:CA:B9").then((peripheralInfo) => {
+        BleManager.retrieveServices(this.props.peripheral.id).then((peripheralInfo) => {
             console.log("retrieve service = ", peripheralInfo);
 
-            BleManager.startNotification("E4:B1:1E:1B:CA:B9", '0000180d-0000-1000-8000-00805F9B34FB', '00002a37-0000-1000-8000-00805F9B34FB')
+            BleManager.startNotification(this.props.peripheral.id, '0000180d-0000-1000-8000-00805F9B34FB', '00002a37-0000-1000-8000-00805F9B34FB')
                 .then(() => {
                     // Success code
                     console.log('Notification started');
