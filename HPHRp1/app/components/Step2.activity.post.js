@@ -75,7 +75,10 @@ export default class Step2Post extends React.Component {
     }
 
     render() {
-        ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        if(this.props.useBLE){
+            ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+        
         let defaultValue = {}
         if (this.props.postHr && this.props.postBp) {
             let { postHr: postHr, postBp: postBp } = this.props
@@ -93,7 +96,7 @@ export default class Step2Post extends React.Component {
         return (
             <View style={_styles.container}>
                 <ScrollView>
-                    <Heartrate state="postActivity" getHeartrate={this.getHeartrate} />
+                    {this.props.useBLE?  <Heartrate state="postActivity" getHeartrate={this.getHeartrate} peripheral={this.props.peripheral}  />: null}
                     <Text style={_styles.text}>ทดสอบหลังทำกิจกรรม</Text>
                     {dataFromBLE ? <Form ref='form' type={input} options={options} value={dataFromBLE} /> : <Form ref='form' type={input} options={options} />}
                     {/*{defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}*/}

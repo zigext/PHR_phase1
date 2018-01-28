@@ -7,7 +7,6 @@ import common from '../styles/common'
 import { split } from 'lodash'
 import Heartrate from './Heartrate'
 
-
 let Form = t.form.Form
 let options = {
     fields: {
@@ -19,10 +18,6 @@ let options = {
         },
     }
 }
-// let defaultValue = {
-//     hr: this.props.hr,
-//     bp: this.props.bp
-// }
 
 //Heart rate condition
 //heart rate > 0 && < 200
@@ -104,7 +99,10 @@ export default class Step1Pre extends React.Component {
     }
 
     render() {
-         ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        if(this.props.useBLE){
+            ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+        
         let defaultValue = {}
         if (this.props.preHr && this.props.preBp) {
             let { preHr: preHr, preBp: preBp } = this.props
@@ -121,7 +119,7 @@ export default class Step1Pre extends React.Component {
         }
         return (
             <View style={_styles.container}>
-                <Heartrate state="preActivity" getHeartrate={this.getHeartrate} />
+                {this.props.useBLE? <Heartrate state="preActivity" getHeartrate={this.getHeartrate} peripheral={this.props.peripheral} /> : null}
                 <Text style={_styles.text}>ทดสอบก่อนทำกิจกรรม</Text>
                 {dataFromBLE ? <Form ref='form' type={input} options={options} value={dataFromBLE} /> : <Form ref='form' type={input} options={options} />}
                 <Icon
