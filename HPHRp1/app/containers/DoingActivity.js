@@ -189,7 +189,8 @@ class DoingActivity extends React.Component {
                             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                                 <View>
                                     <Timer style={{ flexDirection: 'row' }}/>
-                                    <Heartrate state="doingActivity" preHr={this.props.preHr} />
+                                    {this.props.useBLE? <Heartrate state="doingActivity" preHr={this.props.preHr} peripheral={this.props.peripheral}  /> : null }
+                                    
                                 </View>
                                 {/*doingLevel={this.props.doingLevel}*/}
                                 <ActivityProgress onLevelChanged={this.onLevelChanged} progress={this.state.activityLevel / 10} doingLevel={7} />

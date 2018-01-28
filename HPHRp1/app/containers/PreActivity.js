@@ -101,6 +101,11 @@ class PreActivity extends React.Component {
         console.log("PASS = ", dataStore)
     }
 
+    connectPress = () => {
+        this.props.setUseBLE(null)
+        this.props.setConnectToBLE(false)
+    }
+
     renderBody = () => {
         // switch (this.state.step) {
         //     case 1:
@@ -118,7 +123,7 @@ class PreActivity extends React.Component {
         // }
         switch (this.state.step) {
             case 1:
-                return <Step1Pre peripheral={this.props.peripheral} setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
+                return <Step1Pre useBLE={this.props.useBLE} peripheral={this.props.peripheral} setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
             case 2:
                 return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle}
                     st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment}
@@ -137,15 +142,16 @@ class PreActivity extends React.Component {
             <View style={{ flex: 1 }} >
                 <KeyboardAwareScrollView>
                     <View style={styles.headerContainer}>
-                        <Button
-                            raised
-                            backgroundColor='white'
-                            color={common.primaryColorDark}
-                            title='ยกเลิกการเชื่อมต่อกับอุปกรณ์ Bluetooth'
-                            fontSize={14}
-                            containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
-                            buttonStyle={{ borderRadius: 10 }}
-                            onPress={() => Alert.alert(
+                        {this.props.useBLE ? (
+                            <Button
+                                raised
+                                backgroundColor='white'
+                                color={common.primaryColorDark}
+                                title='ยกเลิกการเชื่อมต่อกับอุปกรณ์ Bluetooth'
+                                fontSize={14}
+                                containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
+                                buttonStyle={{ borderRadius: 10 }}
+                                onPress={() => Alert.alert(
                                     'ยกเลิกการเชื่อมต่ออุปกรณ์ Bluetooth',
                                     `ต้องการยกเลิกการเชื่อมต่อกับ ${this.props.peripheral.name} หรือไม่?`,
                                     [
@@ -157,7 +163,20 @@ class PreActivity extends React.Component {
                                         { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
                                     ]
                                 )}
-                        />
+                            />
+                        ) : (
+                                <Button
+                                    raised
+                                    backgroundColor='white'
+                                    color={common.primaryColorDark}
+                                    title='เชื่อมต่อกับอุปกรณ์ Bluetooth'
+                                    fontSize={14}
+                                    containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
+                                    buttonStyle={{ borderRadius: 10 }}
+                                    onPress={this.connectPress}
+                                />
+                            )}
+
                         <View style={styles.patientInfoContainer}>
                             <Text style={styles.text}>{this.props.firstname} {this.props.lastname}  รหัสผู้ป่วย {this.props.patientCode}</Text>
                             <Image source={{ uri: this.props.pictureUri }} style={styles.image}></Image>

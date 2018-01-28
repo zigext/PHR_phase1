@@ -139,11 +139,11 @@ class PostActivity extends React.Component {
             //Nurse pin
                 return <Step0Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} checkNursePin={this.checkNursePin} />
             case 1:
-            //Post-HR & post-BP
+            //Borg scale
                 return <Step1Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} borg={this.state.borg} />
             case 2:
-            //Borg scale
-                return <Step2Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} postHr={this.state.postHr} postBp={this.state.postBp} />
+            //Post-HR & post-BP
+                return <Step2Post useBLE={this.props.useBLE} peripheral={this.props.peripheral}  step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} postHr={this.state.postHr} postBp={this.state.postBp} />
             case 3:
             //Post-test
                 return <Step3Post step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} assistant={this.state.assistant} />
