@@ -141,7 +141,7 @@ export default class SLevel3 extends React.Component {
         })
     }
 
-    
+
     changeToPhysicalPress = () => {
         this.setState({
             type: 'physical'
@@ -158,20 +158,20 @@ export default class SLevel3 extends React.Component {
 
     renderForm = () => {
         return (
-             <View>
+            <View>
                 <View style={_styles.formContainer}>
                     <Form ref='form' type={input} options={options} />
                 </View>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onInputFilled}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-           </View>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color='#d6d4e0'
+                    size={35}
+                    onPress={this.onInputFilled}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
         )
     }
 
@@ -222,11 +222,16 @@ export default class SLevel3 extends React.Component {
     }
 
     renderActivity = () => {
-        
+
         return (
             <View>
-                <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                <View style={_styles.imageContainer}>
+                    <Image source={require('../../assets/images/activities/legs-1.jpg')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/legs-2.jpg')} style={_styles.image} />
+                </View>
+                <View style={_styles.imageContainer}>
+                    <Image source={require('../../assets/images/activities/legs-3.jpg')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/legs-4.jpg')} style={_styles.image} />
                 </View>
 
                 <View style={_styles.descriptionContainer}>
@@ -283,8 +288,8 @@ export default class SLevel3 extends React.Component {
                 <View style={_styles.typeExerciseContainer}>
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'physical' ? common.primaryColor  : 'white' }
-                        color={this.state.type === 'physical' ? 'white' : common.primaryColor  }
+                        backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                        color={this.state.type === 'physical' ? 'white' : common.primaryColor}
                         title='Physical'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -293,8 +298,8 @@ export default class SLevel3 extends React.Component {
                     />
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor  }
-                        color={this.state.type === 'physical' ?  common.primaryColor : 'white'}
+                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                        color={this.state.type === 'physical' ? common.primaryColor : 'white'}
                         title='Breathing'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -321,7 +326,6 @@ const _styles = StyleSheet.create({
         alignSelf: 'stretch',
         margin: 20,
         marginHorizontal: 25,
-
     },
     exitContainer: {
         flex: 1,
@@ -334,7 +338,15 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        marginRight: 180
+        marginRight: 180,
+        marginTop: 15
+    },
+    imageContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10
     },
     typeExerciseContainer: {
         flexDirection: 'row',
