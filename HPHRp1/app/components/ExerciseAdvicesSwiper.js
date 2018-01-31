@@ -92,7 +92,7 @@ export default class ExerciseAdvicesSwiper extends React.Component {
                     <Text style={_styles.text}>ค่อยๆเพิ่มความหนักในการออกกําลังกาย เริ่มเคลื่อนไหวจากข้อเล็กไปยังข้อใหญ่ ทําอย่างต่อเนื่อง ไม่เกร็งค้าง และไม่กลั้นหายใจขณะทํา อาจมีคนช่วยในช่วงแรก จากนั้นก็ทําด้วยตนเอง ค่อยๆเปลี่ยนท่าจากนอน ไปนั่ง และยืน</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food5.jpg')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/walking.png')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide7')} />
                     <Text style={_styles.text}>การเดินทําได้ง่าย ช่วยให้ผู้ป่วยทำกิจวัตรประจําวันได้ดีขึ้น โดยพยายามเดินให้ระยะทางไกลขึ้นในครั้งต่อไป  และสามารถเดินได้เร็วขึ้นถ้าไม่มีอาการไม่พึงประสงค์ เช่น มึนงง เซ ซีด หายใจลําบาก คลื่นไส้ เจ็บหน้าอก</Text>
                 </View>
