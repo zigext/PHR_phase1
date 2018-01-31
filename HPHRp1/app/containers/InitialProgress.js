@@ -62,13 +62,13 @@ export default class InitialProgress extends React.Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ flex: 1, backgroundColor: 'green', flexDirection: 'row' }}>
+                <View style={{ flex: 1, backgroundColor: '#f7f1e6', flexDirection: 'row' }}>
 
-                    <View style={{ flex: 1, backgroundColor: 'pink' }}>
+                    <View style={{ flex: 1, backgroundColor: '#f7f1e6' }}>
                         <RecentLevelChart dataRecentActivities={this.props.dataRecentActivities} xAxisRecentActivities={this.props.xAxisRecentActivities} yAxisRecentActivities={this.props.yAxisRecentActivities} markerRecentActivities={this.props.markerRecentActivities} legendRecentActivities={this.props.legendRecentActivities} />
                     </View>
-                    <View style={{ flex: 1, backgroundColor: 'yellow', flexDirection: 'column' }}>
-                        <View style={{ flex: 0.8, backgroundColor: 'orange', padding: 20 }}>
+                    <View style={{ flex: 1, backgroundColor: '#f7f1e6', flexDirection: 'column' }}>
+                        <View style={{ flex: 0.8, backgroundColor: '#f7f1e6', padding: 20 }}>
                             <Text style={styles.formText}>เลือกผลการทำกิจกรรม</Text>
                             <View style={styles.buttonDown}>
                                 <Picker selectedValue={this.props.type} onValueChange={(type, idx) => this.onSelect(type)}>
@@ -84,7 +84,7 @@ export default class InitialProgress extends React.Component {
                                         mode='date'
                                         date={this.props.startDate}
                                         format='DD/MM/YYYY'
-                                        minDate={this.props.admitDate ? this.props.admitDate : this.props.startDate}
+                                        minDate={this.props.admitDate ? new Date(this.props.admitDate) : this.props.startDate}
                                         maxDate={new Date()}
                                         style={styles.elementContainer}
                                         customStyles={styles.customStyles}
@@ -133,7 +133,7 @@ export default class InitialProgress extends React.Component {
 const styles = {
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF'
+        backgroundColor: '#f7f1e6'
     },
     levelContainer: {
         borderWidth: 10,

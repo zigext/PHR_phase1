@@ -2,26 +2,41 @@ import React from 'react'
 import { AppRegistry, StyleSheet, Text, View, processColor, ScrollView, Picker } from 'react-native'
 import { connect } from 'react-redux'
 import { BarChart, LineChart } from 'react-native-charts-wrapper'
-import { Icon } from 'react-native-elements'
+import { Icon, List, ListItem } from 'react-native-elements'
 import DatePicker from 'react-native-datepicker'
-import { last } from 'lodash'
+import { Actions } from 'react-native-router-flux'
 import moment from 'moment'
 import _ from 'lodash'
 import Chart from '../components/Chart'
 import common from '../styles/common'
 
-let formatDate = (format, date) => {
-    return moment(date).format(format)
-}
+const list = [
+    {
+        name: 'Amy Farha',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+        subtitle: 'Vice President'
+    },
+    {
+        name: 'Chris Jackson',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+    },
+    {
+        name: '123',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+    },
+    {
+        name: '456',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+    }
+]
 
 export default class SearchProgress extends React.Component {
 
     constructor(props) {
         super(props)
-
-        this.state = {
-
-        }
     }
 
     onSelect = type => {
@@ -34,7 +49,7 @@ export default class SearchProgress extends React.Component {
                 return
             }
             else {
-               
+
             }
         })
     }
@@ -44,11 +59,12 @@ export default class SearchProgress extends React.Component {
     }
 
     render() {
+        console.log("______type", this.props.type)
         return (
             <View style={{ flex: 1 }}>
-
-                <View style={{ margin: 20, flex: 1 }}>
-                    <ScrollView contentContainerStyle={{ flex: 1 }}>
+                <ScrollView contentContainerStyle={{ flex: 1 }} scrollEnabled={true}>
+                    <View style={{ margin: 20, flex: 1 }}>
+                        {/*<ScrollView contentContainerStyle={{ flex: 1 }} scrollEnabled={true}>*/}
 
                         <View style={styles.formContainer}>
 
@@ -69,7 +85,7 @@ export default class SearchProgress extends React.Component {
                                         mode='date'
                                         date={this.props.startDate}
                                         format='DD/MM/YYYY'
-                                        minDate={this.props.admitDate ? this.props.admitDate : this.props.startDate}
+                                        minDate={this.props.admitDate ? new Date(this.props.admitDate) : this.props.startDate}
                                         maxDate={new Date()}
                                         style={styles.elementContainer}
                                         customStyles={styles.customStyles}
@@ -102,8 +118,18 @@ export default class SearchProgress extends React.Component {
                                 <Icon
                                     raised
                                     reverse
+                                    name='table-large'
+                                    type='material-community'
+                                    color={common.accentColor}
+                                    size={25}
+                                    containerStyle={{ alignSelf: 'flex-end' }}
+                                    onPress={() =>  Actions.progressResultList({activityResult: this.props.activityResult, searchType: this.props.type})}
+                                />
+                                <Icon
+                                    raised
+                                    reverse
                                     name='settings-backup-restore'
-                                    color='#d6d4e0'
+                                    color={common.grey}
                                     size={25}
                                     containerStyle={{ alignSelf: 'flex-end' }}
                                     onPress={this.reset}
@@ -116,9 +142,24 @@ export default class SearchProgress extends React.Component {
                         <View style={styles.chartContainer}>
                             <Chart dataActivities={this.props.dataActivities} xAxisActivities={this.props.xAxisActivities} yAxisActivities={this.props.yAxisActivities} markerActivities={this.props.markerActivities} legendActivities={this.props.legendActivities} activityResult={this.props.activityResult} type={this.props.type} search={this.props.search} />
                         </View>
-                    </ScrollView>
 
-                </View>
+                        {/*<View style={{ flex: 1 }}>
+                            <List containerStyle={{ flex: 1 }}>
+                                {
+                                    list.map((l, i) => (
+                                        <ListItem
+                                            key={i}
+                                            title={l.name}
+                                        />
+                                    ))
+                                }
+                            </List>
+                        </View>*/}
+
+                        {/*</ScrollView>*/}
+
+                    </View>
+                </ScrollView>
             </View>
         )
     }
@@ -127,25 +168,15 @@ export default class SearchProgress extends React.Component {
 const styles = {
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF'
-    },
-    chart: {
-        flex: 1
-    },
-    levelContainer: {
-        borderWidth: 10,
-        width: 100,
-        height: 100,
-        borderRadius: 100 / 2,
-        borderColor: common.primaryColor
+        backgroundColor: '#f7f1e6'
     },
     formContainer: {
         flex: 0.4,
-        backgroundColor: 'yellow'
+        backgroundColor: '#f7f1e6'
     },
     chartContainer: {
         flex: 1,
-        backgroundColor: 'pink'
+        backgroundColor: '#f7f1e6'
     },
     buttonDown: {
         flexDirection: 'column',
