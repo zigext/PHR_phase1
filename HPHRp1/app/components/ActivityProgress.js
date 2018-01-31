@@ -53,7 +53,7 @@ export default class ActivityProgress extends React.Component {
                 <View style={{ paddingHorizontal: 25 }}>
                     <Progress.Circle size={210} showsText={true} thickness={5} borderWidth={3} color='#29B6F6' progress={this.props.progress}
                         indeterminate={this.state.indeterminate}
-                        formatText={progress => `Level ${Math.round(this.props.progress * 10)}`}
+                        formatText={( this.props.progress * 10 >= 4 && this.props.doingLevel > this.props.progress * 10)? (progress => `Level ${Math.round(this.props.doingLevel)}`) : (progress => `Level ${Math.round(this.props.progress * 10)}`)}
                     />
                 </View>
                 <View style={styles.subContainer}>
