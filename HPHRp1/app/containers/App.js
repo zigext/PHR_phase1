@@ -1,25 +1,3 @@
-// import React, {Component} from 'react'
-// import { createStore, applyMiddleware, combineReducers } from 'redux'
-// import { Provider } from 'react-redux'
-// import thunk from 'redux-thunk'
-
-// import * as reducers from '../reducers'
-// import CounterApp from './counterApp'
-
-// const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-// const reducer = combineReducers(reducers);
-// const store = createStoreWithMiddleware(reducer);
-
-// export default class App extends Component {
-//   render() {
-//     return (
-//       <Provider store={store}>
-//         {/*<CounterApp />*/}
-//       </Provider>
-//     );
-//   }
-// }
-
 import React, { Component } from 'react'
 import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, AsyncStorage } from 'react-native'
 import { Navigator } from 'react-native-deprecated-custom-components'
@@ -33,10 +11,12 @@ import { persistStore } from 'redux-persist'
 import store from '../config/ReduxStore'
 import thunkMiddleware from 'redux-thunk'
 import CreateLogger from 'redux-logger'
+import * as RNProgress from 'react-native-progress'
 import Login from './Login'
 import Home from './Home'
 import Activity from './Activity'
 import Progress from './Progress'
+import ProgressResultList from './ProgressResultList'
 import ForgotPassword from './ForgotPassword'
 import Profile from './Profile'
 import EditProfile from './EditProfile'
@@ -73,7 +53,9 @@ export default class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            isReady: false
+            isReady: false,
+            progress: 0,
+            indeterminate: true,
         }
     }
 
@@ -88,8 +70,24 @@ export default class App extends React.Component {
                     isReady: true
                 })
             }
-        ) //purge here
+        ) //purge here to delete all states in store
+        // this.animate()
     }
+
+    // animate() {
+    //     let progress = 0
+    //     this.setState({ progress })
+    //     setTimeout(() => {
+    //         this.setState({ indeterminate: false })
+    //         setInterval(() => {
+    //             progress += Math.random() / 5
+    //             if (progress > 1) {
+    //                 progress = 1
+    //             }
+    //             this.setState({ progress })
+    //         }, 500)
+    //     }, 1000)
+    // }
 
     render() {
         // const config = {
@@ -142,7 +140,11 @@ export default class App extends React.Component {
 
         if (!this.state.isReady) {
             return (
-                <Text>Loading...</Text>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                     {/*// <RNProgress.Bar progress={0.3} width={300} progress={this.state.progress} indeterminate={this.state.indeterminate} />
+                     // <RNProgress.CircleSnail color={['red', 'green', 'blue']} />*/}
+                    <Text>Loading...</Text>
+                </View>
             )
         }
 
@@ -182,6 +184,7 @@ export default class App extends React.Component {
                                     <Scene key="surgery" component={Surgery} title="ข้อมูลการผ่าตัด" back />
                                     <Scene key="surgeryDetail" component={SurgeryDetail} title="ข้อมูลการผ่าตัด" back />
                                     <Scene key="addSurgery" component={AddSurgery} title="เพิ่มข้อมูลการผ่าตัด" back />
+                                    <Scene key="progressResultList" component={ProgressResultList} title="รายละเอียดผลการทำกิจกรรม" back />
 
                                     <Drawer
                                         key="drawer"
@@ -252,7 +255,7 @@ export default class App extends React.Component {
                                                         component={Progress}
                                                         title="พัฒนาการ"
                                                         icon={TabIcon}
-                                                    
+
                                                     />
                                                 </Stack>
                                                 <Stack
