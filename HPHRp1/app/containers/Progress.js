@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppRegistry, StyleSheet, Text, View, processColor, ToastAndroid } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View, processColor, ToastAndroid, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { BarChart } from 'react-native-charts-wrapper'
 import { last, max, property } from 'lodash'
@@ -157,7 +157,7 @@ class Progress extends React.Component {
         }
         //Use to define when to re-prepare data for chart
         search = this.state.type
-        console.log("_______", search)
+
         //this.state.startDate & this.state.endDate is for using as placeholder in DatePicker
         let startDate
         let endDate
@@ -322,7 +322,7 @@ class Progress extends React.Component {
                 dataSets.push(data)
             }
             let tmp = max(dataSets, property('y'))
-            yAxisMaximum = Math.ceil(tmp.y) 
+            yAxisMaximum = Math.ceil(tmp.y)
         }
         return dataSets
     }
@@ -383,7 +383,6 @@ class Progress extends React.Component {
             )
         }
         else if (search === 'duration') {
-            console.log("set new axis")
             this.setState(
                 update(this.state, {
                     dataActivities: {
@@ -438,9 +437,9 @@ class Progress extends React.Component {
     renderBody = () => {
         switch (this.state.status) {
             case 'initial':
-                return <InitialProgress dataRecentActivities={this.state.dataRecentActivities} xAxisRecentActivities={this.state.xAxisRecentActivities} yAxisRecentActivities={this.state.yAxisRecentActivities} activity={this.state.activity} markerRecentActivities={this.state.markerRecentActivities} legendRecentActivities={this.state.legendRecentActivities} recentActivity={this.state.recentActivity} admitDate={this.props.profile.admit_date} startSearching={this.startSearching} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} />
+                return <InitialProgress dataRecentActivities={this.state.dataRecentActivities} xAxisRecentActivities={this.state.xAxisRecentActivities} yAxisRecentActivities={this.state.yAxisRecentActivities} activity={this.state.activity} markerRecentActivities={this.state.markerRecentActivities} legendRecentActivities={this.state.legendRecentActivities} recentActivity={this.state.recentActivity} admitDate={this.props.profile? this.props.profile.admit_date: null} startSearching={this.startSearching} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} />
             case 'searching':
-                return <SearchProgress dataActivities={this.state.dataActivities} xAxisActivities={this.state.xAxisActivities} yAxisActivities={this.state.yAxisActivities} markerActivities={this.state.markerActivities} legendActivities={this.state.legendActivities} resetState={this.resetState} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} admitDate={this.props.profile.admit_date} search={search} />
+                return <SearchProgress activityResult={this.state.activityResult} dataActivities={this.state.dataActivities} xAxisActivities={this.state.xAxisActivities} yAxisActivities={this.state.yAxisActivities} markerActivities={this.state.markerActivities} legendActivities={this.state.legendActivities} resetState={this.resetState} searching={this.searching} handleSearchChange={this.handleSearchChange} type={this.state.type} startDate={this.state.startDate} endDate={this.state.endDate} admitDate={this.props.profile? this.props.profile.admit_date: null} search={search} />
         }
     }
 
@@ -448,7 +447,9 @@ class Progress extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                {this.renderBody()}
+                <ScrollView contentContainerStyle={{ flex: 1 }}>
+                    {this.renderBody()}
+                </ScrollView>
             </View>
         );
     }
