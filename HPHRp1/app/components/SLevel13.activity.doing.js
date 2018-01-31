@@ -50,6 +50,7 @@ export default class SLevel13 extends React.Component {
     }
 
     componentDidMount = () => {
+        Voice.start('th-TH')
         //If patient can't do this activity
         if (typeof this.props.exception === 'boolean' && this.props.exception === false) {
             //This is the last activity, end doing activity state and save the result
@@ -58,8 +59,8 @@ export default class SLevel13 extends React.Component {
     }
 
     componentWillUnmount() {
-        Voice.destroy().then(Voice.removeAllListeners)
-        Tts.stop()
+        // Voice.destroy().then(Voice.removeAllListeners)
+        Tts.stop() //Call only in the last step
     }
 
     onSpeechStartHandler(e) {
@@ -210,8 +211,8 @@ const _styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        padding: 20,
-        paddingHorizontal: 50,
+        margin: 20,
+        marginHorizontal: 25,
 
     },
     exitContainer: {
