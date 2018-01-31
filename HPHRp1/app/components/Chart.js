@@ -82,7 +82,7 @@ export default class Chart extends React.Component {
     }
 
     render() {
-        console.log("type ", this.props.dataActivities.dataSets)
+        console.log("Chart dataSets  = ", this.props.dataActivities.dataSets)
         if (this.props.search === 'maxLevel') {
             return (
                 <View style={{ flex: 1 }}>

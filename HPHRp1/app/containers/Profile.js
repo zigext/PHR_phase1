@@ -42,7 +42,6 @@ class Profile extends React.Component {
     // }
 
     fetchProfile = async () => {
-        console.log("FETCHING...")
         const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
         await fetch(path)
             .then(ApiUtils.checkStatus)
@@ -52,7 +51,6 @@ class Profile extends React.Component {
                 this.setState({ profile: this.profile })
                 this.props.dispatchProfile(this.state.profile)
                 console.log("Fetch profile success")
-                
             })
             .catch(error => {
                 console.log("Error in fetchProfile = ", error)

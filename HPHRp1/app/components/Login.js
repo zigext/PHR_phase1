@@ -43,6 +43,7 @@ export default class Login extends React.Component {
                 
                 if (err !== null) {
                     ToastAndroid.showWithGravity('อีเมลหรือรหัสผ่านไม่ถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                    console.log("error = ", err)
                 }
                 ToastAndroid.showWithGravity('เข้าสู่ระบบสำเร็จ', ToastAndroid.SHORT, ToastAndroid.CENTER)
                 Keyboard.dismiss()
