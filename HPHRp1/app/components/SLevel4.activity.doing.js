@@ -342,7 +342,8 @@ export default class SLevel4 extends React.Component {
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/arms-1.jpg')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/arms-2.jpg')} style={_styles.image} />
                 </View>
 
                 <View style={_styles.descriptionContainer}>
@@ -443,12 +444,20 @@ const _styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
     },
+    imageContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10
+    },
     descriptionContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        marginRight: 180
+        marginRight: 180,
+        marginTop: 15
     },
     typeExerciseContainer: {
         flexDirection: 'row',

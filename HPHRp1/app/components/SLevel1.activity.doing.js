@@ -183,20 +183,20 @@ export default class SLevel1 extends React.Component {
 
     renderForm = () => {
         return (
-             <View>
+            <View>
                 <View style={_styles.formContainer}>
                     <Form ref='form' type={input} options={options} />
                 </View>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onInputFilled}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-           </View>
+                <Icon
+                    raised
+                    reverse
+                    name='exit-to-app'
+                    color='#d6d4e0'
+                    size={35}
+                    onPress={this.onInputFilled}
+                    containerStyle={{ alignSelf: 'flex-end' }}
+                />
+            </View>
         )
     }
 
@@ -247,11 +247,12 @@ export default class SLevel1 extends React.Component {
     }
 
     renderActivity = () => {
-        
+
         return (
             <View>
-                <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                <View style={_styles.imageContainer}>
+                    <Image source={require('../../assets/images/activities/breathing-1.jpg')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/breathing-2.jpg')} style={_styles.image} />
                 </View>
 
                 <View style={_styles.descriptionContainer}>
@@ -266,17 +267,18 @@ export default class SLevel1 extends React.Component {
                     />
                     {this.state.showDescription ?
                         (<View>
-                            <Text style={[_styles.descriptionText, {fontWeight: 'bold'}]}>กรณีไม่ใช้อุปกรณ์</Text>
+                            <Text style={[_styles.descriptionText, { fontWeight: 'bold' }]}>กรณีไม่ใช้อุปกรณ์</Text>
                             <Text style={_styles.descriptionText}>▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างวางบริเวณหน้าท้อง</Text>
                             <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางจมูกช้าๆ จนท้องป่องออกทำให้มือที่วางบนหน้าท้องรู้สึกได้ จนเกือบสุด แล้วค่อยๆสูดหายใจเข้าอีกพร้อมกับยกหน้าอกและหัวไหล่ขึ้นจนมือที่วางบนทรวงอกรู้สึกได้</Text>
                             <Text style={_styles.descriptionText}>▪ ค่อยๆ ผ่อนลมหายใจออกทางปากช้าๆ จนสุด พักสักครู่</Text>
                             <Text> </Text>
-                            <Text style={[_styles.descriptionText, {fontWeight: 'bold'}]}>กรณีใช้อุปกรณ์ Triflow</Text>
+                            <Text style={[_styles.descriptionText, { fontWeight: 'bold' }]}>กรณีใช้อุปกรณ์ Triflow</Text>
                             <Text style={_styles.descriptionText}>▪ ควบคุมการหายใจเข้าออก 1-2 ครั้ง </Text>
                             <Text style={_styles.descriptionText}>▪ ใช้ริมฝีปากอมอุปกรณ์ส่วนท่อของเครื่อง</Text>
                             <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางปากให้เต็มที่จนลูกบอลลอยขึ้น และให้ลอยคงไว้ให้นานที่สุด แล้วค่อยๆผ่านหายใจออก แล้วหายใจปกติ 3-4 ครั้ง</Text>
                             <Text style={_styles.descriptionText}>▪ ทำซ้ำจนครบ 10 ครั้ง หยุดพัก ควรทำทุก 1-2 ชั่วโมงขณะตื่น</Text>
-                        </View>) 
+                            <Image source={require('../../assets/images/activities/breathing-triflow.jpg')} style={_styles.image} />
+                        </View>)
                         : null}
                 </View>
 
@@ -315,8 +317,8 @@ export default class SLevel1 extends React.Component {
                 <View style={_styles.typeExerciseContainer}>
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'breathing' ? 'white' : common.primaryColor }
-                        color={this.state.type === 'breathing' ? common.primaryColor : 'white' }
+                        backgroundColor={this.state.type === 'breathing' ? 'white' : common.primaryColor}
+                        color={this.state.type === 'breathing' ? common.primaryColor : 'white'}
                         title='Physical'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -325,8 +327,8 @@ export default class SLevel1 extends React.Component {
                     />
                     <Button
                         raised
-                        backgroundColor={this.state.type === 'breathing' ? common.primaryColor : 'white' }
-                        color={this.state.type === 'breathing' ?  'white' : common.primaryColor }
+                        backgroundColor={this.state.type === 'breathing' ? common.primaryColor : 'white'}
+                        color={this.state.type === 'breathing' ? 'white' : common.primaryColor}
                         title='Breathing'
                         fontSize={18}
                         containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
@@ -356,12 +358,19 @@ const _styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
     },
+    imageContainer: {
+        flexDirection: 'row', 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
     descriptionContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
-        marginRight: 180
+        marginRight: 180,
+        marginTop: 15
     },
     typeExerciseContainer: {
         flexDirection: 'row',
