@@ -99,14 +99,68 @@ export default class Activity1AdvicesDetail extends React.Component {
 
     }
 
+    renderImage = (image) => {
+        console.log("render img", image)
+        switch (image) {
+            case "breathing":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/breathing-1.jpg')} style={_styles.image}></Image>
+                        <Image source={require('../../assets/images/activities/breathing-2.jpg')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "triflow":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/breathing-triflow.jpg')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "cough":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/cough-1.jpg')} style={_styles.image}></Image>
+                        <Image source={require('../../assets/images/activities/cough-2.jpg')} style={_styles.image}></Image>
+                        <Image source={require('../../assets/images/activities/cough-3.jpg')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "legsExercise":
+                return (
+                    <View>
+                        <View style={_styles.imageContainer}>
+                            <Image source={require('../../assets/images/activities/legs-1.jpg')} style={_styles.image}></Image>
+                            <Image source={require('../../assets/images/activities/legs-2.jpg')} style={_styles.image}></Image>
+                        </View>
+                        <View style={_styles.imageContainer}>
+                            <Image source={require('../../assets/images/activities/legs-3.jpg')} style={_styles.image}></Image>
+                            <Image source={require('../../assets/images/activities/legs-4.jpg')} style={_styles.image}></Image>
+                        </View>
+                    </View>
+                )
+            case "armsExercise":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/arms-1.jpg')} style={_styles.image}></Image>
+                        <Image source={require('../../assets/images/activities/arms-2.jpg')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "legsSwing":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/legs_swing.jpg')} style={_styles.image}></Image>
+                    </View>
+                )
+        }
+    }
+
     renderDescription = () => {
         return (
             <View>
-                {this.props.subtitle.map(function (d, idx) {
+                {this.props.subtitle.map((d, idx) => {
                     return (
-                        <View>
+                        <View key={idx}>
                             <Text style={_styles.text}>{d.description}</Text>
-                            {/*<Image source={require({d.image})} style={_styles.image}></Image>*/}
+                            {/*<Image source={require(d.image)} style={_styles.image}></Image>*/}
+                            {d.hasOwnProperty('image') ? this.renderImage(d.image) : null}
                         </View>
                     )
                 })}
@@ -141,6 +195,12 @@ const _styles = StyleSheet.create({
         padding: 20,
         paddingHorizontal: 50,
         margin: 10
+    },
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        flex: 1
     },
     image: {
         resizeMode: 'center',

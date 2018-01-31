@@ -11,61 +11,52 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  
-                        ▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างบริเวณหน้าท้อง ขณะหายใจเข้าท้องจะป่องจนรู้สึกได้ แต่มือบนทรวงอกจะไม่รู้สึก เพราะหน้าอกจะไม่ขยับหรือขยับน้อยมาก
-                        ▪ สูดลมหายใจเข้าทางจมูกช้าๆจนท้องป่องออก
-                        ▪ ค่อยๆ ผ่อนลมหายใจออกทางปากช้าๆ จนสุด แล้วพักสักครู่
-                        ▪ ทำจนรู้สึกผ่อนคลาย
-`,
-                image: '../../assets/images/food1.png'
-            },
-            {
-                description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing) ใช้หรือไม่ใช้อุปกรณ์ก็ได้ 
                         ▪ ใช้มือข้างหนึ่งวางบนทรวงอกและมืออีกข้างวางบริเวณหน้าท้อง 
                         ▪ สูดลมหายใจเข้าทางจมูกช้าๆจนท้องป่องออกจนเกือบสุด แล้วสูดหายใจเข้าอีกพร้อมกับยกหน้าอกและหัวไหล่ขึ้นจนมือที่วางบนทรวงอกรู้สึกได้
                         ▪ ค่อยๆ ผ่อนลมหายใจออกทางปากช้าๆ จนสุด แล้วพักสักครู่
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'breathing',
+               
             },
             {
                 description: `     
-                    3. บริหารปอดโดยใช้อุปกรณ์ (Tri-flow)  
+                    2. บริหารปอดกรณีใช้อุปกรณ์ Triflow 
                         ▪ ควรอยู่ในท่านั่ง หากนอนบนเตียงให้ไขเตียงสูงมากกว่า 45 องศา
                         ▪ ควบคุมการหายใจเข้าออก 1-2 ครั้ง 
                         ▪ ใช้ริมฝีปากอมอุปกรณ์ส่วนท่อของเครื่อง
                         ▪ สูดลมหายใจเข้าทางปากให้เต็มที่จนลูกบอลลอยขึ้น และให้ลอยคงไว้ให้นานที่สุด แล้วค่อยๆผ่านหายใจออก แล้วหายใจปกติ 3-4 ครั้ง
                         ▪ ทำซ้ำจนครบ 10 ครั้ง หยุดพัก ควรทำทุก 1-2 ชั่วโมงขณะตื่น
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'triflow'
             },
             {
                 description: `     
-                    4. ไออย่างมีประสิทธิภาพ (Effective cough)  
+                    3. ไออย่างมีประสิทธิภาพ (Effective cough)  
                         ▪ ใช้มือทั้งสอง หมอน หรือผ้าห่มประคองแผลผ่าตัดที่หน้าอก 
                         ▪ อยู่ในท่านั่ง โน้มตัวมาด้านหน้าเล็กน้อย
                         ▪ สูดลมหายใจเข้าให้ลึกพอควร แล้วพยายามไอเพื่อขับเสมหะออก อาจรู้สึกเจ็บแผลพอสมควรขณะไอ
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'cough'
             },
             {
                 description: `     
-                    5. บริหารขา-ข้อเท้า 
+                    4. บริหารขา-ข้อเท้า 
                         ▪ ยืดขาตรง ยกขาสูงประมาณ 30 องศาโดยใช้หมอนรองให้ปลายเท้าพ้นหมอน 
                         ▪ กระดกเท้าเข้าหาลำตัวนับ 1,2 แล้วเหยียดเท้าออกให้รู้สึกเกร็งบริเวณน่อง นับเป็น 1 ครั้ง ทำจนครบ 20 ครั้ง ทำทีละข้างหรือพร้อมกันก็ได้
                         ▪ หมุนข้อเท้าตามเข็มนาฬิกา 10 ครั้ง หมุนทวนเข็มนาฬิกา 10 ครั้ง ทั้งสองข้าง
                         ▪ งอข้อเข่าและสะโพก สลับกับเหยียดออกทีละข้างๆละ 5 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    6. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  
                         ▪ กำมือสลับแบมือ 10 ครั้ง 
                         ▪ เหยียดแขนไปด้านหน้า งอศอกสลับกับเหยียดศอก 10 ครั้ง
                         ▪ เหยียดแขนตรง ยกเหนือศีรษะทีละข้างๆละ 5 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             }
         ]
     },
@@ -75,52 +66,39 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
 `,
-                image: '../../assets/images/food1.png'
+                image: 'breathing'
             },
             {
                 description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    3. บริหารปอดโดยใช้อุปกรณ์ (Tri-flow)  
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    4. ไออย่างมีประสิทธิภาพ (Effective cough)  
+                    2. ไออย่างมีประสิทธิภาพ (Effective cough)  
 
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'cough'
             },
             {
                 description: `     
-                    5. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    6. แกว่งเท้าข้างละ 20 ครั้ง
+                    4. แกว่งเท้าข้างละ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsSwing'
             },
             {
                 description: `     
-                    7. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             },
             {
                 description: `     
-                    8. นั่งเก้าอี้ข้างเตียงเมื่อรับประทานอาหารทุกมื้อ หรืออย่างน้อย 1-2 ครั้ง/วัน
+                    6. นั่งเก้าอี้ข้างเตียงเมื่อรับประทานอาหารทุกมื้อ หรืออย่างน้อย 1-2 ครั้ง/วัน และทำกิจวัตรประจำวันด้วยตนเอง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
             },
         ]
     },
@@ -130,51 +108,45 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
 `,
-                image: '../../assets/images/food1.png'
+                image: 'breathing'
             },
             {
                 description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+                    2. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+                    3. แกว่งเท้าข้างละ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsSwing'
             },
             {
                 description: `     
-                    4. แกว่งเท้าข้างละ 20 ครั้ง
+                    4. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             },
             {
                 description: `     
-                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+                    5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                
             },
             {
                 description: `     
-                    6. ยืนย่ำอยู่กับที่ 20 ครั้ง
+                    6. เดินรอบเตียง 15-20 เมตร ไป-กลับช้าๆ
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                
             },
             {
                 description: `     
-                    7. เดินรอบเตียง 15-20 เมตร ไป-กลับช้าๆ
+                    7. นั่งเก้าอี้ข้างเตียงเมื่อรับประทานอาหารทุกมื้อ หรืออย่างน้อย 1-2 ครั้ง/วัน และทำกิจวัตรประจำวันด้วยตนเอง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    8. ลุกนั่งเก้าอี้อย่างน้อยวันละ 2 ครั้ง
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                
             },
         ]
     },
@@ -184,51 +156,45 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
 `,
-                image: '../../assets/images/food1.png'
+                image: 'breathing'
             },
             {
                 description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+                    2. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+                    3. แกว่งเท้าข้างละ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsSwing'
             },
             {
                 description: `     
-                    4. แกว่งเท้าข้างละ 20 ครั้ง
+                    4. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             },
             {
                 description: `     
-                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+                    5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+            
             },
             {
                 description: `     
-                    6. ยืนย่ำอยู่กับที่ 30 ครั้ง
+                    6. เขย่งเท้าขึ้นลง 10 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
             {
                 description: `     
-                    7. เขย่งเท้าขึ้นลง 10 ครั้ง
+                    7. เดิน 50-100 เมตร วันละ 2-3 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    8. เดิน 50-100 เมตร วันละ 2-3 ครั้ง
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
         ]
     },
@@ -238,57 +204,51 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
 `,
-                image: '../../assets/images/food1.png'
+                image: 'breathing'
             },
             {
                 description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+                    2. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+                    3. แกว่งเท้าข้างละ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsSwing'
             },
             {
                 description: `     
-                    4. แกว่งเท้าข้างละ 20 ครั้ง
+                    4. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             },
             {
                 description: `     
-                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+                    5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+              
             },
             {
                 description: `     
-                    6. ยืนย่ำอยู่กับที่ 30 ครั้ง
+                    6. เขย่งเท้าขึ้นลง 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                
             },
             {
                 description: `     
-                    7. เขย่งเท้าขึ้นลง 20 ครั้ง
+                    7. เดิน 100-200 เมตร วันละ 3 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    8. เดิน 100-200 เมตร วันละ 3 ครั้ง
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
             {
                 description: `     
                     8. ฝึกขึ้นลงบันได 3 ขั้น
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+              
             },
         ]
     },
@@ -298,63 +258,51 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
 `,
-                image: '../../assets/images/food1.png'
+                image: 'breathing'
             },
             {
                 description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+                    2. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+                    3. แกว่งเท้าข้างละ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsSwing'
             },
             {
                 description: `     
-                    4. แกว่งเท้าข้างละ 20 ครั้ง
+                    4. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             },
             {
                 description: `     
-                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+                    5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                
             },
             {
                 description: `     
-                    6. กางข้อศอก ยกไหล่ หมุนแขน
+                    6. เขย่งเท้าขึ้นลง 20-30 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
             {
                 description: `     
-                    7. ยืนย่ำอยู่กับที่ 2 นาที
+                    7. เดิน 200-500 เมตร วันละ 2-3 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
             {
                 description: `     
-                    8. เขย่งเท้าขึ้นลงนาน 2 นาที
+                    8. เดินขึ้นลงบันได 1 ชั้นแบบพักขา
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    9. เดิน 200-500 เมตร วันละ 2-3 ครั้ง
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-            {
-                description: `     
-                    10. เดินขึ้นลงบันได 1 ชั้นแบบพักขา
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
         ]
     },
@@ -364,57 +312,51 @@ const list = [
         subtitle: [
             {
                 description: `     
-                    1. บริหารปอดด้วยการฝึกควบคุมการหายใจเข้า-ออก (Breathing control)  เหมือนกับขั้นที่ 1
+                    1. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
 `,
-                image: '../../assets/images/food1.png'
+                image: 'breathing'
             },
             {
                 description: `     
-                    2. บริหารปอดด้วยการหายใจเข้าออกลึกๆ (Deep breathing)  เหมือนกับขั้นที่ 1
+                    2. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsExercise'
             },
             {
                 description: `     
-                    3. บริหารขา-ข้อเท้า เหมือนกับขั้นที่ 1
+                    3. แกว่งเท้าข้างละ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'legsSwing'
             },
             {
                 description: `     
-                    4. แกว่งเท้าข้างละ 20 ครั้ง
+                    4. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                image: 'armsExercise'
             },
             {
                 description: `     
-                    5. บริหารแขน ข้อมือ ข้อศอก หัวไหล่  เหมือนกับขั้นที่ 1
+                    5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+                
             },
             {
                 description: `     
-                    6. กางข้อศอก ยกไหล่ หมุนแขน เหมือนกับขั้นที่ 6
+                    6. เดิน 10-15 นาที หรือ 100-120 เมตร
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+              
             },
             {
                 description: `     
-                    7. เดิน 10-15 นาที หรือ 100-120 เมตร
+                    7. เดินขึ้นลงบันได 10-15 ขั้นแบบสลับขา ถ้าอาการคงที่ให้ขึ้นบันไดแบบพักขา
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
             {
                 description: `     
-                    8. เดินขึ้นลงบันได 10-15 ขั้นแบบสลับขา ถ้าอาการคงที่ให้ขึ้นบันไดแบบพักขา
+                    8. เดินขึ้นบันได 1-2 ชั้นแบบสลับขา
 `,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
-            },
-                        {
-                description: `     
-                    9. เดินขึ้นบันได 1-2 ชั้นแบบสลับขา
-`,
-                image: 'https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/flip.jpg'
+               
             },
         ]
     },
@@ -431,31 +373,20 @@ const list = [
     },
     {
         level: 12,
-        title: 'การหายใจเข้าออกยาวๆ ลึกๆ (Deep-breathing exercises)',
-        subtitle: `     
-                    1. ให้ผู้ป่วยนั่งตัวตรงที่ข้างเตียง หรือช่วยให้อยู่ในท่า semi-Fowler’s position 
-                    2. ใช้มือทั้งสองข้างจับที่ท้องจะได้รู้สึกเวลาหน้าอกขยายจะบ่งชี้ว่าปอดขยายตัว
-                   3. ให้ผู้ป่วยหายใจเข้าทางจมูกจนรู้สึกว่าหน้าท้องขยาย
-                   4. ให้ผู้ป่วยหายใจทางปากขณะกล้ามเนื้อหน้าหน้าท้องหดตัว
-                   5. ทำแบบนี้ซ้ำทุกชั่วโมงในวันแรกหลังผ่าตัด 
-`
-    },
-    {
-        level: 13,
         title: 'การใช้สไปโรมิเตอร์ (Incentive spirometer) ',
         subtitle: `     
                     เพื่อขยายถุงลมในปอดหลังผ่าตัด ให้เป่าถึงระดับที่ตั้งไว้ให้ปอดขยายตัว วิธีนี้ช่วยให้ลมเข้าไปในถุงลม และช่วยทำให้กล้ามเนื้อที่ช่วยในการหายใจแข็งแรง ควรฝึกใช้เครื่องช่วยหายใจทั้งก่อนและหลังผ่า ส่วนมากให้ผู้ป่วยทำ 5-10 ครั้งต่อชั่วโมงหลังผ่าตัด 
 `
     },
     {
-        level: 14,
+        level: 13,
         title: 'การออกกำลังกายแขน-ขา (Extremity exercises) ',
         subtitle: `     
                     ช่วยป้องกันปัญหาเกี่ยวกับกรไหลเวียนโลหิต เลือดดำไหลกลับสู่หัวใจดีขึ้น ให้ผู้ป่วยงอและเหยียดข้อต่างๆทุกข้อ โดยเฉพาะข้อสะโพก ข้อเข่า ข้อเท้าขณะนอนราบหลังและขาอยู่แนวราบเหยียดตรงเท้าต้องหมุนเป็นวงกลมขณะนอนหรือนั่ง 
 `
     },
     {
-        level: 15,
+        level: 14,
         title: 'การพลิกตัว (Turning exercises)',
         subtitle: `     
                     หัดพลิกตัวจากด้านหนึ่งไปอีกด้าน โดยใช้ไม้กั้นเตียงช่วยในการพลิกตัว ช่วยป้องกันการคั่งของเลือดดำ หลอดเลือดดำอุดตัน แผลกดทับ และอาการแทรกซ้อนในระบบทางเดินหายใจ ควรพลิกตัวและเปลี่ยนท่านอนทุก 1-2 ชั่วโมง ในระยะหลังผ่าตัด 
