@@ -220,7 +220,7 @@ export default class SLevel1 extends React.Component {
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                    {/*<Image source={require('../../assets/images/daily1.png')} style={_styles.image} />*/}
                 </View>
 
                 {/*Check if this is the final activity that patient can do*/}
