@@ -26,10 +26,10 @@ class Progress extends React.Component {
             legendRecentActivities: {
                 enabled: true,
                 textColor: processColor('black'),
-                textSize: 12,
+                textSize: 16,
                 position: 'BELOW_CHART_RIGHT',
                 form: 'SQUARE',
-                formSize: 14,
+                formSize: 15,
                 xEntrySpace: 10,
                 yEntrySpace: 5,
                 formToTextSpace: 5,
@@ -51,10 +51,10 @@ class Progress extends React.Component {
             legendActivities: {
                 enabled: true,
                 textColor: processColor('black'),
-                textSize: 12,
+                textSize: 16,
                 position: 'BELOW_CHART_RIGHT',
                 form: 'SQUARE',
-                formSize: 14,
+                formSize: 15,
                 xEntrySpace: 10,
                 yEntrySpace: 5,
                 formToTextSpace: 5,
@@ -279,7 +279,7 @@ class Progress extends React.Component {
                 xAxisRecentActivities: {
                     $set: {
                         valueFormatter: xAxis,
-                        textSize: 14,
+                        textSize: 15,
                         avoidFirstLastClipping: true,
                         position: 'BOTTOM',
                         granularityEnabled: true,
@@ -290,7 +290,8 @@ class Progress extends React.Component {
                     $set: {
                         left: {
                             axisMaximum: 7,
-                            axisMinimum: 0
+                            axisMinimum: 0,
+                            textSize: 15,
                         },
                         right: {
                             enabled: false
@@ -361,7 +362,7 @@ class Progress extends React.Component {
                     xAxisActivities: {
                         $set: {
                             valueFormatter: xAxis,
-                            textSize: 14,
+                            textSize: 15,
                             avoidFirstLastClipping: true,
                             position: 'BOTTOM',
                             granularityEnabled: true,
@@ -372,7 +373,8 @@ class Progress extends React.Component {
                         $set: {
                             left: {
                                 axisMaximum: 7,
-                                axisMinimum: 0
+                                axisMinimum: 0,
+                                textSize: 15,
                             },
                             right: {
                                 enabled: false
@@ -405,7 +407,7 @@ class Progress extends React.Component {
                     xAxisActivities: {
                         $set: {
                             valueFormatter: xAxis,
-                            textSize: 14,
+                            textSize: 15,
                             avoidFirstLastClipping: true,
                             position: 'BOTTOM',
                             granularityEnabled: true,
@@ -416,7 +418,8 @@ class Progress extends React.Component {
                         $set: {
                             left: {
                                 axisMinimum: 0,
-                                axisMaximum: yAxisMaximum
+                                axisMaximum: yAxisMaximum,
+                                textSize: 15,
                             },
                             right: {
                                 enabled: false
