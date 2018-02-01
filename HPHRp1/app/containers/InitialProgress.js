@@ -146,7 +146,7 @@ const styles = {
         borderWidth: 3,
         borderRadius: 10,
         borderColor: common.primaryColor,
-
+        
     },
     text: {
         fontSize: 20,
