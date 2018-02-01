@@ -11,7 +11,7 @@ import AdvicesButton from '../components/AdvicesButton'
 import ProgressButton from '../components/ProgressButton'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
-import { last } from 'lodash'
+import { last, isEmpty } from 'lodash'
 
 let scene
 
@@ -20,7 +20,7 @@ class Home extends React.Component {
         super()
         this.state = {
             test: false,
-           
+
         }
     }
 
@@ -106,13 +106,17 @@ class Home extends React.Component {
         let hr = (new Date()).getHours()
         //If it's day, notify patient
         if (hr >= 6 && hr <= 20) {
-            let timeOfLastActivity = last(this.props.default.activity).results.timeStart
-            let timeNow = moment()
-            let duration = moment.duration(timeNow.diff(timeOfLastActivity)).asHours()
-            console.log("duration between last activity = ", duration)
-            if (duration >= 6) {
-                PushNotification.localNotification(notifications.reminderForNotDoingActivityYet)
+            if (!isEmpty(this.props.default.activity)) {
+                console.log("if ", this.props.default.activity)
+                let timeOfLastActivity = last(this.props.default.activity).results.timeStart
+                let timeNow = moment()
+                let duration = moment.duration(timeNow.diff(timeOfLastActivity)).asHours()
+                console.log("duration between last activity = ", duration)
+                if (duration >= 6) {
+                    PushNotification.localNotification(notifications.reminderForNotDoingActivityYet)
+                }
             }
+
         }
         //If it's night, does nothing
         else {
@@ -153,7 +157,7 @@ class Home extends React.Component {
                 <ActivityButton onActivityPress={this.onActivityPress} />
                 <ProgressButton onProgressPress={this.onProgressPress} />
             </View>
-  
+
         )
     }
 }
