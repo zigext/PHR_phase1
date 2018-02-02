@@ -4,7 +4,8 @@ import * as types from '../actions/actionTypes'
 const initialState = {
     isLoggedIn: false,
     appId: 'HPHR',
-    activity: []
+    activity: [],
+    user: {}
 }
 
 export default function UserReducer(state = initialState, action = {}) {
@@ -16,11 +17,11 @@ export default function UserReducer(state = initialState, action = {}) {
                 isLoggedIn: !state.isLoggedIn,
                 user: action.payload
             }
-        case types.LOG_OUT:
-            return {
-                ...state,
-                isLoggedIn: !state.isLoggedIn
-            }
+        // case types.LOG_OUT:
+        //     return {
+        //         ...state,
+        //         isLoggedIn: !state.isLoggedIn
+        //     }
         case types.GET_PROFILE:
             return {
                 ...state,
