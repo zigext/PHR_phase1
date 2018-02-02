@@ -109,9 +109,54 @@ export default class ProgressResultList extends React.Component {
     }
 
     checkPreActivity = (preActivity) => {
-        let str
-        if(preActivity.hasOwnProperty('highGlucose') && preActivity.highGlucose === true)
-            str = 'น้ำตาลในเลือดสูง'
+        let str = ''
+        if (preActivity.sbpLowerThanNormal === true)
+            str = str + 'SBP ต่ำลงมากกว่าปกติของผู้ป่วยมากกว่า 20 mmHg'
+        if (preActivity.highSbp === true)
+            str = str + ', ' + 'SBP ≥ 180 mmHG'
+        if (preActivity.highDbp === true)
+            str = str + ', ' + 'DBP ≥ 110 mmHG'
+        if (preActivity.st === true)
+            str = str + ', ' + 'ST ≥ 120 ครั้ง/นาที'
+        if (preActivity.pvc === true)
+            str = str + ', ' + 'PVC ชนิด bigeminy หรือมาติดกันมากกว่า 2-3 ตัว'
+        if (preActivity.af === true)
+            str = str + ', ' + 'AF ≥ 100 ครั้ง/นาที'
+        if (preActivity.svt === true)
+            str = str + ', ' + 'SVT'
+        if (preActivity.bradyCardia === true)
+            str = str + ', ' + 'Bradychardia ที่ต้องใช้ pacemaker VT หรือ VF'
+        if (preActivity.stSegment === true)
+            str = str + ', ' + 'มีความผิดปกติของ ST-segment'
+        if (preActivity.rr === true)
+            str = str + ', ' + 'อัตราการหายใจ ≥ 35 ครั้ง/นาที'
+        if (preActivity.spO2 === true)
+            str = str + ', ' + 'SpO2 ≤ 93%'
+        if (preActivity.paO2 === true)
+            str = str + ', ' + 'PaO2 ≤ 60 mmHg'
+        if (preActivity.agitation === true)
+            str = str + ', ' + 'กระสับกระส่าย'
+        if (preActivity.dyspnea === true)
+            str = str + ', ' + 'หอบเหนื่อย'
+        if (preActivity.abnormalGlucose === true)
+            str = str + ', ' + 'น้ำตาลในเลือดผิดปกติ/ไม่เป็นไปตามแผนการรักษา (300 mg% หรือ < 80 mg%)'
+        if (preActivity.anemia === true)
+            str = str + ', ' + 'ใบหน้าซีด หรือ Hb ≤ 10 gm%'
+        if (preActivity.fatigue === true)
+            str = str + ', ' + 'เหนื่อยล้า อ่อนเพลีย'
+        if (preActivity.nausea === true)
+            str = str + ', ' + 'คลื่นไส้'
+        if (preActivity.chestPain === true)
+            str = str + ', ' + 'เจ็บแน่นหน้าอก'
+        if (preActivity.dizziness === true)
+            str = str + ', ' + 'หน้ามืด มึนงง'
+        if (preActivity.weakMuscle === true)
+            str = str + ', ' + 'กล้ามเนื้ออ่อนแรง'
+        if (preActivity.pain === true)
+            str = str + ', ' + 'ปวดแผล (Pain score ≥ 5)'
+        if(str === '')  str = 'ไม่มี'
+
+        return str
     }
 
     render() {
@@ -133,11 +178,12 @@ export default class ProgressResultList extends React.Component {
 
                 </ScrollView>
                 {this.state.isOpen ? (
-                    <Modal style={[styles.modal, styles.modal4]} position={"center"} ref={"modal"} backdrop={true} >
+                    <Modal style={[styles.modal, styles.modalSize]}  ref={"modal"} backdrop={true} >
                         <ScrollView>
                             <View style={styles.modalContainer}>
                                 <Text style={styles.modalTopic}>ผลการทำกิจกรรม</Text>
-                                <Text style={styles.modalText}>วันที่: {this.formatMoment(this.state.modalData.date, "DD/MM/YYYY")} เวลา: {this.formatMoment(this.state.timeStart, "kk:mm")}</Text>
+                                <Text style={styles.modalText}>วันที่: {this.formatMoment(this.state.modalData.date, "DD/MM/YYYY")}</Text>
+                                 <Text style={styles.modalText}>เวลา: {this.formatMoment(this.state.timeStart, "kk:mm")}</Text>
                                 <Text style={styles.modalText}>ระดับของกิจกรรมสูงสุดที่ทำได้: {this.state.modalData.result.maxLevel}  {this.state.modalData.result.levelTitle}</Text>
                                 <Text style={styles.modalText}>ระดับของกิจกรรมต่อไป: {this.state.modalData.result.nextLevel}</Text>
                                 <Text style={styles.modalText}>กิจกรรมทางกายที่ทำสำเร็จ: {this.state.modalData.result.physicalExercise ? this.checkPhysicalExercise(this.state.modalData.result.physicalExercise) : 'ไม่มี'}</Text>
@@ -145,7 +191,7 @@ export default class ProgressResultList extends React.Component {
                                 <Text style={styles.modalTopic}>ผลแบบทดสอบก่อนทำกิจกรรม</Text>
                                 <Text style={styles.modalText}>อัตราการเต้นหัวใจ: {this.state.modalData.preActivity.preHr} bpm</Text>
                                 <Text style={styles.modalText}>ความดันเลือด: {this.state.modalData.preActivity.preBp}</Text>
-                                <Text style={styles.modalText}>อาการที่พบ: {this.checkPreActivity(this.state.modalData.preActivity)}</Text>
+                                <Text style={styles.modalText}>ความผิดปกติที่พบ: {this.checkPreActivity(this.state.modalData.preActivity)}</Text>
                                 <Text style={styles.modalText}>สรุป: {this.state.modalData.preActivity.passed ? 'ผ่าน' : 'ไม่ผ่าน'}</Text>
                                 <Text style={styles.modalTopic}>ผลแบบทดสอบหลังทำกิจกรรม</Text>
                                 <Text style={styles.modalText}>อัตราการเต้นหัวใจ: {this.state.modalData.postActivity.postHr} bpm</Text>
@@ -187,8 +233,9 @@ const styles = {
         marginVertical: 12
     },
     modalText: {
-        fontSize: 17,
+        fontSize: 18,
         color: common.grey,
+        lineHeight: 30
     },
     item: {
         padding: 10,
@@ -199,8 +246,8 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center'
     },
-    modal4: {
-        height: 400,
-        width: 500
+    modalSize: {
+        height: 500,
+        width: 650
     },
 }
