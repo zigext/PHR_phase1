@@ -8,8 +8,6 @@ import ActionButton from 'react-native-action-button'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { logIn } from '../actions/userAction'
-import Timer from '../components/Timer'
-import Stepper from '../components/Stepper'
 
 class LogIn extends React.Component {
     constructor() {
@@ -24,7 +22,7 @@ class LogIn extends React.Component {
             }
         })
         const currentUser = firebase.auth().currentUser
-        let auth = this.props.default.isLoggedIn
+        let auth = this.props.userReducer.isLoggedIn
         if (auth) {
             Actions.drawer()
         }

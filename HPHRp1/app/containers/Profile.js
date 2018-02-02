@@ -25,7 +25,7 @@ class Profile extends React.Component {
     componentDidMount() {
         Orientation.lockToLandscape()
         this.fetchProfile()
-        // this.ref = firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`)
+        // this.ref = firebase.database().ref(`profile/${this.props.userReducer.user.uid}_${this.props.userReducer.appId}`)
         // this.ref.on('value', this.handleProfileUpdate)
     }
 
@@ -42,7 +42,7 @@ class Profile extends React.Component {
     // }
 
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())

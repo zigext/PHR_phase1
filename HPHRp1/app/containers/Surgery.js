@@ -40,7 +40,7 @@ class Surgery extends React.Component {
             this.handleFirstConnectivityChange
         )
         // this.getSurgeries()
-        // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.default.user.uid}`)
+        // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.userReducer.user.uid}`)
         // this.ref.on('value', this.handleSurgeryUpdate)
     }
     handleFirstConnectivityChange = (isConnected) => {
@@ -66,7 +66,7 @@ class Surgery extends React.Component {
     }
 
     fetchSurgeries = async () => {
-        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846` //userid=${this.props.default.user.uid} //userid=${this.props.UserReducer.user.uid}
+        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846` //userid=${this.props.userReducer.user.uid} //userid=${this.props.UserReducer.user.uid}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
@@ -103,7 +103,7 @@ class Surgery extends React.Component {
 
     onPress = (i) => {
         let obj = this.state.surgeryArray[i]
-        Actions.surgeryDetail({ surgery: obj.information, uid: this.props.default.user.uid })
+        Actions.surgeryDetail({ surgery: obj.information, uid: this.props.userReducer.user.uid })
     }
 
     onPressActionButton = () => {

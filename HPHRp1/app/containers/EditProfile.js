@@ -33,7 +33,7 @@ class EditProfile extends React.Component {
         // this.editProfile(newProfile, callback)
 
         // console.log('Upload complete: ', uploadedFile)
-        // firebase.database().ref(`profile/${this.props.default.user.uid}_${this.props.default.appId}`).update(newProfile).
+        // firebase.database().ref(`profile/${this.props.userReducer.user.uid}_${this.props.userReducer.appId}`).update(newProfile).
         //     then((data) => {
         //         console.log("edit profile in database success")
         //         callback(null)
@@ -55,8 +55,8 @@ class EditProfile extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.default.user.uid
-                appid: 'PHRapp', //this.props.defalt.appId
+                userid: '1416382941765846', //this.props.userReducer.user.uid
+                appid: 'PHRapp', //this.props.userReducer.appId
                 profile: newProfile
             })
         })

@@ -114,7 +114,7 @@ class PostActivity extends React.Component {
         //     callback(true, null)
         // else
         //     callback(false, null)
-        const path = `${SERVER_IP}${PIN_CODE}?pin_code=${pin}&appid=PHRapp` //pin_code=${pin}&appid=${this.props.default.appId}  //appid=${this.props.UserReducer.appId}
+        const path = `${SERVER_IP}${PIN_CODE}?pin_code=${pin}&appid=PHRapp` //pin_code=${pin}&appid=${this.props.userReducer.appId}  //appid=${this.props.UserReducer.appId}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
