@@ -267,7 +267,7 @@ export default class SLevel11 extends React.Component {
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/tiptoe.png')} style={_styles.image} />
                 </View>
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
