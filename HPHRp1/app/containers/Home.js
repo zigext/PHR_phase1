@@ -67,48 +67,69 @@ class Home extends React.Component {
 
     //Set notifications for patients with extra conditions
     componentWillReceiveProps(nextProps) {
-        console.log("receive props", this.props.default.user.profile)
+        console.log("receive props", this.props.userReducer.user.profile)
         this.setNotificationsByConditions()
     }
 
     setNotifications() {
+        console.log("set notifications")
+        console.log("dailyActivityReminder = ", notifications.dailyActivityReminder.hasOwnProperty("date"))
+        console.log("dailyImportanceReminder = ", notifications.dailyImportanceReminder.hasOwnProperty("date"))
+        console.log("reminderForDailyLife = ", notifications.reminderForDailyLife.hasOwnProperty("date"))
         //Schedule notifications for every patients
-        PushNotification.localNotificationSchedule(notifications.dailyActivityReminder)
-        PushNotification.localNotificationSchedule(notifications.dailyImportanceReminder)
-        PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
+
+        //if it's localNotificationSchedule
+        //Bugs when log out then log in again, it cannot getTime from undefined 
+        //property date is missing from notifications
+        if (notifications.dailyActivityReminder.hasOwnProperty("date") || notifications.dailyImportanceReminder.hasOwnProperty("date") || notifications.reminderForDailyLife.hasOwnProperty("date")) {
+            PushNotification.localNotificationSchedule(notifications.dailyActivityReminder)
+            PushNotification.localNotificationSchedule(notifications.dailyImportanceReminder)
+            PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
+        }
+
+        //But if it's localNotification, there will be no bugs
+        //has to remove repeatType and date property from notifications
+        // PushNotification.localNotification(notifications.dailyActivityReminder)
+        // PushNotification.localNotification(notifications.dailyImportanceReminder)
+        // PushNotification.localNotification(notifications.reminderForDailyLife)
+
     }
 
     setNotificationsByConditions() {
-        let { is_smoking, nyha_class, ejection_fraction, medical_condition, surgery_sapheneous_vein, level } = this.props.default.user.profile
-        //Smoking
-        //What's about lung disease??????????????????
-        if (is_smoking === 'true')
-            PushNotification.localNotificationSchedule(notifications.dailyReminderForBreathing)
-        //Use sapheneous veins from leg
-        if (surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4')
-            PushNotification.localNotificationSchedule(notifications.reminderForSapheneousVeinPatient)
-        //High risk
-        //What's about EF??????????????????
-        if (nyha_class >= 3 || ejection_fraction === '1')
-            PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
-        //Reminder for daily life's activity
-        // if(level >= 2)
-        //     PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
-        //Set notifications when patient reaches goal level at Activity scene
-        if (level === '4')
-            PushNotification.localNotification(notifications.reachLevel4)
-        else if (level === '6')
-            PushNotification.localNotification(notifications.reachLevel6)
-        else if (level === '7')
-            PushNotification.localNotification(notifications.reachLevel7)
+        // PushNotification.localNotificationSchedule(notifications.dailyImportanceReminder)
+        if (this.props.userReducer.user.hasOwnProperty("profile")) {
+            let { is_smoking, nyha_class, ejection_fraction, medical_condition, surgery_sapheneous_vein, level } = this.props.userReducer.user.profile
+            //Smoking
+            //What's about lung disease??????????????????
+            if (is_smoking === 'true')
+                PushNotification.localNotificationSchedule(notifications.dailyReminderForBreathing)
+            //Use sapheneous veins from leg
+            if (surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4')
+                PushNotification.localNotificationSchedule(notifications.reminderForSapheneousVeinPatient)
+            //High risk
+            //What's about EF??????????????????
+            if (nyha_class >= 3 || ejection_fraction === '1')
+                PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
+            //Reminder for daily life's activity
+            // if(level >= 2)
+            //     PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)
+            //Set notifications when patient reaches goal level at Activity scene
+            if (level === '4')
+                PushNotification.localNotification(notifications.reachLevel4)
+            else if (level === '6')
+                PushNotification.localNotification(notifications.reachLevel6)
+            else if (level === '7')
+                PushNotification.localNotification(notifications.reachLevel7)
+        }
+
 
         //If patient hasn't done any activity in the last 6 hours
         let hr = (new Date()).getHours()
         //If it's day, notify patient
         if (hr >= 6 && hr <= 20) {
-            if (!isEmpty(this.props.default.activity)) {
-                console.log("if ", this.props.default.activity)
-                let timeOfLastActivity = last(this.props.default.activity).results.timeStart
+            if (!isEmpty(this.props.userReducer.activity)) {
+                console.log("if ", this.props.userReducer.activity)
+                let timeOfLastActivity = last(this.props.userReducer.activity).results.timeStart
                 let timeNow = moment()
                 let duration = moment.duration(timeNow.diff(timeOfLastActivity)).asHours()
                 console.log("duration between last activity = ", duration)
