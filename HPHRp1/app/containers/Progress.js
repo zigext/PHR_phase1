@@ -218,7 +218,7 @@ class Progress extends React.Component {
     }
 
     fetchActivityResult = async (startDate, endDate) => {
-        const path = `${SERVER_IP}${ACTIVITY_RESULT_1}?userid=1416382941765846&appid=PHRapp&start_date=${startDate}&end_date=${endDate}` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}  
+        const path = `${SERVER_IP}${ACTIVITY_RESULT_1}?userid=1416382941765846&appid=PHRapp&start_date=${startDate}&end_date=${endDate}` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
@@ -462,8 +462,8 @@ const mapStateToProps = (state) => {
     console.log("mapStateToProps in progress ", state)
     // return state
     return {
-        profile: state.default.user.profile,
-        activity: state.default.activity
+        profile: state.userReducer.user.profile,
+        activity: state.userReducer.activity
     }
 
 }

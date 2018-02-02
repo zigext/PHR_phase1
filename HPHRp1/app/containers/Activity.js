@@ -52,7 +52,7 @@ class Activity extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("receive props in Activity", this.props.default.user.profile)
+        console.log("receive props in Activity", this.props.userReducer.user.profile)
     }
 
     componentWillUnmount() {
@@ -98,7 +98,7 @@ class Activity extends React.Component {
     }
 
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.default.user.uid}&appid=${this.props.default.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
@@ -127,7 +127,7 @@ class Activity extends React.Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userid: '1416382941765846', //this.props.default.user.uid
+                    userid: '1416382941765846', //this.props.userReducer.user.uid
                     appid: 'PHRapp', //this.props.defalt.appId
                     profile: { level: this.state.result.nextLevel.toString() }
                 })
@@ -174,7 +174,7 @@ class Activity extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.default.user.uid
+                userid: '1416382941765846', //this.props.userReducer.user.uid
                 appid: 'PHRapp', //this.props.defalt.appId
                 results: results,
                 date: date,
@@ -231,7 +231,7 @@ class Activity extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.default.user.uid
+                userid: '1416382941765846', //this.props.userReducer.user.uid
                 appid: 'PHRapp', //this.props.defalt.appId
                 results: obj,
                 date: date,
