@@ -44,7 +44,6 @@ export default class RecentLevelChart extends React.Component {
                         borderColor={processColor('teal')}
                         borderWidth={1}
                         drawBorders={true}
-
                         touchEnabled={true}
                         dragEnabled={true}
                         scaleEnabled={true}
@@ -52,9 +51,9 @@ export default class RecentLevelChart extends React.Component {
                         scaleYEnabled={true}
                         pinchZoom={true}
                         doubleTapToZoomEnabled={true}
-
                         dragDecelerationEnabled={false}
                         dragDecelerationFrictionCoef={0.99}
+                        noDataText="ไม่มีข้อมูล"
 
                         keepPositionOnRotation={false}
                         onSelect={this.handleSelect.bind(this)}

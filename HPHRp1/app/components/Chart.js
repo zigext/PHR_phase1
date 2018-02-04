@@ -44,6 +44,7 @@ export default class Chart extends React.Component {
                 drawHighlightArrow={true}
                 onSelect={this.handleSelect.bind(this)}
                 onChange={(event) => console.log(event.nativeEvent)}
+                noDataText="ไม่มีข้อมูล"
             />
         )
     }
@@ -62,7 +63,6 @@ export default class Chart extends React.Component {
                 borderColor={processColor('teal')}
                 borderWidth={1}
                 drawBorders={true}
-
                 touchEnabled={true}
                 dragEnabled={true}
                 scaleEnabled={true}
@@ -70,13 +70,12 @@ export default class Chart extends React.Component {
                 scaleYEnabled={true}
                 pinchZoom={true}
                 doubleTapToZoomEnabled={true}
-
                 dragDecelerationEnabled={true}
                 dragDecelerationFrictionCoef={0.99}
-
                 keepPositionOnRotation={false}
                 onSelect={this.handleSelect.bind(this)}
                 onChange={(event) => console.log(event.nativeEvent)}
+                noDataText="ไม่มีข้อมูล"
             />
         )
     }
