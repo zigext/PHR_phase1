@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, Image, Alert, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Alert, ScrollView, Dimensions } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
@@ -8,6 +8,10 @@ import styles from '../styles/index'
 import common from '../styles/common'
 import Sound from 'react-native-sound'
 import PropTypes from 'prop-types'
+
+let { width, height } = Dimensions.get('window')
+const imageHeight = Math.round(width * 9 / 16);
+const imageWidth = width
 
 export default class Activity1AdvicesDetail extends React.Component {
     static propTypes = {
@@ -22,7 +26,7 @@ export default class Activity1AdvicesDetail extends React.Component {
     playSound = (level) => {
         const callback = (error, sound) => {
             if (error) {
-                Alert.alert('error', error.message)
+                Alert.alert('ผิดพลาด! ไม่สามารถเล่นเสียงได้', error.message)
                 return
             }
             sound.play(() => {
@@ -30,123 +34,121 @@ export default class Activity1AdvicesDetail extends React.Component {
             })
         }
         switch (level) {
-            case 0: {
-                const sound = new Sound(require('../../assets/sound/ac1_0.wav'), error => callback(error, sound))
+            case "breathing": {
+                const sound = new Sound(require('../../assets/sound/breathing.wav'), error => callback(error, sound))
                 break
             }
-            case 1: {
-                const sound = new Sound(require('../../assets/sound/ac1_1.wav'), error => callback(error, sound))
+            case "triflow": {
+                const sound = new Sound(require('../../assets/sound/breathing-triflow.wav'), error => callback(error, sound))
+                break
+            }
+            case "cough": {
+                const sound = new Sound(require('../../assets/sound/cough.wav'), error => callback(error, sound))
+                break
+            }
+            case "legs": {
+                const sound = new Sound(require('../../assets/sound/legs.wav'), error => callback(error, sound))
+                break
+            }
+            case "arms": {
+                const sound = new Sound(require('../../assets/sound/arms.wav'), error => callback(error, sound))
                 break
             }
             case 2: {
-                const sound = new Sound(require('../../assets/sound/ac1_2.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/level2.wav'), error => callback(error, sound))
                 break
             }
             case 3: {
-                const sound = new Sound(require('../../assets/sound/ac1_3.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/level3.wav'), error => callback(error, sound))
                 break
             }
             case 4: {
-                const sound = new Sound(require('../../assets/sound/ac1_4.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/level4.wav'), error => callback(error, sound))
                 break
             }
             case 5: {
-                const sound = new Sound(require('../../assets/sound/ac1_5.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/level5.wav'), error => callback(error, sound))
                 break
             }
             case 6: {
-                const sound = new Sound(require('../../assets/sound/ac1_6.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/level6.wav'), error => callback(error, sound))
                 break
             }
             case 7: {
-                const sound = new Sound(require('../../assets/sound/ac1_7.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/level7.wav'), error => callback(error, sound))
                 break
             }
             case 8: {
-                const sound = new Sound(require('../../assets/sound/ac1_8.wav'), error => callback(error, sound))
-                break
-            }
-            case 9: {
-                const sound = new Sound(require('../../assets/sound/ac1_9.wav'), error => callback(error, sound))
-                break
-            }
-            case 10: {
-                const sound = new Sound(require('../../assets/sound/ac1_10.wav'), error => callback(error, sound))
-                break
-            }
-            case 11: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
-                break
-            }
-            case 12: {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
-                break
-            }
-            case 13: {
-                const sound = new Sound(require('../../assets/sound/ac1_13.wav'), error => callback(error, sound))
-                break
-            }
-            case 14: {
-                const sound = new Sound(require('../../assets/sound/ac1_14.wav'), error => callback(error, sound))
-                break
-            }
-            case 15: {
-                const sound = new Sound(require('../../assets/sound/ac1_15.wav'), error => callback(error, sound))
+                const sound = new Sound(require('../../assets/sound/ac1-other-1.wav'), error => callback(error, sound))
                 break
             }
             default: return
         }
-
     }
 
     renderImage = (image) => {
-        console.log("render img", image)
         switch (image) {
             case "breathing":
                 return (
-                    <View style={_styles.imageContainer}>
-                        <Image source={require('../../assets/images/activities/breathing-1.jpg')} style={_styles.image}></Image>
-                        <Image source={require('../../assets/images/activities/breathing-2.jpg')} style={_styles.image}></Image>
+                    <View>
+                        <View style={_styles.imageContainer}>
+                            <Image source={require('../../assets/images/activities/breathing-1.jpg')} style={_styles.image}></Image>
+                            <Image source={require('../../assets/images/activities/breathing-2.jpg')} style={_styles.image}></Image>
+                        </View>
+                        {this.props.level === 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} containerStyle={_styles.soundContainer} onPress={() => this.playSound("breathing")} /> : null}
                     </View>
                 )
             case "triflow":
                 return (
-                    <View style={_styles.imageContainer}>
-                        <Image source={require('../../assets/images/activities/breathing-triflow.jpg')} style={_styles.image}></Image>
+                    <View>
+                        <View style={_styles.imageContainer}>
+                            <Image source={require('../../assets/images/activities/breathing-triflow.jpg')} style={_styles.image}></Image>
+                        </View>
+                        {this.props.level === 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} containerStyle={_styles.soundContainer} onPress={() => this.playSound("triflow")} /> : null}
                     </View>
                 )
             case "cough":
                 return (
-                    <View style={_styles.imageContainer}>
-                        <Image source={require('../../assets/images/activities/cough-1.jpg')} style={_styles.image}></Image>
-                        <Image source={require('../../assets/images/activities/cough-2.jpg')} style={_styles.image}></Image>
-                        <Image source={require('../../assets/images/activities/cough-3.jpg')} style={_styles.image}></Image>
+                    <View>
+                        <View style={_styles.imageContainer}>
+                            <Image source={require('../../assets/images/activities/cough.jpg')} style={[_styles.image, {width: 600, height: 350}]}></Image>
+                        </View>
+                        {this.props.level === 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} containerStyle={_styles.soundContainer} onPress={() => this.playSound("cough")} /> : null}
                     </View>
                 )
             case "legsExercise":
                 return (
                     <View>
                         <View style={_styles.imageContainer}>
-                            <Image source={require('../../assets/images/activities/legs-1.jpg')} style={_styles.image}></Image>
-                            <Image source={require('../../assets/images/activities/legs-2.jpg')} style={_styles.image}></Image>
+                            <Image source={require('../../assets/images/activities/legs-1.jpg')} style={[_styles.image, {width: 500, height: 300}]}></Image>
                         </View>
                         <View style={_styles.imageContainer}>
                             <Image source={require('../../assets/images/activities/legs-3.jpg')} style={_styles.image}></Image>
                             <Image source={require('../../assets/images/activities/legs-4.jpg')} style={_styles.image}></Image>
                         </View>
+                        {this.props.level === 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} containerStyle={_styles.soundContainer} onPress={() => this.playSound("legs")} /> : null}
                     </View>
                 )
             case "armsExercise":
                 return (
-                    <View style={_styles.imageContainer}>
-                        <Image source={require('../../assets/images/activities/arms-1.jpg')} style={_styles.image}></Image>
-                        <Image source={require('../../assets/images/activities/arms-2.jpg')} style={_styles.image}></Image>
+                    <View>
+                        <View style={_styles.imageContainer}>
+                            <Image source={require('../../assets/images/activities/arms-1.jpg')} style={_styles.image}></Image>
+                            <Image source={require('../../assets/images/activities/arms-2.jpg')} style={_styles.image}></Image>
+                        </View>
+                        {this.props.level === 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} containerStyle={_styles.soundContainer} onPress={() => this.playSound("arms")} /> : null}
                     </View>
                 )
             case "legsSwing":
                 return (
                     <View style={_styles.imageContainer}>
                         <Image source={require('../../assets/images/activities/legs_swing.jpg')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "tiptoe":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/tiptoe.png')} style={_styles.image}></Image>
                     </View>
                 )
         }
@@ -159,7 +161,6 @@ export default class Activity1AdvicesDetail extends React.Component {
                     return (
                         <View key={idx}>
                             <Text style={_styles.text}>{d.description}</Text>
-                            {/*<Image source={require(d.image)} style={_styles.image}></Image>*/}
                             {d.hasOwnProperty('image') ? this.renderImage(d.image) : null}
                         </View>
                     )
@@ -172,13 +173,12 @@ export default class Activity1AdvicesDetail extends React.Component {
         return (
             <View style={_styles.slide}>
                 <ScrollView>
-                    {this.props.level <= 10 ? <Text style={[_styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.level}   {this.props.title}</Text> :
-                        <Text style={[_styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>{this.props.title}</Text>}
-                    {/*<Text style={[styles.text, { fontWeight: 'bold', marginBottom: 5 }]}>ระดับ {this.props.activity.level}   {this.props.activity.title}</Text>*/}
-                    {/*<Text style={styles.text}>{this.props.subtitle}</Text>*/}
+                    {this.props.level <= 7 ? <Text style={[_styles.text, _styles.topic]}>ระดับ {this.props.level}   {this.props.title}</Text> :
+                        <Text style={[_styles.text, _styles.topic]}>{this.props.title}</Text>}
+                    {this.props.level === 1 ? (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}><Image source={require('../../assets/images/activities/fowler.png')} style={{ height: 290, width: 430 }} resizeMode='contain' /></View>) : null}
                     {this.renderDescription()}
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound(this.props.level)} />
-                    {/*<Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>*/}
+                    {this.props.level > 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} onPress={() => this.playSound(this.props.level)} containerStyle={_styles.soundContainer} /> : null}
+
                 </ScrollView>
             </View>
         )
@@ -202,15 +202,24 @@ const _styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1
     },
+    soundContainer: {
+        alignSelf: 'flex-end'
+    },
     image: {
         resizeMode: 'center',
         margin: 10,
-        flex: 1
+        height: 260,
+        width: 350,
+        // flex: 1
     },
     text: {
         color: common.grey,
         fontSize: 22,
         letterSpacing: 4,
         lineHeight: 45
+    },
+    topic: {
+        fontWeight: 'bold',
+        marginBottom: 5
     }
 })
