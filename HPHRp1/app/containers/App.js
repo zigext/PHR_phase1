@@ -31,6 +31,7 @@ import ActivityAdvices from './ActivityAdvices'
 import Activity1AdvicesList from '../components/Activity1AdvicesList'
 import Activity1AdvicesDetail from '../components/Activity1AdvicesDetail'
 import Activity2AdvicesDetail from '../components/Activity2AdvicesDetail'
+import InstructionAdvices from '../components/Instructions'
 import SurgeryDetail from '../components/SurgeryDetail'
 import SideDrawer from '../components/drawers/SideDrawer'
 import reducers from '../reducers/Index'
@@ -140,8 +141,8 @@ export default class App extends React.Component {
 
         if (!this.state.isReady) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                     {/*// <RNProgress.Bar progress={0.3} width={300} progress={this.state.progress} indeterminate={this.state.indeterminate} />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    {/*// <RNProgress.Bar progress={0.3} width={300} progress={this.state.progress} indeterminate={this.state.indeterminate} />
                      // <RNProgress.CircleSnail color={['red', 'green', 'blue']} />*/}
                     <Text>Loading...</Text>
                 </View>
@@ -280,6 +281,12 @@ export default class App extends React.Component {
                                                         key="tab_advices_daily"
                                                         component={DailyAdvices}
                                                         title="ชีวิตประจำวัน"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_instruction"
+                                                        component={InstructionAdvices}
+                                                        title="คำแนะนำ"
                                                         panHandlers={null}
                                                     />
                                                     <Scene

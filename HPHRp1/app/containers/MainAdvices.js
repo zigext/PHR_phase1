@@ -37,6 +37,9 @@ class MainAdvices extends React.Component {
     onActivityPress = () => {
         Actions.tab_advices_activity()
     }
+    onInstructionPress = () => {
+        Actions.tab_advices_instruction()
+    }
 
     render() {
         return (
@@ -45,7 +48,7 @@ class MainAdvices extends React.Component {
                 <ExerciseAdvicesButton onExercisePress={this.onExercisePress} />
                 <DailyAdvicesButton onDailyPress={this.onDailyPress} />
                 <ActivityAdvicesButton onActivityPress={this.onActivityPress} />
-                <InstructionAdvicesButton />
+                <InstructionAdvicesButton onInstructionPress={this.onInstructionPress} />
                 <ProhibitAdvicesButton onProhibitPress={this.onProhibitPress} />
             </View>
         )
