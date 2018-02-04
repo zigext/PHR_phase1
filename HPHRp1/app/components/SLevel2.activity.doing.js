@@ -320,9 +320,7 @@ export default class SLevel2 extends React.Component {
         return (
             <View>
                 <View style={_styles.imageContainer}>
-                    <Image source={require('../../assets/images/activities/cough-1.jpg')} style={_styles.image} />
-                    <Image source={require('../../assets/images/activities/cough-2.jpg')} style={_styles.image} />
-                    <Image source={require('../../assets/images/activities/cough-3.jpg')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/cough.jpg')} style={_styles.image} />
                 </View>
 
                 <View style={_styles.descriptionContainer}>

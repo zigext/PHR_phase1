@@ -403,5 +403,6 @@ const _styles = StyleSheet.create({
         resizeMode: 'center',
         margin: 10,
         height: 220,
+        width: 350
     }
 })

@@ -342,7 +342,7 @@ export default class SLevel4 extends React.Component {
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/activities/arms-1.jpg')} style={_styles.image} />
+                    <Image source={require('../../assets/images/activities/arms-1.jpg')} style={[_styles.image, {width: 500}]} />
                     <Image source={require('../../assets/images/activities/arms-2.jpg')} style={_styles.image} />
                 </View>
 
@@ -496,5 +496,6 @@ const _styles = StyleSheet.create({
         resizeMode: 'center',
         margin: 10,
         height: 220,
+        width: 400
     }
 })
