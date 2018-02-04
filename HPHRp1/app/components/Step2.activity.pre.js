@@ -3,9 +3,13 @@ import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 // var stylesheet = require('tcomb-form-native/lib/stylesheets/bootstrap');
 import t from 'tcomb-form-native'
+import Tts from 'react-native-tts'
 import styles from '../styles/index'
 import common from '../styles/common'
 import { cloneDeep } from 'lodash'
+
+Tts.setDefaultLanguage('th-TH')
+Tts.setDefaultVoice('th-TH-language')
 
 
 let Form = t.form.Form
@@ -14,9 +18,7 @@ let Form = t.form.Form
 const myCustomStylesheet = cloneDeep(t.form.Form.stylesheet)
 // overriding the text color
 myCustomStylesheet.controlLabel.normal.fontWeight = 'normal'
-// myCustomStylesheet.fieldset.flexDirection = 'column'
-// myCustomStylesheet.formGroup.normal.flex = 1
-// myCustomStylesheet.formGroup.error.flex = 1
+
 let options = {
     fields: {
         sbpLowerThanNormal: {
@@ -121,7 +123,14 @@ let input4 = t.struct({
 export default class Step2Pre extends React.Component {
     constructor(props) {
         super(props)
+    }
 
+    componentDidMount = () => {
+        Tts.speak('ทำแบบทดสอบก่อนนะ เลือกอาการที่มี ถ้าไม่มีก็ถัดไปได้เลย')
+    }
+
+    componentWillUnmount() {
+        Tts.stop()
     }
 
     onForward = () => {
@@ -129,7 +138,7 @@ export default class Step2Pre extends React.Component {
         let value2 = this.refs.form2.getValue()
         let value3 = this.refs.form3.getValue()
         let value4 = this.refs.form4.getValue()
-        
+
         if (value1 || value2 || value3 || value4) {
             // this.props.onStepChange(this.props.step + 1)
             // this.props.onDataChange('sbpLowerThanNormal', value.sbpLowerThanNormal)
