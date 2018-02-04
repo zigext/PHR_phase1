@@ -54,7 +54,7 @@ let options = {
         ac12: {
             label: 'เดินขึ้นลงบันได',
         }
-       
+
     },
     stylesheet: myCustomStylesheet
 }
@@ -184,36 +184,41 @@ export default class Step6Pre extends React.Component {
     checkPreTestResult = () => {
         for (let property in this.props.dataStore) {
             if (this.props.dataStore[property] === true) {
-                return (
-                    <View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                            <Icon
-                                raised
-                                reverse
-                                name='warning'
-                                type='font-awesome'
-                                color='#c81837'
-                                size={35}
-                            />
-                            <Text style={_styles.text}>กรุณาปรึกษาแพทย์เพื่อพิจารณาการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                console.log("TRUE ", property)
+                //If the first time doing activity. Pre-test result is passed. The preActivity.passed wil be true.
+                //So this condition is to ignore the passed property.
+                if (property !== "passed") {
+                    return (
+                        <View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Icon
+                                    raised
+                                    reverse
+                                    name='warning'
+                                    type='font-awesome'
+                                    color='#c81837'
+                                    size={35}
+                                />
+                                <Text style={_styles.text}>กรุณาปรึกษาแพทย์เพื่อพิจารณาการทำกิจกรรมฟื้นฟูสมรรถภาพหัวใจ</Text>
+                            </View>
+                            <View style={_styles.buttonContainer}>
+                                <Button
+                                    raised
+                                    icon={{ name: 'home' }}
+                                    title='กลับสู่หน้าเริ่มต้น'
+                                    backgroundColor='grey'
+                                    onPress={this.onBackToStarter} />
+                                <Button
+                                    raised
+                                    iconRight
+                                    icon={{ name: 'md-settings', type: 'ionicon' }}
+                                    title='เลือกกิจกรรมที่ทำได้'
+                                    backgroundColor={common.accentColor}
+                                    onPress={this.onSelectActivityPress} />
+                            </View>
                         </View>
-                        <View style={_styles.buttonContainer}>
-                            <Button
-                                raised
-                                icon={{ name: 'home' }}
-                                title='กลับสู่หน้าเริ่มต้น'
-                                backgroundColor='grey'
-                                onPress={this.onBackToStarter} />
-                            <Button
-                                raised
-                                iconRight
-                                icon={{ name: 'md-settings', type: 'ionicon' }}
-                                title='เลือกกิจกรรมที่ทำได้'
-                                backgroundColor={common.accentColor}
-                                onPress={this.onSelectActivityPress} />
-                        </View>
-                    </View>
-                )
+                    )
+                }
             }
         }
         return (
