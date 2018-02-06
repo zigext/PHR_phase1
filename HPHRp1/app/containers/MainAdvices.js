@@ -5,8 +5,6 @@ import FoodAdvicesButton from '../components/FoodAdvicesButton'
 import ExerciseAdvicesButton from '../components/ExerciseAdvicesButton'
 import ActivityAdvicesButton from '../components/ActivityAdvicesButton'
 import DailyAdvicesButton from '../components/DailyAdvicesButton'
-import ProhibitAdvicesButton from '../components/ProhibitAdvicesButton'
-import InstructionAdvicesButton from '../components/InstructionAdvicesButton'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 
@@ -31,14 +29,8 @@ class MainAdvices extends React.Component {
         Actions.tab_advices_daily()
     }
 
-    onProhibitPress = () => {
-        Actions.tab_advices_prohibit()
-    }
     onActivityPress = () => {
         Actions.tab_advices_activity()
-    }
-    onInstructionPress = () => {
-        Actions.tab_advices_instruction()
     }
 
     render() {
@@ -48,8 +40,6 @@ class MainAdvices extends React.Component {
                 <ExerciseAdvicesButton onExercisePress={this.onExercisePress} />
                 <DailyAdvicesButton onDailyPress={this.onDailyPress} />
                 <ActivityAdvicesButton onActivityPress={this.onActivityPress} />
-                <InstructionAdvicesButton onInstructionPress={this.onInstructionPress} />
-                <ProhibitAdvicesButton onProhibitPress={this.onProhibitPress} />
             </View>
         )
     }
