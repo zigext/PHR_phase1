@@ -30,23 +30,23 @@ export default class DailyAdvicesSwiper extends React.Component {
         }
         switch (name) {
             case 'slide1': {
-                const sound = new Sound(require('../../assets/sound/daily1.wav'), error => callback(error, sound))
+                const sound = new Sound('daily1.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide2': {
-                const sound = new Sound(require('../../assets/sound/daily2.wav'), error => callback(error, sound))
+                const sound = new Sound('daily2.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide3': {
-                const sound = new Sound(require('../../assets/sound/daily3.wav'), error => callback(error, sound))
+                const sound = new Sound('daily3.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide4': {
-                const sound = new Sound(require('../../assets/sound/daily4.wav'), error => callback(error, sound))
+                const sound = new Sound('daily4.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide5': {
-                const sound = new Sound(require('../../assets/sound/daily5.wav'), error => callback(error, sound))
+                const sound = new Sound('daily5.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             default: return

@@ -30,23 +30,24 @@ export default class FoodAdvicesSwiper extends React.Component {
         }
         switch (name) {
             case 'slide1': {
-                const sound = new Sound(require('../../assets/sound/food1.wav'), error => callback(error, sound))
+                const sound = new Sound('food1.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
+                // const sound = new Sound(require('../../assets/sound/food1.wav'), error => callback(error, sound))
                 break
             }
             case 'slide2': {
-                const sound = new Sound(require('../../assets/sound/food2.wav'), error => callback(error, sound))
+                const sound = new Sound('food2.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide3': {
-                const sound = new Sound(require('../../assets/sound/food3.wav'), error => callback(error, sound))
+                const sound = new Sound('food3.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide4': {
-                const sound = new Sound(require('../../assets/sound/food4.wav'), error => callback(error, sound))
+                const sound = new Sound('food4.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide5': {
-                const sound = new Sound(require('../../assets/sound/food5.wav'), error => callback(error, sound))
+                const sound = new Sound('food5.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             default: return

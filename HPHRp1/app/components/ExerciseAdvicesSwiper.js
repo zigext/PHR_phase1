@@ -30,31 +30,31 @@ export default class ExerciseAdvicesSwiper extends React.Component {
         }
         switch (name) {
             case 'slide1': {
-                const sound = new Sound(require('../../assets/sound/exercise1.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise1.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide2': {
-                const sound = new Sound(require('../../assets/sound/exercise2.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise2.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide3': {
-                const sound = new Sound(require('../../assets/sound/exercise3.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise3.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide4': {
-                const sound = new Sound(require('../../assets/sound/exercise4.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise4.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide5': {
-                const sound = new Sound(require('../../assets/sound/exercise5.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise5.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide6': {
-                const sound = new Sound(require('../../assets/sound/exercise6.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise6.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 'slide7': {
-                const sound = new Sound(require('../../assets/sound/exercise7.wav'), error => callback(error, sound))
+                const sound = new Sound('exercise7.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             default: return
