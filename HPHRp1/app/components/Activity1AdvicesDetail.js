@@ -35,51 +35,51 @@ export default class Activity1AdvicesDetail extends React.Component {
         }
         switch (level) {
             case "breathing": {
-                const sound = new Sound(require('../../assets/sound/breathing.wav'), error => callback(error, sound))
+                const sound = new Sound('breathing.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case "triflow": {
-                const sound = new Sound(require('../../assets/sound/breathing-triflow.wav'), error => callback(error, sound))
+                const sound = new Sound('breathing_triflow.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case "cough": {
-                const sound = new Sound(require('../../assets/sound/cough.wav'), error => callback(error, sound))
+                const sound = new Sound('cough.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case "legs": {
-                const sound = new Sound(require('../../assets/sound/legs.wav'), error => callback(error, sound))
+                const sound = new Sound('legs.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case "arms": {
-                const sound = new Sound(require('../../assets/sound/arms.wav'), error => callback(error, sound))
+                const sound = new Sound('arms.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 2: {
-                const sound = new Sound(require('../../assets/sound/level2.wav'), error => callback(error, sound))
+                const sound = new Sound('level2.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 3: {
-                const sound = new Sound(require('../../assets/sound/level3.wav'), error => callback(error, sound))
+                const sound = new Sound('level3.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 4: {
-                const sound = new Sound(require('../../assets/sound/level4.wav'), error => callback(error, sound))
+                const sound = new Sound('level4.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 5: {
-                const sound = new Sound(require('../../assets/sound/level5.wav'), error => callback(error, sound))
+                const sound = new Sound('level5.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 6: {
-                const sound = new Sound(require('../../assets/sound/level6.wav'), error => callback(error, sound))
+                const sound = new Sound('level6.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 7: {
-                const sound = new Sound(require('../../assets/sound/level7.wav'), error => callback(error, sound))
+                const sound = new Sound('level7.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             case 8: {
-                const sound = new Sound(require('../../assets/sound/ac1-other-1.wav'), error => callback(error, sound))
+                const sound = new Sound('ac1_other_1.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
             default: return
@@ -111,7 +111,7 @@ export default class Activity1AdvicesDetail extends React.Component {
                 return (
                     <View>
                         <View style={_styles.imageContainer}>
-                            <Image source={require('../../assets/images/activities/cough.jpg')} style={[_styles.image, {width: 600, height: 350}]}></Image>
+                            <Image source={require('../../assets/images/activities/cough.jpg')} style={[_styles.image, { width: 600, height: 350 }]}></Image>
                         </View>
                         {this.props.level === 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} containerStyle={_styles.soundContainer} onPress={() => this.playSound("cough")} /> : null}
                     </View>
@@ -120,7 +120,7 @@ export default class Activity1AdvicesDetail extends React.Component {
                 return (
                     <View>
                         <View style={_styles.imageContainer}>
-                            <Image source={require('../../assets/images/activities/legs-1.jpg')} style={[_styles.image, {width: 500, height: 300}]}></Image>
+                            <Image source={require('../../assets/images/activities/legs-1.jpg')} style={[_styles.image, { width: 500, height: 300 }]}></Image>
                         </View>
                         <View style={_styles.imageContainer}>
                             <Image source={require('../../assets/images/activities/legs-3.jpg')} style={_styles.image}></Image>
@@ -145,10 +145,40 @@ export default class Activity1AdvicesDetail extends React.Component {
                         <Image source={require('../../assets/images/activities/legs_swing.jpg')} style={_styles.image}></Image>
                     </View>
                 )
+            case "sitting":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/sitting.png')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "standing":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/standing.png')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "marching":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/marching.png')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "walking":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/walking.png')} style={_styles.image}></Image>
+                    </View>
+                )
             case "tiptoe":
                 return (
                     <View style={_styles.imageContainer}>
                         <Image source={require('../../assets/images/activities/tiptoe.png')} style={_styles.image}></Image>
+                    </View>
+                )
+            case "climbingStair":
+                return (
+                    <View style={_styles.imageContainer}>
+                        <Image source={require('../../assets/images/activities/stair.jpg')} style={_styles.image}></Image>
                     </View>
                 )
         }
@@ -175,7 +205,7 @@ export default class Activity1AdvicesDetail extends React.Component {
                 <ScrollView>
                     {this.props.level <= 7 ? <Text style={[_styles.text, _styles.topic]}>ระดับ {this.props.level}   {this.props.title}</Text> :
                         <Text style={[_styles.text, _styles.topic]}>{this.props.title}</Text>}
-                    {this.props.level === 1 ? (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}><Image source={require('../../assets/images/activities/fowler.png')} style={{ height: 290, width: 430 }} resizeMode='contain' /></View>) : null}
+                    {this.props.level === 1 ? (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}><Image source={require('../../assets/images/activities/fowler.png')} style={{ height: 320, width: 550 }} resizeMode='contain' /></View>) : null}
                     {this.renderDescription()}
                     {this.props.level > 1 ? <Icon reverse name='controller-play' type='entypo' color={common.accentColor} onPress={() => this.playSound(this.props.level)} containerStyle={_styles.soundContainer} /> : null}
 
