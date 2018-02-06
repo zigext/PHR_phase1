@@ -62,7 +62,7 @@ export default class Heartrate extends React.Component {
             console.log("count = ", this.count, this.state.currentHr)
         }
 
-        if (this.state.currentHr - this.props.preHr >= 30) {
+        if (this.state.currentHr - this.props.preHr >= 20) {
             ToastAndroid.showWithGravity('อัตราการเต้นหัวใจถึงค่าที่กำหนด ควรหยุดทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
         }
     }
