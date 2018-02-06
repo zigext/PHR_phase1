@@ -99,6 +99,7 @@ const list = [
                 description: `     
                     6. นั่งเก้าอี้ข้างเตียงเมื่อรับประทานอาหารทุกมื้อ หรืออย่างน้อย 1-2 ครั้ง/วัน และทำกิจวัตรประจำวันด้วยตนเอง
 `,
+                    image: 'sitting'
             },
         ]
     },
@@ -134,19 +135,19 @@ const list = [
                 description: `     
                     5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                
+                    image: 'marching'          
             },
             {
                 description: `     
                     6. เดินรอบเตียง 15-20 เมตร ไป-กลับช้าๆ
 `,
-                
+                    image: 'walking'            
             },
             {
                 description: `     
                     7. นั่งเก้าอี้ข้างเตียงเมื่อรับประทานอาหารทุกมื้อ หรืออย่างน้อย 1-2 ครั้ง/วัน และทำกิจวัตรประจำวันด้วยตนเอง
 `,
-                
+                    image: 'sitting'       
             },
         ]
     },
@@ -182,7 +183,7 @@ const list = [
                 description: `     
                     5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-            
+                    image: 'marching'   
             },
             {
                 description: `     
@@ -194,7 +195,7 @@ const list = [
                 description: `     
                     7. เดิน 50-100 เมตร วันละ 2-3 ครั้ง
 `,
-               
+                    image: 'walking'  
             },
         ]
     },
@@ -230,7 +231,7 @@ const list = [
                 description: `     
                     5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-              
+                    image: 'marching'   
             },
             {
                 description: `     
@@ -242,13 +243,13 @@ const list = [
                 description: `     
                     7. เดิน 100-200 เมตร วันละ 3 ครั้ง
 `,
-               
+                    image: 'walking'  
             },
             {
                 description: `     
                     8. ฝึกขึ้นลงบันได 3 ขั้น
 `,
-              
+                    image: 'climbingStair'      
             },
         ]
     },
@@ -284,7 +285,7 @@ const list = [
                 description: `     
                     5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                
+                    image: 'marching'   
             },
             {
                 description: `     
@@ -296,13 +297,13 @@ const list = [
                 description: `     
                     7. เดิน 200-500 เมตร วันละ 2-3 ครั้ง
 `,
-               
+                    image: 'walking'  
             },
             {
                 description: `     
                     8. เดินขึ้นลงบันได 1 ชั้น แบบพักขา
 `,
-               
+                    image: 'climbingStair'       
             },
         ]
     },
@@ -338,19 +339,19 @@ const list = [
                 description: `     
                     5. ยืนย่ำอยู่กับที่ 20 ครั้ง
 `,
-                
+                    image: 'marching'  
             },
             {
                 description: `     
                     6. เดิน 10-15 นาที หรือ 100-120 เมตร
 `,
-              
+                    image: 'walking'  
             },
             {
                 description: `     
                     7. เดินขึ้นลงบันได 10-15 ขั้น แบบสลับขา ถ้าอาการคงที่ให้ขึ้นบันไดแบบพักขา
 `,
-               
+                    image: 'climbingStair'  
             },
             {
                 description: `     
