@@ -140,7 +140,20 @@ export default class SLevel10 extends React.Component {
             let result = {}
             //End but activity not completed
             if (!this.state.completedLevel) {
-                result.maxLevel = this.props.activityLevel
+                if (value.amount >= 15 && value.amount <= 20)
+                    result.maxLevel = 3
+                else if (value.amount >= 50 && value.amount < 100)
+                    result.maxLevel = 4
+                    else if (value.amount >= 100 && value.amount <= 120)
+                    result.maxLevel = 7
+                else if (value.amount >= 100 && value.amount < 200)
+                    result.maxLevel = 5
+                else if (value.amount >= 200 && value.amount <= 500)
+                    result.maxLevel = 6
+                else    
+                    result.maxLevel = 3
+                // result.maxLevel = this.props.activityLevel
+
                 result.levelTitle = 'เดิน'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
@@ -163,7 +176,21 @@ export default class SLevel10 extends React.Component {
             else {
                 await this.props.onAllPhysicalCompleted()
 
-                result.maxLevel = this.props.activityLevel
+                if (value.amount >= 15 && value.amount <= 20)
+                    result.maxLevel = 3
+                else if (value.amount >= 50 && value.amount < 100)
+                    result.maxLevel = 4
+                    else if (value.amount >= 100 && value.amount <= 120)
+                    result.maxLevel = 7
+                else if (value.amount >= 100 && value.amount < 200)
+                    result.maxLevel = 5
+                else if (value.amount >= 200 && value.amount <= 500)
+                    result.maxLevel = 6
+                
+                else    
+                    result.maxLevel = 3
+                // result.maxLevel = this.props.activityLevel
+
                 result.levelTitle = 'เดิน'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel

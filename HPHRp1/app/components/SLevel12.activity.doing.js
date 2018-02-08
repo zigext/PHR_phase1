@@ -136,7 +136,16 @@ export default class SLevel12 extends React.Component {
             let result = {}
             //End but activity not completed
             if (!this.state.completedLevel) {
-                result.maxLevel = this.props.activityLevel
+                if (value.amount < 3)
+                    result.maxLevel = this.props.activityLevel
+                else if (value.amount >= 3 && value.amount < 10)
+                    result.maxLevel = 5
+                else if (value.amount >= 10)
+                    result.maxLevel = 6
+                // else if (value.amount > 10)
+                //     result.maxLevel = 7
+                // result.maxLevel = this.props.activityLevel
+
                 result.levelTitle = 'เดินขึ้นลงบันได'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
@@ -159,7 +168,16 @@ export default class SLevel12 extends React.Component {
             else {
                 await this.props.onAllPhysicalCompleted()
 
-                result.maxLevel = this.props.activityLevel
+                if (value.amount < 3)
+                    result.maxLevel = this.props.activityLevel
+                else if (value.amount >= 3 && value.amount < 10)
+                    result.maxLevel = 5
+                else if (value.amount === 10)
+                    result.maxLevel = 6
+                else if (value.amount > 10)
+                    result.maxLevel = 7
+                // result.maxLevel = this.props.activityLevel
+
                 result.levelTitle = 'เดินขึ้นลงบันได'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
@@ -287,10 +305,10 @@ export default class SLevel12 extends React.Component {
                 totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'
                 break
             case 6:
-                totalTimes = 'เดินลงบันได 1 ชั้นแบบพักขา'
+                totalTimes = 'เดินลงบันได 10 ขั้นแบบพักขา'
                 break
             case 7:
-                totalTimes = 'เดินขึ้นลงบันได 10-15 ขั้น แบบสลับขา ถ้าอาการทางคลินิกคงที่ให้ขึ้นบันไดแบบพักขา และเดินขึ้นบันได 1-2 ชั้นแบบสลับขา'
+                totalTimes = 'เดินขึ้นลงบันได 10-15 ขั้น แบบสลับขา ถ้าอาการทางคลินิกคงที่ให้ขึ้นบันไดแบบพักขา และเดินขึ้นบันได 10-20 ขั้นแบบสลับขา'
                 break
             default:
                 totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'

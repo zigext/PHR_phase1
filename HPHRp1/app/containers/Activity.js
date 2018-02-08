@@ -98,13 +98,14 @@ class Activity extends React.Component {
     }
 
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        // const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        const path = `${SERVER_IP}${PROFILE}?userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}`
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
             .then(responseData => {
                 this.profile = responseData.data.profile
-                this.setState({ profile: this.profile, level: this.profile.level })
+                this.setState({ profile: this.profile, level: parseInt(this.profile.level) })
                 this.props.userActions.getProfile(this.state.profile)
                 console.log("Fetch profile success")
 
@@ -127,8 +128,10 @@ class Activity extends React.Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userid: '1416382941765846', //this.props.userReducer.user.uid
-                    appid: 'PHRapp', //this.props.defalt.appId
+                    // userid: '1416382941765846', //this.props.userReducer.user.uid
+                    // appid: 'PHRapp', //this.props.defalt.appId
+                    userid: this.props.userReducer.user.uid,
+                    appid: this.props.userReducer.appId, 
                     profile: { level: this.state.result.nextLevel.toString() }
                 })
             })
@@ -174,8 +177,10 @@ class Activity extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.userReducer.user.uid
-                appid: 'PHRapp', //this.props.defalt.appId
+                // userid: '1416382941765846', //this.props.userReducer.user.uid
+                // appid: 'PHRapp', //this.props.defalt.appId
+                userid: this.props.userReducer.user.uid, //this.props.userReducer.user.uid
+                appid: this.props.userReducer.appId, 
                 results: results,
                 date: date,
                 time: time
@@ -221,7 +226,6 @@ class Activity extends React.Component {
         obj.postActivity = {}
         let date = moment(this.state.timeStart).format("YYYY-MM-DD")
         let time = moment(this.state.timeStart).format("kk:mm:ss")
-        console.log("____", obj)
 
         const path = `${SERVER_IP}${ACTIVITY_RESULT_1}`
         await fetch(path, {
@@ -231,8 +235,10 @@ class Activity extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.userReducer.user.uid
-                appid: 'PHRapp', //this.props.defalt.appId
+                // userid: '1416382941765846', //this.props.userReducer.user.uid
+                // appid: 'PHRapp', //this.props.defalt.appId
+                userid: this.props.userReducer.user.uid, 
+                appid: this.props.userReducer.appId, 
                 results: obj,
                 date: date,
                 time: time
@@ -323,8 +329,8 @@ class Activity extends React.Component {
     renderPreActivity = () => {
         return (
 
-            // <PreActivity useBLE={this.state.useBLE} setUseBLE={this.setUseBLE} setConnectToBLE={this.setConnectToBLE} peripheral={this.state.peripheral} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} />
-            <PreActivity useBLE={this.state.useBLE} setUseBLE={this.setUseBLE} setConnectToBLE={this.setConnectToBLE} peripheral={this.state.useBLE? this.state.peripheral: null} disconnectBLE={this.disconnectBLE} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
+            <PreActivity useBLE={this.state.useBLE} setUseBLE={this.setUseBLE} setConnectToBLE={this.setConnectToBLE} peripheral={this.state.useBLE? this.state.peripheral: null} disconnectBLE={this.disconnectBLE} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.state.profile.picture_uri} />
+            // <PreActivity useBLE={this.state.useBLE} setUseBLE={this.setUseBLE} setConnectToBLE={this.setConnectToBLE} peripheral={this.state.useBLE? this.state.peripheral: null} disconnectBLE={this.disconnectBLE} onPreActivityDone={this.onPreActivityDone} onSelectActivity={this.onSelectActivity} setTimeStart={this.setTimeStart} saveOnlyPreActivity={this.saveOnlyPreActivity} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' />
         )
     }
 
@@ -336,8 +342,8 @@ class Activity extends React.Component {
 
     renderPostActivity = () => {
         return (
-            // <PostActivity useBLE={this.state.useBLE} peripheral={this.state.peripheral} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.props.profile.picture_uri} result={this.state.result}/>
-            <PostActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
+            <PostActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname={this.state.profile.firstname} lastname={this.state.profile.lastname} patientCode={this.state.profile.patient_code} pictureUri={this.state.profile.picture_uri} result={this.state.result}/>
+            // <PostActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} onPostActivityDone={this.onPostActivityDone} preHr={this.state.preActivity.preHr} preBp={this.state.preActivity.preBp} firstname='John' lastname='Doe' patientCode='0001' pictureUri='http://profilepicturesdp.com/wp-content/uploads/2017/04/Best-images-for-Whtsapp-144.jpg' result={this.state.result} />
         )
     }
 
@@ -371,10 +377,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return { userActions: bindActionCreators(userActions, dispatch) }
-    // return {
-    //     dispatchSaveActivity: (results, date, time) => dispatch(saveActivity(results, date, time))
-    // }
-    // return bindActionCreators({ addTodo }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Activity)

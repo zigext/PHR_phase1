@@ -140,7 +140,16 @@ export default class SLevel11 extends React.Component {
             let result = {}
             //End but activity not completed
             if (!this.state.completedLevel) {
-                result.maxLevel = this.props.activityLevel
+                if (value.amount >= 10 && value.amount < 20)
+                    result.maxLevel = 4
+                else if (value.amount === 20)
+                    result.maxLevel = 5
+                else if (value.amount > 20)
+                    result.maxLevel = 6
+                else if (value.amount < 10)
+                    result.maxLevel = 3
+                // result.maxLevel = this.props.activityLevel
+
                 result.levelTitle = 'เขย่งเท้าขึ้นลง'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
@@ -163,7 +172,16 @@ export default class SLevel11 extends React.Component {
             else {
                 await this.props.onAllPhysicalCompleted()
 
-                result.maxLevel = this.props.activityLevel
+                if (value.amount >= 10 && value.amount < 20)
+                    result.maxLevel = 4
+                else if (value.amount === 20)
+                    result.maxLevel = 5
+                else if (value.amount > 20)
+                    result.maxLevel = 6
+                else if (value.amount < 10)
+                    result.maxLevel = 3
+                // result.maxLevel = this.props.activityLevel
+
                 result.levelTitle = 'เขย่งเท้าขึ้นลง'
                 result.amount = value.amount
                 result.completedLevel = this.state.completedLevel
