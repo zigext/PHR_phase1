@@ -22,6 +22,7 @@ import Profile from './Profile'
 import EditProfile from './EditProfile'
 import Surgery from './Surgery'
 import AddSurgery from './AddSurgery'
+import MWT from './6MWT'
 import MainAdvices from './MainAdvices'
 import FoodAdvices from './FoodAdvices'
 import ExerciseAdvices from './ExerciseAdvices'
@@ -186,6 +187,7 @@ export default class App extends React.Component {
                                     <Scene key="surgeryDetail" component={SurgeryDetail} title="ข้อมูลการผ่าตัด" back />
                                     <Scene key="addSurgery" component={AddSurgery} title="เพิ่มข้อมูลการผ่าตัด" back />
                                     <Scene key="progressResultList" component={ProgressResultList} title="รายละเอียดผลการทำกิจกรรม" back />
+                                    <Scene key="mwt" component={MWT} title="ทดสอบเดินบนพื้นราบ 6 นาที" back />
 
                                     <Drawer
                                         key="drawer"

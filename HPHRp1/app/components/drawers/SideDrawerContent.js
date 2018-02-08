@@ -27,6 +27,7 @@ const list = [
     { title: 'คำแนะนำ' },
     { title: 'ประวัติส่วนตัว' },
     { title: 'ประวัติการผ่าตัด' },
+    { title: 'เดินบนพื้นราบ 6 นาที' },
     { title: 'ออกจากระบบ' }
 ]
 
@@ -52,8 +53,8 @@ class SideDrawerContent extends React.Component {
             })
             .catch()
     })
-        
-    
+
+
 
     // setAuthenticationToAsyncStorage = async () => {
     //     await AsyncStorage.setItem('authentication', JSON.stringify({ isLoggedIn: false }))
@@ -87,6 +88,10 @@ class SideDrawerContent extends React.Component {
                 break
             }
             case 6: {
+                Actions.mwt()
+                break
+            }
+            case 7: {
 
                 Alert.alert(
                     'ออกจากระบบ',
@@ -94,8 +99,8 @@ class SideDrawerContent extends React.Component {
                     [
                         {
                             text: 'ใช่', onPress: () => {
-                                this.logOut().then( () => Actions.launch())
-                                
+                                this.logOut().then(() => Actions.launch())
+
                             }
                         },
                         { text: 'ไม่', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
