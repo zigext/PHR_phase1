@@ -16,17 +16,6 @@ class AddSurgery extends React.Component {
 
     onAddSurgeryPress = (newSurgery, date, time, doctor, hospital, type, note, callback) => {
         this.addSurgery(newSurgery, hospital, date, time, callback)
-        // firebase.database().ref(`surgery/${this.props.default.user.uid}_${hospital}_${date}_${time}`).set(newSurgery).
-        //     then((data) => {
-        //         console.log("add new surgery to database success")
-        //         this.props.dispatchAddNewSurgery()
-        //         callback(null)
-        //         Actions.surgery()
-        //     }).
-        //     catch((err) => {
-        //         console.log("add new surgery to database failed")
-        //         callback(err)
-        //     })
     }
 
     addSurgery = async (newSurgery, hospital, date, time, callback) => {
@@ -38,7 +27,8 @@ class AddSurgery extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.default.user.uid //this.props.UserReducer.user.uid
+                // userid: '1416382941765846', //this.props.UserReducer.user.uid
+                userid: this.props.UserReducer.user.uid,
                 hospitalid: hospital, 
                 date: date,
                 time: time,

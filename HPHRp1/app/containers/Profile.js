@@ -29,20 +29,9 @@ class Profile extends React.Component {
         // this.ref.on('value', this.handleProfileUpdate)
     }
 
-    // componentWillUnmount() {
-    //     if (this.ref) {
-    //         this.ref.off('value', this.handleProfileUpdate)
-    //     }
-    // }
-
-    // // Bind the method only once to keep the same reference
-    // handleProfileUpdate = (snapshot) => {
-    //     this.profile = snapshot.val()
-    //     this.props.dispatchProfile(this.profile)
-    // }
-
     fetchProfile = async () => {
-        const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        // const path = `${SERVER_IP}${PROFILE}?userid=1416382941765846&appid=PHRapp` //userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}  //userid=${this.props.UserReducer.user.uid}&appid=${this.props.UserReducer.appId}
+        const path = `${SERVER_IP}${PROFILE}?userid=${this.props.userReducer.user.uid}&appid=${this.props.userReducer.appId}`
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())

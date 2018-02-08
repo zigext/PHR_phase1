@@ -99,17 +99,23 @@ class Home extends React.Component {
         // PushNotification.localNotificationSchedule(notifications.dailyImportanceReminder)
         if (this.props.userReducer.user.hasOwnProperty("profile")) {
             let { is_smoking, nyha_class, ejection_fraction, medical_condition, surgery_sapheneous_vein, level } = this.props.userReducer.user.profile
+
+            console.log("dailyReminderForBreathing = ", notifications.dailyReminderForBreathing.hasOwnProperty("date"))
+            console.log("reminderForSapheneousVeinPatient = ", notifications.reminderForSapheneousVeinPatient.hasOwnProperty("date"))
+            console.log("reminderForHighRiskPatient = ", notifications.reminderForHighRiskPatient.hasOwnProperty("date"))
+
             //Smoking
             //What's about lung disease??????????????????
-            if (is_smoking === 'true')
-                PushNotification.localNotificationSchedule(notifications.dailyReminderForBreathing)
-            //Use sapheneous veins from leg
-            if (surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4')
-                PushNotification.localNotificationSchedule(notifications.reminderForSapheneousVeinPatient)
-            //High risk
-            //What's about EF??????????????????
-            if (nyha_class >= 3 || ejection_fraction === '1')
-                PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
+            // if (is_smoking === 'true' && notifications.dailyReminderForBreathing.hasOwnProperty("date"))
+            //     PushNotification.localNotificationSchedule(notifications.dailyReminderForBreathing)
+            // //Use sapheneous veins from leg
+            // if (surgery_sapheneous_vein === '1' || surgery_sapheneous_vein === '2' || surgery_sapheneous_vein === '3' || surgery_sapheneous_vein === '4' && notifications.reminderForSapheneousVeinPatient.hasOwnProperty("date"))
+            //     PushNotification.localNotificationSchedule(notifications.reminderForSapheneousVeinPatient)
+            // //High risk
+            // //What's about EF??????????????????
+            // if (nyha_class >= 3 || ejection_fraction === '1' && notifications.reminderForHighRiskPatient.hasOwnProperty("date"))
+            //     PushNotification.localNotificationSchedule(notifications.reminderForHighRiskPatient)
+            
             //Reminder for daily life's activity
             // if(level >= 2)
             //     PushNotification.localNotificationSchedule(notifications.reminderForDailyLife)

@@ -39,22 +39,12 @@ class Surgery extends React.Component {
             'change',
             this.handleFirstConnectivityChange
         )
-        // this.getSurgeries()
-        // this.ref = firebase.database().ref(`surgery`).orderByKey().startAt(`${this.props.userReducer.user.uid}`)
-        // this.ref.on('value', this.handleSurgeryUpdate)
     }
     handleFirstConnectivityChange = (isConnected) => {
         console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
         this.setState({ isConnected })
 
     }
-
-
-    // componentWillUnmount() {
-    //     if (this.ref) {
-    //         this.ref.off('value', this.handleSurgeryUpdate)
-    //     }
-    // }
 
     //sort by date descending
     compare = (a, b) => {
@@ -66,7 +56,8 @@ class Surgery extends React.Component {
     }
 
     fetchSurgeries = async () => {
-        const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846` //userid=${this.props.userReducer.user.uid} //userid=${this.props.UserReducer.user.uid}
+        // const path = `${SERVER_IP}${SURGERY}?userid=1416382941765846`  //userid=${this.props.UserReducer.user.uid}
+        const path = `${SERVER_IP}${SURGERY}?userid=${this.props.userReducer.user.uid}`
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())

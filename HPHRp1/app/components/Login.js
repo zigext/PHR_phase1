@@ -65,7 +65,7 @@ export default class Login extends React.Component {
         return (
             <View style={_styles.container}>
 
-                <Form ref='form' type={Person} options={options} value={value}/>
+                <Form ref='form' type={Person} options={options} />
                 <TouchableHighlight
                     style={this.state.loading ? _styles.disabledButton : _styles.button}
                     onPress={this.onPress}

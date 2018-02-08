@@ -55,8 +55,10 @@ class EditProfile extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userid: '1416382941765846', //this.props.userReducer.user.uid
-                appid: 'PHRapp', //this.props.userReducer.appId
+                // userid: '1416382941765846', //this.props.userReducer.user.uid
+                // appid: 'PHRapp', //this.props.userReducer.appId
+                userid: this.props.userReducer.user.uid, 
+                appid: this.props.userReducer.appId,
                 profile: newProfile
             })
         })
