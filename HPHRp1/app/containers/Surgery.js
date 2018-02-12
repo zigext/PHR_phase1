@@ -89,7 +89,7 @@ class Surgery extends React.Component {
         //     ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.SHORT, ToastAndroid.CENTER)
         // }
         return (
-            <View>
+            <View style={{flex: 1}}>
                 <ScrollView>
                     <List>
                         {
