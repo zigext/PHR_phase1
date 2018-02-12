@@ -75,23 +75,6 @@ class Surgery extends React.Component {
             })
     }
 
-    // getSurgeries = () => {
-    //     this.ref = firebase.database().ref(`surgery`) //read all user's surgeries
-    //     this.ref.on('value', this.handleSurgeryUpdate)
-    // }
-
-    // // Bind the method only once to keep the same reference
-    // handleSurgeryUpdate = async (snapshot) => {
-    //     console.log('Post Content', snapshot)
-    //     // this.props.dispatchProfile(this.profile)
-    //     this.surgeries = snapshot.val() || {};
-    //     this.surgeryArray = Object.keys(this.surgeries).map((k) => this.surgeries[k])
-    //     // let sorted = await this.sortContactsByName()
-    //     this.setState({
-    //         surgeryArray: this.surgeryArray
-    //     })
-    // }
-
     onPress = (i) => {
         let obj = this.state.surgeryArray[i]
         Actions.surgeryDetail({ surgery: obj.information, uid: this.props.userReducer.user.uid })
@@ -102,9 +85,9 @@ class Surgery extends React.Component {
     }
 
     render() {
-        if (!this.state.isConnected) {
-            ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.SHORT, ToastAndroid.CENTER)
-        }
+        // if (!this.state.isConnected) {
+        //     ToastAndroid.showWithGravity('โปรดเชื่อมต่ออินเตอร์เน็ต', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        // }
         return (
             <View>
                 <ScrollView>
