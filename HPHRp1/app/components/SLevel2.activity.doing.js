@@ -92,7 +92,7 @@ export default class SLevel2 extends React.Component {
         else {
             this.props.onAllBreathingCompleted()
         }
-        
+
         this.props.setBreathingExercise('effectiveCough', true)
         //If other physical exercises in this level are completed, then go to next activityLevel
         if (this.props.completedAllPhysical) {
@@ -288,9 +288,22 @@ export default class SLevel2 extends React.Component {
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.primaryColorDark}
                         size={35}
                         onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>ยกเลิกการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='cross'
+                        type='entypo'
+                        color={common.grey}
+                        size={35}
+                        onPress={this.props.onCancelActivity}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
@@ -418,10 +431,10 @@ const _styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
     },
-     imageContainer: {
-        flexDirection: 'row', 
-        flex: 1, 
-        justifyContent: 'center', 
+    imageContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center'
     },
     descriptionContainer: {

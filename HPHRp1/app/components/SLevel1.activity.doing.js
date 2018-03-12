@@ -219,9 +219,22 @@ export default class SLevel1 extends React.Component {
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.primaryColorDark}
                         size={35}
                         onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>ยกเลิกการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='cross'
+                        type='entypo'
+                        color={common.grey}
+                        size={35}
+                        onPress={this.props.onCancelActivity}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
@@ -254,7 +267,9 @@ export default class SLevel1 extends React.Component {
                     <Image source={require('../../assets/images/activities/breathing-1.jpg')} style={_styles.image} />
                     <Image source={require('../../assets/images/activities/breathing-2.jpg')} style={_styles.image} />
                 </View>
-
+                <View style={_styles.imageContainer}>
+                    <Image source={require('../../assets/images/activities/breathing-triflow.jpg')} style={_styles.image} />
+                </View>
                 <View style={_styles.descriptionContainer}>
                     <Button
                         raised
@@ -277,35 +292,12 @@ export default class SLevel1 extends React.Component {
                             <Text style={_styles.descriptionText}>▪ ใช้ริมฝีปากอมอุปกรณ์ส่วนท่อของเครื่อง</Text>
                             <Text style={_styles.descriptionText}>▪ สูดลมหายใจเข้าทางปากให้เต็มที่จนลูกบอลลอยขึ้น และให้ลอยคงไว้ให้นานที่สุด แล้วค่อยๆผ่านหายใจออก แล้วหายใจปกติ 3-4 ครั้ง</Text>
                             <Text style={_styles.descriptionText}>▪ ทำซ้ำจนครบ 10 ครั้ง หยุดพัก ควรทำทุก 1-2 ชั่วโมงขณะตื่น</Text>
-                            <Image source={require('../../assets/images/activities/breathing-triflow.jpg')} style={_styles.image} />
                         </View>)
                         : null}
                 </View>
 
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
-                {/*<Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
-                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onActivityDone}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-                </View>*/}
             </View>
         )
     }
@@ -359,9 +351,9 @@ const _styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
     imageContainer: {
-        flexDirection: 'row', 
-        flex: 1, 
-        justifyContent: 'center', 
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center'
     },
     descriptionContainer: {

@@ -14,7 +14,7 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
-import { isEmpty } from 'lodash'
+import { isEmpty, omit } from 'lodash'
 import BleManager from 'react-native-ble-manager'
 
 const BleManagerModule = NativeModules.BleManager
@@ -36,6 +36,7 @@ class Activity extends React.Component {
             connected: false,
             useBLE: null
         }
+         this.baseState = omit(this.state, 'level', 'connected', 'useBLE', 'peripherals', 'peripheral')
         this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(this)
     }
     componentDidMount = async () => {
@@ -77,6 +78,7 @@ class Activity extends React.Component {
 
     setPeripheral = async (peripheral) => {
         await this.setState({ peripheral })
+        console.log('peripheral = ' + this.state.peripheral)
     }
 
     setConnectToBLE = async (value) => {
@@ -128,8 +130,6 @@ class Activity extends React.Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // userid: '1416382941765846', //this.props.userReducer.user.uid
-                    // appid: 'PHRapp', //this.props.defalt.appId
                     userid: this.props.userReducer.user.uid,
                     appid: this.props.userReducer.appId, 
                     profile: { level: this.state.result.nextLevel.toString() }
@@ -177,9 +177,7 @@ class Activity extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                // userid: '1416382941765846', //this.props.userReducer.user.uid
-                // appid: 'PHRapp', //this.props.defalt.appId
-                userid: this.props.userReducer.user.uid, //this.props.userReducer.user.uid
+                userid: this.props.userReducer.user.uid, 
                 appid: this.props.userReducer.appId, 
                 results: results,
                 date: date,
@@ -320,6 +318,12 @@ class Activity extends React.Component {
         console.log("select = ", this.state.exception)
     }
 
+    onCancelActivity = async () => {
+        await this.setState(this.baseState)
+         console.log("cancel")
+        console.log("state in Activity = ", this.state)
+    }
+
     renderScanBLE = () => {
         return (
             <ScanBLE setConnectToBLE={this.setConnectToBLE} setPeripheral={this.setPeripheral} setUseBLE={this.setUseBLE} />
@@ -336,7 +340,7 @@ class Activity extends React.Component {
 
     renderDoingActivity = () => {
         return (
-            <DoingActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} doingLevel={this.state.level} />
+            <DoingActivity useBLE={this.state.useBLE} peripheral={this.state.useBLE? this.state.peripheral: null} exception={this.state.exception} preHr={this.state.preActivity.preHr} onDoingActivityDone={this.onDoingActivityDone} setTimeStop={this.setTimeStop} setDuration={this.setDuration} onCancelActivity={this.onCancelActivity} doingLevel={this.state.level} />
         )
     }
 

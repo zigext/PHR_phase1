@@ -18,7 +18,7 @@ myCustomStylesheet.controlLabel.normal.fontSize = 20
 let options = {
     fields: {
         amount: {
-            label: 'จำนวนขั้นที่เดินได้'
+            label: 'จำนวนขั้นบันไดที่เดินได้'
         },
         disorder: {
             label: 'เกิดอาการผิดปกติ'
@@ -305,10 +305,10 @@ export default class SLevel12 extends React.Component {
                 totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'
                 break
             case 6:
-                totalTimes = 'เดินลงบันได 10 ขั้นแบบพักขา'
+                totalTimes = 'เดินลงบันได 10 ขั้น แบบพักขา'
                 break
             case 7:
-                totalTimes = 'เดินขึ้นลงบันได 10-15 ขั้น แบบสลับขา ถ้าอาการทางคลินิกคงที่ให้ขึ้นบันไดแบบพักขา และเดินขึ้นบันได 10-20 ขั้นแบบสลับขา'
+                totalTimes = 'เดินขึ้นลงบันได 10-20 ขั้น แบบสลับขา'
                 break
             default:
                 totalTimes = 'เดินขึ้นลงบันได 3 ขั้น'

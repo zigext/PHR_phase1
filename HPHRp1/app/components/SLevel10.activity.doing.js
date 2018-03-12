@@ -144,13 +144,13 @@ export default class SLevel10 extends React.Component {
                     result.maxLevel = 3
                 else if (value.amount >= 50 && value.amount < 100)
                     result.maxLevel = 4
-                    else if (value.amount >= 100 && value.amount <= 120)
+                else if (value.amount >= 100 && value.amount <= 120)
                     result.maxLevel = 7
                 else if (value.amount >= 100 && value.amount < 200)
                     result.maxLevel = 5
                 else if (value.amount >= 200 && value.amount <= 500)
                     result.maxLevel = 6
-                else    
+                else
                     result.maxLevel = 3
                 // result.maxLevel = this.props.activityLevel
 
@@ -180,14 +180,14 @@ export default class SLevel10 extends React.Component {
                     result.maxLevel = 3
                 else if (value.amount >= 50 && value.amount < 100)
                     result.maxLevel = 4
-                    else if (value.amount >= 100 && value.amount <= 120)
+                else if (value.amount >= 100 && value.amount <= 120)
                     result.maxLevel = 7
                 else if (value.amount >= 100 && value.amount < 200)
                     result.maxLevel = 5
                 else if (value.amount >= 200 && value.amount <= 500)
                     result.maxLevel = 6
-                
-                else    
+
+                else
                     result.maxLevel = 3
                 // result.maxLevel = this.props.activityLevel
 
@@ -261,9 +261,22 @@ export default class SLevel10 extends React.Component {
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.primaryColorDark}
                         size={35}
                         onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>ยกเลิกการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='cross'
+                        type='entypo'
+                        color={common.grey}
+                        size={35}
+                        onPress={this.props.onCancelActivity}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>

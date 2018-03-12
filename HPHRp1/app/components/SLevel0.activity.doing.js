@@ -102,6 +102,21 @@ export default class SLevel1 extends React.Component {
         this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
+    onCancel = () => {
+        Alert.alert(
+            'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
+            'ต้องการยกเลิกการทำกิจกรรมหรือไม่? ข้อมูลกิจกรรมที่ทำอยู่จะสูญหาย',
+            [
+                {
+                    text: 'ใช่', onPress: () => {
+                        this.props.onCancelActivity()
+                    }
+                },
+                { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+            ]
+        )
+    }
+
     onActivityDone = () => {
         Alert.alert(
             'กิจกรรมฟื้นฟูสมรรถภาพหัวใจ',
@@ -188,9 +203,22 @@ export default class SLevel1 extends React.Component {
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.primaryColorDark}
                         size={35}
                         onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>ยกเลิกการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='cross'
+                        type='entypo'
+                        color={common.grey}
+                        size={35}
+                        onPress={this.props.onCancelActivity}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
@@ -253,6 +281,7 @@ export default class SLevel1 extends React.Component {
                         buttonStyle={{ borderRadius: 10 }}
                         onPress={() => ToastAndroid.showWithGravity('ไม่สามารถสลับไปทำ Breathing exercise ได้', ToastAndroid.SHORT, ToastAndroid.CENTER)}
                     />
+
                 </View>
                 <Text style={_styles.topic}>นั่งหัวสูงบนเตียง 45-60 องศา</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}

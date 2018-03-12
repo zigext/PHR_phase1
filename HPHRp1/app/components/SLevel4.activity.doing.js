@@ -310,9 +310,22 @@ export default class SLevel4 extends React.Component {
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.primaryColorDark}
                         size={35}
                         onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>ยกเลิกการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='cross'
+                        type='entypo'
+                        color={common.grey}
+                        size={35}
+                        onPress={this.props.onCancelActivity}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
@@ -342,7 +355,7 @@ export default class SLevel4 extends React.Component {
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/activities/arms-1.jpg')} style={[_styles.image, {width: 500}]} />
+                    <Image source={require('../../assets/images/activities/arms-1.jpg')} style={[_styles.image, { width: 500 }]} />
                     <Image source={require('../../assets/images/activities/arms-2.jpg')} style={_styles.image} />
                 </View>
 

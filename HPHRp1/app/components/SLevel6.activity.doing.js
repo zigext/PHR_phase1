@@ -181,9 +181,22 @@ export default class SLevel6 extends React.Component {
                         raised
                         reverse
                         name='exit-to-app'
-                        color='#d6d4e0'
+                        color={common.primaryColorDark}
                         size={35}
                         onPress={this.onActivityDone}
+                        containerStyle={{ alignSelf: 'flex-end' }}
+                    />
+                </View>
+                <View style={_styles.exitContainer}>
+                    <Text style={_styles.text}>ยกเลิกการทำกิจกรรม</Text>
+                    <Icon
+                        raised
+                        reverse
+                        name='cross'
+                        type='entypo'
+                        color={common.grey}
+                        size={35}
+                        onPress={this.props.onCancelActivity}
                         containerStyle={{ alignSelf: 'flex-end' }}
                     />
                 </View>
@@ -218,28 +231,6 @@ export default class SLevel6 extends React.Component {
 
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
-                {/*<Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
-                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onActivityDone}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-                </View>*/}
             </View>
         )
     }
