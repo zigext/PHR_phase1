@@ -17,7 +17,7 @@ export default class Activity2AdvicesButton extends React.Component {
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/walking.png')} style={styles.imageInButtonImage}></Image>
+                        <Image source={require('../../assets/images/buttons/walking.png')} style={styles.imageInButtonImage}></Image>
                         <Text style={styles.buttonImageText}>ระยะที่ 2</Text>
                     </View>
                 </TouchableHighlight>

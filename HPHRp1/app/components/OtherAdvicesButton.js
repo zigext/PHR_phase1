@@ -3,23 +3,25 @@ import { View, Text, TextInput, StyleSheet, TouchableHighlight, ToastAndroid, Ke
 import { Button } from 'react-native-elements'
 import styles from '../styles/index'
 
-export default class FoodAdvicesButton extends React.Component {
-
+export default class OtherAdvicesButton extends React.Component {
+    constructor(props) {
+        super(props)
+    }
     onPress = () => {
-        this.props.onFoodPress()
+        this.props.onOtherPress()
     }
 
     render() {
         return (
             <View>
                 <TouchableHighlight
-                    style={[styles.buttonImage, {paddingHorizontal:0}]}
+                    style={[styles.buttonImage, {paddingHorizontal: 3}]}
                     onPress={this.onPress}
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/buttons/food.png')} style={styles.imageInButtonImage}></Image>
-                        <Text style={styles.buttonImageText}>อาหารและยา</Text>
+                        <Image source={require('../../assets/images/buttons/advices.png')} style={styles.imageInButtonImage}></Image>
+                        <Text style={styles.buttonImageText}>ทั่วไป</Text>
                     </View>
                 </TouchableHighlight>
                 <View>

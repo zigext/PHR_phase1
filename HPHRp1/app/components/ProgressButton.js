@@ -24,7 +24,7 @@ export default class ProgressButton extends React.Component {
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/line-chart.png')} style={styles.imageInButtonImage}></Image>
+                        <Image source={require('../../assets/images/buttons/progress.png')} style={styles.imageInButtonImage}></Image>
                         <Text style={styles.buttonImageText}>พัฒนาการ</Text>
                     </View>
                 </TouchableHighlight>

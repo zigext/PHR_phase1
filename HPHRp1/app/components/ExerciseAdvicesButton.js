@@ -20,7 +20,7 @@ export default class ExerciseAdvicesButton extends React.Component {
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/exercise.png')} style={styles.imageInButtonImage}></Image>
+                        <Image source={require('../../assets/images/buttons/exercise.png')} style={styles.imageInButtonImage}></Image>
                         <Text style={styles.buttonImageText}>ออกกำลังกาย</Text>
                     </View>
                 </TouchableHighlight>

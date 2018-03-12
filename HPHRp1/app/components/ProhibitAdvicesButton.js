@@ -21,7 +21,7 @@ export default class ProhibitAdvicesButton extends React.Component {
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/prohibit.png')} style={styles.imageInButtonImage}></Image>
+                        <Image source={require('../../assets/images/buttons/prohibit.png')} style={styles.imageInButtonImage}></Image>
                         <Text style={styles.buttonImageText}>ข้อห้าม</Text>
                     </View>
                 </TouchableHighlight>

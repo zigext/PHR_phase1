@@ -23,7 +23,7 @@ export default class ActivityButton extends React.Component {
                     underlayColor='#99d9f4'
                 >
                     <View>
-                        <Image source={require('../../assets/images/heart.png')} style={styles.imageInButtonImage}></Image>
+                        <Image source={require('../../assets/images/buttons/heart.png')} style={styles.imageInButtonImage}></Image>
                         <Text style={styles.buttonImageText}>กิจกรรมฟื้นฟูหัวใจ</Text>
                     </View>
                 </TouchableHighlight>
