@@ -1,8 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, Image, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, Alert, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { Actions } from 'react-native-router-flux'
-import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import Swiper from 'react-native-swiper'
 import styles from '../styles/index'
@@ -10,10 +8,6 @@ import common from '../styles/common'
 import Sound from 'react-native-sound'
 
 export default class ExerciseAdvicesSwiper extends React.Component {
-    constructor() {
-        super()
-
-    }
 
     playSound = (name) => {
         const callback = (error, sound) => {
@@ -37,26 +31,6 @@ export default class ExerciseAdvicesSwiper extends React.Component {
                 const sound = new Sound('exercise2.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
-            case 'slide3': {
-                const sound = new Sound('exercise3.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
-                break
-            }
-            case 'slide4': {
-                const sound = new Sound('exercise4.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
-                break
-            }
-            case 'slide5': {
-                const sound = new Sound('exercise5.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
-                break
-            }
-            case 'slide6': {
-                const sound = new Sound('exercise6.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
-                break
-            }
-            case 'slide7': {
-                const sound = new Sound('exercise7.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
-                break
-            }
             default: return
         }
 
@@ -66,35 +40,30 @@ export default class ExerciseAdvicesSwiper extends React.Component {
         return (
             <Swiper style={_styles.wrapper} showsButtons>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/exercise1.jpg')} style={_styles.image}></Image>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide1')} />
-                    <Text style={_styles.text}>รูปแบบการออกกําลังกาย ใช้การเดินและการออกกําลังแบบไอโซโทนิค คือการออกกําลังกายชนิดที่มีการยืด/หดตัวของกล้ามเนื้อ และอวัยวะมีการเคลื่อนไหวขณะออกกําลัง</Text>
+                    <ScrollView>
+                        <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide1')} />
+                        <Text style={_styles.text}>การออกกำลังกาย จะต้องมีความต่อเนื่องจากที่อยู่โรงพยาบาล มีขั้นตอน คือ</Text>
+                        <Text style={_styles.text}>▪ จับชีพจรและอบอุ่นร่างกายก่อนเดิน </Text>
+                        <Text style={_styles.text}>▪ เดินด้วยความเร็วปานกลางอย่างต่อเนื่อง วันละ 10 นาที หลังจากนั้นเพิ่มเวลานานขึ้น จนถึงครั้งละ 20-30 นาที เดินอย่างน้อยสัปดาห์ละ 3-5 วัน</Text>
+                        <Text style={_styles.text}>▪ เดินหลังจากรับประทานอาหาร อย่างน้อย 1-2 ชั่วโมง </Text>
+                        <Text style={_styles.text}>▪ ควรจดบันทึกการเดิน ระยะเวลา ระยะเวลา อัตราการเต้นของหัวใจ และอาการผิดปกติต่างๆ (มี/ไม่มี อย่างไร)</Text>
+                        <Image source={require('../../assets/images/advices/exercise1.jpg')} style={_styles.image}></Image>
+                    </ScrollView>
                 </View>
                 <View style={_styles.slide}>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide2')} />
-                    <Text style={_styles.text}>ผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลัน ควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าขณะพักไม่เกิน 20 ครั้งต่อนาที</Text>
-                </View>
-                <View style={_styles.slide}>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide3')} />
-                    <Text style={_styles.text}>ผู้ป่วยหลังผ่าตัดหัวใจ หรือรักษาโดยการขยายหลอดเลือดหัวใจด้วยบอลลูน ควรออกกําลังกายโดยชีพจรขณะออกกําลังกายมากกว่าขณะพักไม่เกิน 30 ครั้งต่อนาที</Text>
-                </View>
-                <View style={_styles.slide}>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide4')} />
-                    <Text style={_styles.text}>ระยะเวลา เริ่มจาก 5-10 นาที และเพิ่มเป็น 20-30 นาที ให้รู้สึกเหนื่อยเล็กน้อยหรือปานกลาง (RPE 9-12)</Text>
-                </View>
-                <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/exercise2.jpg')} style={_styles.image}></Image>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
-                    <Text style={_styles.text}>ความถี่ วันละ 2 ครั้ง ขึ้นกับสภาพร่างกาย</Text>
-                </View>
-                <View style={_styles.slide}>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide6')} />
-                    <Text style={_styles.text}>ค่อยๆเพิ่มความหนักในการออกกําลังกาย เริ่มเคลื่อนไหวจากข้อเล็กไปยังข้อใหญ่ ทําอย่างต่อเนื่อง ไม่เกร็งค้าง และไม่กลั้นหายใจขณะทํา อาจมีคนช่วยในช่วงแรก จากนั้นก็ทําด้วยตนเอง ค่อยๆเปลี่ยนท่าจากนอน ไปนั่ง และยืน</Text>
-                </View>
-                <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/walking.png')} style={_styles.image}></Image>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide7')} />
-                    <Text style={_styles.text}>การเดินทําได้ง่าย ช่วยให้ผู้ป่วยทำกิจวัตรประจําวันได้ดีขึ้น โดยพยายามเดินให้ระยะทางไกลขึ้นในครั้งต่อไป  และสามารถเดินได้เร็วขึ้นถ้าไม่มีอาการไม่พึงประสงค์ เช่น มึนงง เซ ซีด หายใจลําบาก คลื่นไส้ เจ็บหน้าอก</Text>
+                    <ScrollView>
+                        <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide2')} />
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={_styles.text}>อาการที่ผิดปกติที่ควรหยุดเดิน </Text>
+                            <Icon reverse raised name='warning' type='font-awesome' color='#c81837' size={23} />
+                        </View>
+                        <Text style={_styles.text}>▪ เจ็บแน่นหน้าอก </Text>
+                        <Text style={_styles.text}>▪ เวียนศีรษะ มึนงง คลื่นไส้อาเจียน </Text>
+                        <Text style={_styles.text}>▪ เหนื่อยหอบ หายใจไม่สะดวก  </Text>
+                        <Text style={_styles.text}>▪ ใจสั่นมาก</Text>
+                        <Text style={_styles.text}>▪ รู้สึกอ่อนแรงผิดปกติหรือเมื่อยล้า </Text>
+                        <Text style={_styles.text}>▪ รู้สึกไม่สบายหรือมีไข้ </Text>
+                    </ScrollView>
                 </View>
             </Swiper>
         )
@@ -107,19 +76,22 @@ const _styles = StyleSheet.create({
     slide: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'stretch',
         padding: 20,
         paddingHorizontal: 50,
         margin: 10
     },
     image: {
         resizeMode: 'center',
+        alignSelf: 'center',
         margin: 10,
-        flex: 1
+        flex: 1,
+        height: 350,
+        width: 500
     },
     text: {
         color: common.grey,
-        fontSize: 22,
+        fontSize: 20,
         letterSpacing: 4,
         lineHeight: 45
     }

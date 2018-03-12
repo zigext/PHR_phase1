@@ -1,8 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, Image, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { Actions } from 'react-native-router-flux'
-import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import Swiper from 'react-native-swiper'
 import styles from '../styles/index'
@@ -10,11 +8,6 @@ import Sound from 'react-native-sound'
 import common from '../styles/common'
 
 export default class FoodAdvicesSwiper extends React.Component {
-    constructor() {
-        super()
-
-    }
-
     playSound = (name) => {
         const callback = (error, sound) => {
             if (error) {
@@ -46,10 +39,6 @@ export default class FoodAdvicesSwiper extends React.Component {
                 const sound = new Sound('food4.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
                 break
             }
-            case 'slide5': {
-                const sound = new Sound('food5.wav', Sound.MAIN_BUNDLE, error => callback(error, sound))
-                break
-            }
             default: return
         }
 
@@ -59,29 +48,24 @@ export default class FoodAdvicesSwiper extends React.Component {
         return (
             <Swiper style={_styles.wrapper} showsButtons>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food1.png')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/advices/food1.png')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide1')} />
-                    <Text style={_styles.text}>ควรหลีกเลี่ยงอาหารที่ทำให้คลอเลสเตอรอลในเลือดสูง เช่น ไข่แดง เครื่องในสัตว์ อาหารทะเล</Text>
+                    <Text style={_styles.text}>หลีกเลี่ยงอาหารที่มีคลอเลสเตอรอลสูง ไขมันสูง อาหารหมักดอง และอาหารที่มีรสชาติเค็ม  เช่น ไข่แดง เครื่องในสัตว์ อาหารทะเล</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food2.jpg')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/advices/food2.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide2')} />
-                    <Text style={_styles.text}>ควรงดชา กาแฟ น้ำอัดลม เครื่องดื่มที่มีแอลกอฮอล์ และควรงดสูบบุหรี่</Text>
+                    <Text style={_styles.text}>งดชา กาแฟ น้ำอัดลม เครื่องดื่มที่มีแอลกอฮอล์ และควรงดสูบบุหรี่</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food3.png')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/advices/food3.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide3')} />
-                    <Text style={_styles.text}>หลีกเลี่ยงอาหารที่ทำให้น้ำตาลในเลือดสูง เช่น ข้าวเหนียวทุเรียน ขนมหวาน มะม่วง ลำไย</Text>
+                    <Text style={_styles.text}>ควรรับประทานผักทุกชนิด ผลไม้ที่ไม่มีรสหวานจัด ได้เท่าที่ต้องการ ไม่ควรน้อยกว่าวันละ 2 มื้อ</Text>
                 </View>
                 <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food4.jpg')} style={_styles.image}></Image>
+                    <Image source={require('../../assets/images/advices/food4.jpg')} style={_styles.image}></Image>
                     <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide4')} />
-                    <Text style={_styles.text}>ถ้าต้องใช้น้ำมันปรุงอาหารควรเลือกใช้น้ำมันพืช แทนเนยหรือน้ำมันจากสัตว์ หรือใช้การลวก ต้ม นึ่ง และอบแทนการทอด</Text>
-                </View>
-                <View style={_styles.slide}>
-                    <Image source={require('../../assets/images/food5.jpg')} style={_styles.image}></Image>
-                    <Icon reverse name='controller-play' type='entypo' color='#f49842' onPress={() => this.playSound('slide5')} />
-                    <Text style={_styles.text}>ควรรับประทานผักทุกชนิด ผลไม้ที่ไม่มีรสหวานจัด เช่น มะละกอ แอปเปิ้ล ฝรั่ง</Text>
+                    <Text style={_styles.text}>การรับประทานยา แนะนำให้ผู้ป่วยรับประทานยาหรือฉีดยา ถูกต้องตามวิธี ขนาดและเวลา ไม่ควรเพิ่มหรือหยุดยาเอง และควรสังเกตอาการข้างเคียงของยาที่ได้รับ </Text>
                 </View>
             </Swiper>
         )
