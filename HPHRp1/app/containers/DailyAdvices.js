@@ -1,18 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native'
-import firebase from '../config/Firebase'
-import { Actions } from 'react-native-router-flux'
-import { connect } from 'react-redux'
+import { StyleSheet, Text, View } from 'react-native'
 import DailyAdvicesSwiper from '../components/DailyAdvicesSwiper'
 import Orientation from 'react-native-orientation'
 
-
-class DailyAdvices extends React.Component {
-    constructor() {
-        super()
-
-    }
-
+export default class DailyAdvices extends React.Component {
     componentDidMount() {
         Orientation.lockToLandscape();
     }
@@ -24,19 +15,6 @@ class DailyAdvices extends React.Component {
         )
     }
 }
-
-const mapStateToProps = (state) => {
-    console.log("mapStateToProps", state)
-    return state
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        // dispatchLogIn: (email, uid) => dispatch(logIn(email, uid))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DailyAdvices)
 
 var styles = StyleSheet.create({
     container: {

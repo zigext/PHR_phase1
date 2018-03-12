@@ -9,7 +9,7 @@ import InstructionAdvicesButton from '../components/InstructionAdvicesButton'
 import Orientation from 'react-native-orientation'
 
 
-class FoodAdvices extends React.Component {
+class ActivityAdvices extends React.Component {
     constructor() {
         super()
 
@@ -58,7 +58,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FoodAdvices)
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityAdvices)
 
 var styles = StyleSheet.create({
     container: {
