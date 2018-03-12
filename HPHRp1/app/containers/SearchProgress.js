@@ -10,29 +10,6 @@ import _ from 'lodash'
 import Chart from '../components/Chart'
 import common from '../styles/common'
 
-const list = [
-    {
-        name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
-    },
-    {
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-    },
-    {
-        name: '123',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-    },
-    {
-        name: '456',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-    }
-]
-
 export default class SearchProgress extends React.Component {
 
     constructor(props) {
@@ -142,21 +119,6 @@ export default class SearchProgress extends React.Component {
                         <View style={styles.chartContainer}>
                             <Chart dataActivities={this.props.dataActivities} xAxisActivities={this.props.xAxisActivities} yAxisActivities={this.props.yAxisActivities} markerActivities={this.props.markerActivities} legendActivities={this.props.legendActivities} activityResult={this.props.activityResult} type={this.props.type} search={this.props.search} />
                         </View>
-
-                        {/*<View style={{ flex: 1 }}>
-                            <List containerStyle={{ flex: 1 }}>
-                                {
-                                    list.map((l, i) => (
-                                        <ListItem
-                                            key={i}
-                                            title={l.name}
-                                        />
-                                    ))
-                                }
-                            </List>
-                        </View>*/}
-
-                        {/*</ScrollView>*/}
 
                     </View>
                 </ScrollView>
