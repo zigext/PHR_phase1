@@ -16,7 +16,7 @@ export default class Activity2AdvicesDetail extends React.Component {
                     <View style={_styles.contentContainer}>
                         <Text style={_styles.text}>เป็นกิจกรรมที่ทำได้ง่าย และช่วยให้ผู้ป่วยทำกิจวัตรประจำวันได้ดียิ่งขึ้น</Text>
                         <Text style={_styles.text}>โดยพยายามเดินให้ได้ระยะทางที่ไกลขึ้น ในการเดินครั้งต่อไป </Text>
-                        <Image source={require('../../assets/images/exercise2.jpg')} style={_styles.image}></Image>
+                        <Image source={require('../../assets/images/advices/exercise1.jpg')} style={_styles.image}></Image>
                     </View>
                 </ScrollView>
             </View>

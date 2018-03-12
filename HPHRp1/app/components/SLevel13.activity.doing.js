@@ -177,7 +177,7 @@ export default class SLevel13 extends React.Component {
         return (
             <View>
                 <View style={{ alignItems: 'center' }}>
-                    <Image source={require('../../assets/images/daily1.png')} style={_styles.image} />
+                    <Image source={require('../../assets/images/advices/daily1.png')} style={_styles.image} />
                 </View>
                 <View style={_styles.exitContainer}>
                     <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
