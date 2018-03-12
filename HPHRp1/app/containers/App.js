@@ -25,10 +25,12 @@ import AddSurgery from './AddSurgery'
 import MWT from './6MWT'
 import MainAdvices from './MainAdvices'
 import FoodAdvices from './FoodAdvices'
+import OtherAdvices from './OtherAdvices'
 import ExerciseAdvices from './ExerciseAdvices'
 import DailyAdvices from './DailyAdvices'
 import ProhibitAdvices from './ProhibitAdvices'
 import ActivityAdvices from './ActivityAdvices'
+import AdvicesForHome from './AdvicesForHome'
 import Activity1AdvicesList from '../components/Activity1AdvicesList'
 import Activity1AdvicesDetail from '../components/Activity1AdvicesDetail'
 import Activity2AdvicesDetail from '../components/Activity2AdvicesDetail'
@@ -270,7 +272,7 @@ export default class App extends React.Component {
                                                     <Scene
                                                         key="tab_advices_food"
                                                         component={FoodAdvices}
-                                                        title="อาหาร"
+                                                        title="อาหารและยา"
                                                         panHandlers={null}
                                                     />
                                                     <Scene
@@ -319,6 +321,18 @@ export default class App extends React.Component {
                                                         key="tab_advices_activity_2"
                                                         component={Activity2AdvicesDetail}
                                                         title="กิจกรรมฟื้นฟูสมรรถภาพหัวใจระยะที่ 2"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_home"
+                                                        component={AdvicesForHome}
+                                                        title="คำแนะนำหลังกลับบ้าน"
+                                                        panHandlers={null}
+                                                    />
+                                                    <Scene
+                                                        key="tab_advices_other"
+                                                        component={OtherAdvices}
+                                                        title="ทั่วไป"
                                                         panHandlers={null}
                                                     />
                                                 </Stack>
