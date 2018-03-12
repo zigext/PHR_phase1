@@ -21,10 +21,10 @@ let options = {
 
 //Heart rate condition
 //heart rate > 0 && < 200
-let preHr = t.refinement(t.Number, function (n) { return n > 0 && n < 250 })
+let preHr = t.refinement(t.Number, function (n) { return n >= 30 && n <= 250 })
 // if you define a getValidationErrorMessage function, it will be called on validation errors
 preHr.getValidationErrorMessage = function (value, path, context) {
-    return 'อัตราการเต้นหัวใจไม่ถูกต้อง'
+    return 'อัตราการเต้นหัวใจไม่ถูกต้อง กรุณากรอกตัวเลขในช่วง 30-250'
 }
 
 //Blood pressure condition
@@ -32,13 +32,13 @@ preHr.getValidationErrorMessage = function (value, path, context) {
 //bpArray[0] = systolic, bpArray[1] = diastolic
 let preBp = t.refinement(t.String, function (n) {
     let bpArray = split(n, '/')
-    if (bpArray[0] > 0 && bpArray[0] < 300 && bpArray[1] > 0 && bpArray[1] < 300) {
+    if (bpArray[0] >= 30 && bpArray[0] <= 250 && bpArray[1] >= 30 && bpArray[1] <= 250) {
         return n !== null
     }
 
 })
 preBp.getValidationErrorMessage = function (value, path, context) {
-    return 'ความดันเลือดไม่ถูกต้อง ex. 80/120'
+    return 'ความดันเลือดไม่ถูกต้อง กรุณากรอกตัวเลขในช่วง 30-250 ex. 80/120'
 }
 
 let input = t.struct({
