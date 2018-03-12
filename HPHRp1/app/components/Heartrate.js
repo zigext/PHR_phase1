@@ -1,12 +1,22 @@
 import React from 'react'
-import { StyleSheet, Text, View, NativeEventEmitter, NativeModules } from 'react-native'
+import { StyleSheet, Text, View, NativeEventEmitter, NativeModules, ToastAndroid } from 'react-native'
 import BleManager from 'react-native-ble-manager'
 import Buffer from 'buffer'
 import { Icon } from 'react-native-elements'
+import Sound from 'react-native-sound'
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule)
 
+const callbackSound = (error, sound) => {
+    if (error) {
+        Alert.alert('error', error.message)
+        return
+    }
+    sound.play(() => {
+        sound.release()
+    })
+}
 
 export default class Heartrate extends React.Component {
     constructor(props) {
@@ -59,11 +69,10 @@ export default class Heartrate extends React.Component {
             this.setState({
                 currentHr: sensorData
             })
-            console.log("count = ", this.count, this.state.currentHr)
         }
-
         if (this.state.currentHr - this.props.preHr >= 20) {
             ToastAndroid.showWithGravity('อัตราการเต้นหัวใจถึงค่าที่กำหนด ควรหยุดทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            const sound = new Sound('alert.wav', Sound.MAIN_BUNDLE, error => callbackSound(error, sound))
         }
     }
 
