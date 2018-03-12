@@ -1,14 +1,11 @@
 import React, { Component, } from 'react'
 import { StyleSheet, View, Text, Button } from 'react-native'
 import { Actions } from 'react-native-router-flux'
-import FoodAdvicesButton from '../components/FoodAdvicesButton'
-import ExerciseAdvicesButton from '../components/ExerciseAdvicesButton'
 import ActivityAdvicesButton from '../components/ActivityAdvicesButton'
-import DailyAdvicesButton from '../components/DailyAdvicesButton'
-import { connect } from 'react-redux'
+import AdvicesForHomeButton from '../components/AdvicesForHomeButton'
 import Orientation from 'react-native-orientation'
 
-class MainAdvices extends React.Component {
+export default class MainAdvices extends React.Component {
     constructor() {
         super()
     }
@@ -17,46 +14,24 @@ class MainAdvices extends React.Component {
         Orientation.lockToLandscape()
     }
 
-    onFoodPress = () => {
-        Actions.tab_advices_food()
-    }
-
-    onExercisePress = () => {
-        Actions.tab_advices_exercise()
-    }
-
-    onDailyPress = () => {
-        Actions.tab_advices_daily()
-    }
-
     onActivityPress = () => {
         Actions.tab_advices_activity()
+    }
+
+    onAdvicesHomePress = () => {
+        Actions.tab_advices_home()
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <FoodAdvicesButton onFoodPress={this.onFoodPress} />
-                <ExerciseAdvicesButton onExercisePress={this.onExercisePress} />
-                <DailyAdvicesButton onDailyPress={this.onDailyPress} />
                 <ActivityAdvicesButton onActivityPress={this.onActivityPress} />
+                <AdvicesForHomeButton onAdvicesHomePress={this.onAdvicesHomePress} />
             </View>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    // console.log("mapStateToProps", state)
-    return state
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        // dispatchLogIn: (email, uid) => dispatch(logIn(email, uid))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainAdvices)
 
 var styles = StyleSheet.create({
     container: {
