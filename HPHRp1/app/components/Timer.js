@@ -16,10 +16,20 @@ export default class Timer extends React.Component {
     }
 
     componentDidMount = () => {
-        this.incrementer = setInterval(() =>
+        this.incrementer = setInterval(async () => {
             this.setState({
                 secondsElapsed: this.state.secondsElapsed + 1
             })
+            //for 6 mins walk test, stop when reach 6 miniutes
+            if (this.props.sixMinsWalk) {
+                if (this.state.secondsElapsed >= 360) {
+                    clearInterval(this.incrementer)
+                    if (this.state.secondsElapsed >= 360)
+                        await this.setState({ secondsElapsed: 360 })
+                    this.props.onDataChange('duration', this.state.secondsElapsed * 1000) //change to ms
+                }
+            }
+        }
             , 1000)
     }
 
@@ -28,6 +38,16 @@ export default class Timer extends React.Component {
         this.setState({
             lastClearedIncrementer: this.incrementer
         })
+    }
+
+    //when stop 6mwt before reach 6 minutes 
+    componentWillReceiveProps = (nextProps) => {
+        if (this.props.isDoing6Mwt !== nextProps.isDoing6Mwt) {
+                if (this.props.sixMinsWalk) {
+                    clearInterval(this.incrementer)
+                    this.props.onDataChange('duration', this.state.secondsElapsed * 1000) //change to ms
+                }
+        }
     }
 
     handleStartClick = () => {
@@ -53,10 +73,21 @@ export default class Timer extends React.Component {
         });
     }
 
+    timerSize = (size) => {
+        if (size) {
+            return {
+                fontSize: size
+            }
+        }
+        return {
+            fontSize: 60,
+        }
+    }
+
     render() {
         return (
             <View>
-                <Text style={styles.text}>{formattedSeconds(this.state.secondsElapsed)}</Text>
+                <Text style={this.timerSize(this.props.fontSize)}>{formattedSeconds(this.state.secondsElapsed)}</Text>
 
                 {/*{(this.state.secondsElapsed === 0 ||
                     this.incrementer === this.state.lastClearedIncrementer
