@@ -61,14 +61,13 @@ export default class InitialProgress extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <View style={{ flex: 1, backgroundColor: '#f7f1e6', flexDirection: 'row' }}>
-
-                    <View style={{ flex: 1, backgroundColor: '#f7f1e6' }}>
+            <View style={styles.container}>
+                <View style={[styles.container, {flexDirection: 'row'} ]}>
+                    <View style={styles.container}>
                         <RecentLevelChart dataRecentActivities={this.props.dataRecentActivities} xAxisRecentActivities={this.props.xAxisRecentActivities} yAxisRecentActivities={this.props.yAxisRecentActivities} markerRecentActivities={this.props.markerRecentActivities} legendRecentActivities={this.props.legendRecentActivities} />
                     </View>
-                    <View style={{ flex: 1, backgroundColor: '#f7f1e6', flexDirection: 'column' }}>
-                        <View style={{ flex: 0.8, backgroundColor: '#f7f1e6', padding: 20 }}>
+                    <View style={styles.container}>
+                        <View style={{ flex: 0.8, padding: 20 }}>
                             <Text style={styles.formText}>เลือกผลการทำกิจกรรม</Text>
                             <View style={styles.buttonDown}>
                                 <Picker selectedValue={this.props.type} onValueChange={(type, idx) => this.onSelect(type)}>
@@ -133,7 +132,8 @@ export default class InitialProgress extends React.Component {
 const styles = {
     container: {
         flex: 1,
-        backgroundColor: '#f7f1e6'
+        backgroundColor: '#FFFDF9',
+        // backgroundColor: '#f7f1e6'
     },
     levelContainer: {
         borderWidth: 10,
