@@ -320,7 +320,6 @@ class Activity extends React.Component {
 
     onCancelActivity = async () => {
         await this.setState(this.baseState)
-         console.log("cancel")
         console.log("state in Activity = ", this.state)
     }
 
