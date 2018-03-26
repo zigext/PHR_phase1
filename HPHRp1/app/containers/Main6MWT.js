@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert, Image } from 'react-native'
+import { StyleSheet, Text, View, Alert, Image, ToastAndroid } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SERVER_IP, PIN_CODE, MWT6 } from '../config/Const'
@@ -85,26 +85,26 @@ class Do6MWT extends React.Component {
 
     //Check nurse pin with server
     checkNursePin = async (pin, callback) => {
-        if (pin === 1234)
-            callback(true, null)
-        else
-            callback(false, null)
-        // const path = `${SERVER_IP}${PIN_CODE}?pin_code=${pin}&appid=${this.props.appId}` //pin_code=${pin}&appid=${this.props.userReducer.appId}  //appid=${this.props.UserReducer.appId}
-        // await fetch(path)
-        //     .then(ApiUtils.checkStatus)
-        //     .then(response => response.json())
-        //     .then(responseData => {
-        //         let success = responseData.success
-        //         console.log("Check pin success = ", success)
-        //         if (success === 'true')
-        //             callback(true, null)
-        //         else
-        //             callback(false, null)
-        //     })
-        //     .catch(error => {
-        //         console.log("Error in checkNursePin = ", error)
-        //         callback(false, error)
-        //     })
+        // if (pin === 1234)
+        //     callback(true, null)
+        // else
+        //     callback(false, null)
+        const path = `${SERVER_IP}${PIN_CODE}?pin_code=${pin}&appid=${this.props.appId}` //pin_code=${pin}&appid=${this.props.userReducer.appId}  //appid=${this.props.UserReducer.appId}
+        await fetch(path)
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .then(responseData => {
+                let success = responseData.success
+                console.log("Check pin success = ", success)
+                if (success === 'true')
+                    callback(true, null)
+                else
+                    callback(false, null)
+            })
+            .catch(error => {
+                console.log("Error in checkNursePin = ", error)
+                callback(false, error)
+            })
     }
 
     saveMWTResult = async () => {
