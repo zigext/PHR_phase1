@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
 import common from '../styles/common'
-import TimerCountdown from 'react-native-timer-countdown'
 
 let breathingExercise = {}
 
