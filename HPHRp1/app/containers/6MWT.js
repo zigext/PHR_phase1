@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, BackAndroid, ScrollView } from 'react-native'
-import { SERVER_IP, MWT6 } from '../config/Const'
+import { SERVER_IP, MWT6, PROFILE } from '../config/Const'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
@@ -19,12 +19,14 @@ class MWT extends React.Component {
             mwtArray: [],
             profile: {},
         }
+        this.baseState = this.state
     }
 
     componentDidMount = async () => {
+
         Orientation.lockToLandscape()
-        // await this.fetchMWTResult()
-        // await this.fetchProfile()
+        await this.fetchMWTResult()
+        await this.fetchProfile()
     }
 
     fetchMWTResult = async () => {
@@ -32,16 +34,39 @@ class MWT extends React.Component {
         await fetch(path)
             .then(ApiUtils.checkStatus)
             .then(response => response.json())
-            .then(responseData => {
-                let mwtArray = responseData.results
-                this.setState({
-                    mwtArray
-                })
+            .then(async responseData => {
+                let response = responseData.data
+                console.log(response)
+                // for (let index in response) {
+                //     let key = Object.keys(response[index])[0]
+                //     let data = {}
+                //     let obj = response[index][key]['6minswalk'].result
+                //     console.log("obj", obj)
+                //     await this.setState({
+                //         mwtArray: [...this.state.mwtArray, obj]
+                //     })
+                // }
+                await this.prepareMWTResultArray(response)
+                // await this.setState({
+                //     mwtArray
+                // })
                 console.log("Fetch 6MWT success ", this.state.mwtArray)
             })
             .catch(error => {
                 console.log("Fetch 6MWT failed = ", error)
             })
+    }
+
+    prepareMWTResultArray = async (responseData) => {
+        for (let index in responseData) {
+            let key = Object.keys(responseData[index])[0]
+            let data = {}
+            let obj = responseData[index][key]['6minswalk'].result
+            console.log("obj", obj)
+            await this.setState({
+                mwtArray: [...this.state.mwtArray, obj]
+            })
+        }
     }
 
     fetchProfile = async () => {
@@ -73,20 +98,39 @@ class MWT extends React.Component {
 
     onPressMwtItem = (i) => {
         let obj = this.state.mwtArray[i]
-        // Actions.surgeryDetail({ surgery: obj.information, uid: this.props.userReducer.user.uid })
+        Actions.mwtDetail(
+            {
+                pre: obj.pre,
+                post: obj.post,
+                post5Mins: obj.post5Mins,
+                result: obj.result,
+                uid: this.props.userReducer.user.uid
+            }
+        )
     }
 
-    toggleIsView = () => {
+    toggleIsView = async () => {
         this.setState({ isView: !this.state.isView })
+        if(this.state.isView) {
+            this.didMountAgain()
+        }
+    }
+
+    didMountAgain = async () => {
+        await this.setState({
+            mwtArray: []
+        })
+        await this.fetchMWTResult()
     }
 
     //Show list
     renderView = () => {
         return (
             <View style={styles.container}>
-                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                {/*<ScrollView contentContainerStyle={styles.scrollViewContainer}>*/}
+                <ScrollView>
                     {isEmpty(this.state.mwtArray) ? (
-                            <Text style={styles.noListText}>ไม่มีผลการทดสอบ</Text>
+                        <Text style={styles.noListText}>ไม่มีผลการทดสอบ</Text>
                     ) :
                         (
                             <List>
@@ -134,7 +178,7 @@ class MWT extends React.Component {
             <Main6Mwt
                 appId={this.props.userReducer.appId}
                 uid={this.props.userReducer.user.uid}
-                profile={profile} //this.state.profile
+                profile={this.state.profile} //this.state.profile
                 toggleIsView={this.toggleIsView} />
         )
     }
@@ -159,7 +203,7 @@ var styles = StyleSheet.create({
         margin: 20
     },
     scrollViewContainer: {
-        justifyContent: 'center', 
+        justifyContent: 'center',
         alignItems: 'center',
         flex: 1
     },
