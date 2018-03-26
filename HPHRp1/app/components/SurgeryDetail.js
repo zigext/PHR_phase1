@@ -10,8 +10,6 @@ import firebase from '../config/Firebase'
 import ApiUtils from './ApiUtils'
 import { SERVER_IP, SURGERY } from '../config/Const'
 
-
-
 export default class SurgeryDetail extends React.Component {
 
     static propTypes = {
@@ -25,14 +23,11 @@ export default class SurgeryDetail extends React.Component {
 
     deleteSurgeryPress = () => {
         Alert.alert(
-            'ออกจากระบบ',
+            'ข้อมูลการผ่าตัด',
             'ต้องการลบรายการนี้หรือไม่?',
             [
                 {
                     text: 'ใช่', onPress: () => {
-                        // this.ref = firebase.database().ref(`surgery`)
-                        // this.ref.child(`${this.props.uid}_${this.props.surgery.hospital}_${this.props.surgery.date}_${this.props.surgery.time}`).remove()
-                        // Actions.surgery()
                         this.deleteSurgery()
                     }
                 },
