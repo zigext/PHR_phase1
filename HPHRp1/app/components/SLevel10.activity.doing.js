@@ -7,6 +7,7 @@ import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import common from '../styles/common'
 import { cloneDeep } from 'lodash'
+import BorgScale from './BorgScale.activity.doing'
 
 Tts.setDefaultLanguage('th-TH')
 Tts.setDefaultVoice('th-TH-language')
@@ -51,7 +52,8 @@ export default class SLevel10 extends React.Component {
             status: 'doing',
             doingLevel: this.props.doingLevel,
             completedLevel: false,
-            type: 'physical'
+            type: 'physical',
+            displayMain: true
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -85,10 +87,15 @@ export default class SLevel10 extends React.Component {
         Voice.start('en')
     }
 
+    toggleDisplayMain = () => {
+        this.setState({ displayMain: !this.state.displayMain })
+    }
+
     onSystemLevelChange = () => {
         this.props.setPhysicalExercise('walking', true)
-        this.props.onActivityLevelChange(this.props.activityLevel + 1)
-        this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        this.toggleDisplayMain()
+        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+        // this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
     onActivityDone = () => {
@@ -310,34 +317,11 @@ export default class SLevel10 extends React.Component {
                 </View>
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
-                {/*<Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
-                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onActivityDone}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-                </View>*/}
             </View>
         )
     }
 
-    render() {
-
+    renderMain = () => {
         let totalTimes
         switch (this.props.doingLevel) {
             case 3:
@@ -385,6 +369,21 @@ export default class SLevel10 extends React.Component {
                 <Text style={_styles.topic}>เดิน {totalTimes}</Text>
                 {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
             </View>
+        )
+    }
+
+    renderBorg = () => (
+        <BorgScale
+            onActivityLevelChange={this.props.onActivityLevelChange}
+            onSystemLevelChange={this.props.onSystemLevelChange}
+            activityLevel={this.props.activityLevel}
+            systemLevel={this.props.systemLevel}
+        />
+    )
+
+    render() {
+        return (
+            this.state.displayMain ? this.renderMain() : this.renderBorg()
         )
 
     }

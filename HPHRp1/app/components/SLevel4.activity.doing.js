@@ -7,6 +7,7 @@ import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import common from '../styles/common'
 import { cloneDeep } from 'lodash'
+import BorgScale from './BorgScale.activity.doing'
 
 Tts.setDefaultLanguage('th-TH')
 Tts.setDefaultVoice('th-TH-language')
@@ -51,7 +52,8 @@ export default class SLevel4 extends React.Component {
             status: 'doing',
             showDescription: false,
             type: 'physical',
-            completedLevel: false
+            completedLevel: false,
+            displayMain: true
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -85,6 +87,10 @@ export default class SLevel4 extends React.Component {
         Voice.start('en')
     }
 
+    toggleDisplayMain = () => {
+        this.setState({ displayMain: !this.state.displayMain })
+    }
+
     onSystemLevelChange = async () => {
         if (!this.props.physicalExercise.hasOwnProperty("legsExercise")) {
             this.props.setCompletedAllPhysicalExercise(false)
@@ -93,8 +99,10 @@ export default class SLevel4 extends React.Component {
         this.props.setPhysicalExercise('armsExercise', true)
         //If all breathing exercises also completed
         if (this.props.completedAllBreathing) {
-            this.props.onActivityLevelChange(this.props.activityLevel + 1)
-            this.props.onSystemLevelChange(this.props.systemLevel + 1)
+            // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+            // this.props.onSystemLevelChange(this.props.systemLevel + 1)
+
+            this.toggleDisplayMain() //to ask borg scale
         }
         //If not
         else {
@@ -151,7 +159,6 @@ export default class SLevel4 extends React.Component {
                                 }
                             ]
                         )
-                        //    this.setState({status: 'done'})
                     }
                 },
                 { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
@@ -380,65 +387,55 @@ export default class SLevel4 extends React.Component {
 
                 {/*Check if this is the final activity that patient can do*/}
                 {this.props.finalSystemLevel === LEVEL ? this.renderButtonWhenFinal() : this.renderNormalButton()}
-                {/*<Icon
-                    raised
-                    reverse
-                    name='ios-arrow-forward'
-                    type='ionicon'
-                    color={common.accentColor}
-                    size={35}
-                    onPress={this.onSystemLevelChange}
-                    containerStyle={{ alignSelf: 'flex-end' }}
-                />
-                <View style={_styles.exitContainer}>
-                    <Text style={_styles.text}>สิ้นสุดการทำกิจกรรม</Text>
-                    <Icon
-                        raised
-                        reverse
-                        name='exit-to-app'
-                        color='#d6d4e0'
-                        size={35}
-                        onPress={this.onActivityDone}
-                        containerStyle={{ alignSelf: 'flex-end' }}
-                    />
-                </View>*/}
             </View>
         )
     }
 
+    renderMain = () => (
+        <View style={_styles.container}>
+            <View style={_styles.typeExerciseContainer}>
+                <Button
+                    raised
+                    backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                    color={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                    title='Physical'
+                    fontSize={18}
+                    containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                    buttonStyle={{ borderRadius: 10 }}
+                    onPress={this.changeToPhysicalPress}
+                />
+                <Button
+                    raised
+                    backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                    color={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                    title='Breathing'
+                    fontSize={18}
+                    containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                    buttonStyle={{ borderRadius: 10 }}
+                    onPress={this.changeToBreathingPress}
+                />
+            </View>
+            <Text style={_styles.topic}>บริหารแขน-ข้อศอก-ข้อมือ-หัวไหล่</Text>
+            <Text style={_styles.detail}>กำสลับแบมือ 10 ครั้ง</Text>
+            <Text style={_styles.detail}>เหยียดแขนแล้วงอศอกสลับเหยียดศอก 10 ครั้ง</Text>
+            <Text style={_styles.detail}>เหยียดแขนตรงเหนือศีรษะทีละข้างๆละ 5 ครั้ง</Text>
+            {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
+        </View>
+    )
+
+    renderBorg = () => (
+        <BorgScale
+            onActivityLevelChange={this.props.onActivityLevelChange}
+            onSystemLevelChange={this.props.onSystemLevelChange}
+            activityLevel={this.props.activityLevel}
+            systemLevel={this.props.systemLevel}
+        />
+    )
+
     render() {
         return (
-            <View style={_styles.container}>
-                <View style={_styles.typeExerciseContainer}>
-                    <Button
-                        raised
-                        backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
-                        color={this.state.type === 'physical' ? 'white' : common.primaryColor}
-                        title='Physical'
-                        fontSize={18}
-                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
-                        buttonStyle={{ borderRadius: 10 }}
-                        onPress={this.changeToPhysicalPress}
-                    />
-                    <Button
-                        raised
-                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
-                        color={this.state.type === 'physical' ? common.primaryColor : 'white'}
-                        title='Breathing'
-                        fontSize={18}
-                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
-                        buttonStyle={{ borderRadius: 10 }}
-                        onPress={this.changeToBreathingPress}
-                    />
-                </View>
-                <Text style={_styles.topic}>บริหารแขน-ข้อศอก-ข้อมือ-หัวไหล่</Text>
-                <Text style={_styles.detail}>กำสลับแบมือ 10 ครั้ง</Text>
-                <Text style={_styles.detail}>เหยียดแขนแล้วงอศอกสลับเหยียดศอก 10 ครั้ง</Text>
-                <Text style={_styles.detail}>เหยียดแขนตรงเหนือศีรษะทีละข้างๆละ 5 ครั้ง</Text>
-                {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
-            </View>
+            this.state.displayMain ? this.renderMain() : this.renderBorg()
         )
-
     }
 }
 

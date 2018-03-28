@@ -7,6 +7,7 @@ import t from 'tcomb-form-native'
 import styles from '../styles/index'
 import common from '../styles/common'
 import { cloneDeep } from 'lodash'
+import BorgScale from './BorgScale.activity.doing'
 
 Tts.setDefaultLanguage('th-TH')
 Tts.setDefaultVoice('th-TH-language')
@@ -50,7 +51,8 @@ export default class SLevel7 extends React.Component {
         this.state = {
             status: 'doing',
             type: 'physical',
-            completedLevel: false
+            completedLevel: false,
+            displayMain: true
         }
         Voice.onSpeechStart = this.onSpeechStartHandler.bind(this)
         Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this)
@@ -84,10 +86,15 @@ export default class SLevel7 extends React.Component {
         Voice.start('en')
     }
 
+    toggleDisplayMain = () => {
+        this.setState({ displayMain: !this.state.displayMain })
+    }
+
     onSystemLevelChange = () => {
         this.props.setPhysicalExercise('sitting', true)
-        this.props.onActivityLevelChange(this.props.activityLevel + 1)
-        this.props.onSystemLevelChange(this.props.systemLevel + 1)
+        this.toggleDisplayMain() //to ask borg scale
+        // this.props.onActivityLevelChange(this.props.activityLevel + 1)
+        // this.props.onSystemLevelChange(this.props.systemLevel + 1)
     }
 
     onActivityDone = () => {
@@ -315,36 +322,48 @@ export default class SLevel7 extends React.Component {
         )
     }
 
+    renderMain = () => (
+        <View style={_styles.container}>
+            <View style={_styles.typeExerciseContainer}>
+                <Button
+                    raised
+                    backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                    color={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                    title='Physical'
+                    fontSize={18}
+                    containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                    buttonStyle={{ borderRadius: 10 }}
+
+                />
+                <Button
+                    raised
+                    backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
+                    color={this.state.type === 'physical' ? common.primaryColor : 'white'}
+                    title='Breathing'
+                    fontSize={18}
+                    containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
+                    buttonStyle={{ borderRadius: 10 }}
+                    onPress={() => ToastAndroid.showWithGravity('ทำ Breathing exercise สำเร็จครบแล้ว', ToastAndroid.SHORT, ToastAndroid.CENTER)}
+                />
+            </View>
+            <Text style={_styles.topic}>นั่งเก้าอี้ข้างเตียง 1-2 ครั้ง</Text>
+            {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
+        </View>
+    )
+
+    renderBorg = () => (
+        <BorgScale
+            onActivityLevelChange={this.props.onActivityLevelChange}
+            onSystemLevelChange={this.props.onSystemLevelChange}
+            activityLevel={this.props.activityLevel}
+            systemLevel={this.props.systemLevel}
+        />
+    )
+
     render() {
         return (
-            <View style={_styles.container}>
-                <View style={_styles.typeExerciseContainer}>
-                    <Button
-                        raised
-                        backgroundColor={this.state.type === 'physical' ? common.primaryColor : 'white'}
-                        color={this.state.type === 'physical' ? 'white' : common.primaryColor}
-                        title='Physical'
-                        fontSize={18}
-                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
-                        buttonStyle={{ borderRadius: 10 }}
-
-                    />
-                    <Button
-                        raised
-                        backgroundColor={this.state.type === 'physical' ? 'white' : common.primaryColor}
-                        color={this.state.type === 'physical' ? common.primaryColor : 'white'}
-                        title='Breathing'
-                        fontSize={18}
-                        containerViewStyle={{ alignSelf: 'flex-start', borderRadius: 10 }}
-                        buttonStyle={{ borderRadius: 10 }}
-                        onPress={() => ToastAndroid.showWithGravity('ทำ Breathing exercise สำเร็จครบแล้ว', ToastAndroid.SHORT, ToastAndroid.CENTER)}
-                    />
-                </View>
-                <Text style={_styles.topic}>นั่งเก้าอี้ข้างเตียง 1-2 ครั้ง</Text>
-                {(this.state.status === 'doing') ? this.renderActivity() : this.renderForm()}
-            </View>
+            this.state.displayMain ? this.renderMain() : this.renderBorg()
         )
-
     }
 }
 
