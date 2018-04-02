@@ -26,7 +26,6 @@ export default class SearchProgress extends React.Component {
                 return
             }
             else {
-
             }
         })
     }
@@ -36,12 +35,10 @@ export default class SearchProgress extends React.Component {
     }
 
     render() {
-        console.log("______type", this.props.type)
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={{ flex: 1 }} scrollEnabled={true}>
                     <View style={{ margin: 20, flex: 1 }}>
-                        {/*<ScrollView contentContainerStyle={{ flex: 1 }} scrollEnabled={true}>*/}
 
                         <View style={styles.formContainer}>
 
@@ -130,11 +127,11 @@ export default class SearchProgress extends React.Component {
 const styles = {
     container: {
         flex: 1,
-        backgroundColor: '#f7f1e6'
+        backgroundColor: '#FFFDF9'
     },
     formContainer: {
         flex: 0.4,
-        backgroundColor: '#f7f1e6'
+        backgroundColor: '#FFFDF9'
     },
     chartContainer: {
         flex: 1,
