@@ -59,7 +59,7 @@ export default class Profile extends React.Component {
                             <Text style={_styles.text}>ชื่อ : {this.props.profile.firstname} {this.props.profile.lastname}</Text>
                             <Text style={_styles.text}>รหัสผู้ป่วย : {this.props.profile.patient_code}</Text>
                             <Text style={_styles.text}>รหัสบัตรประชาชน : {this.props.profile.id_card}</Text>
-                            <Text style={_styles.text}>เพศ : {this.props.profile.gender}</Text>
+                            <Text style={_styles.text}>เพศ : {this.props.profile.gender = 'men'? <Text style={_styles.text}>ชาย</Text> : <Text style={_styles.text}>หญิง</Text>}</Text>
                             <Text style={_styles.text}>ส่วนสูง : {this.props.profile.height} เซนติเมตร</Text>
                             <Text style={_styles.text}>น้ำหนัก : {this.props.profile.weight} กิโลกรัม</Text>
                             <Text style={_styles.text}>หมู่เลือด : {this.props.profile.blood_type}</Text>
