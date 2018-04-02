@@ -10,6 +10,7 @@ import ScanBLE from './ScanBLE'
 import common from '../styles/common'
 import { isEmpty } from 'lodash'
 import Main6Mwt from './Main6MWT'
+import moment from 'moment'
 
 class MWT extends React.Component {
     constructor(props) {
@@ -104,14 +105,17 @@ class MWT extends React.Component {
                 post: obj.post,
                 post5Mins: obj.post5Mins,
                 result: obj.result,
-                uid: this.props.userReducer.user.uid
+                uid: this.props.userReducer.user.uid,
+                appId: this.props.userReducer.appId,
+                time: obj.result.timeStart,
+                date: obj.result.date
             }
         )
     }
 
     toggleIsView = async () => {
         this.setState({ isView: !this.state.isView })
-        if(this.state.isView) {
+        if (this.state.isView) {
             this.didMountAgain()
         }
     }
@@ -121,6 +125,16 @@ class MWT extends React.Component {
             mwtArray: []
         })
         await this.fetchMWTResult()
+    }
+
+    millisToMinutesAndSeconds = (millis) => {
+        let minutes = Math.floor(millis / 60000)
+        let seconds = ((millis % 60000) / 1000).toFixed(0)
+        return minutes + "." + (seconds < 10 ? '0' : '') + seconds
+    }
+
+     formatMoment = (date, format) => {
+        return moment(date).format(format)
     }
 
     //Show list
@@ -138,8 +152,8 @@ class MWT extends React.Component {
                                     this.state.mwtArray.map((item, i) => (
                                         <ListItem
                                             key={i}
-                                            title={<Text style={styles.item}>วันที่   {item.result.date}  ระยะทาง  {item.result.distance} เมตร</Text>}
-                                            subtitle={<Text style={{ fontSize: 18 }}>เวลา   {item.result.duration}</Text>}
+                                            title={<Text style={styles.item}>วันที่   {this.formatMoment(item.result.date, "DD/MM/YYYY")} เวลา {item.result.timeStart}  ระยะทาง  {item.result.distance} เมตร</Text>}
+                                            subtitle={<Text style={{ fontSize: 18 }}>ใช้เวลา  {this.millisToMinutesAndSeconds(item.result.duration)} นาที</Text>}
                                             titleStyle={styles.item}
                                             onPress={() => this.onPressMwtItem(i)}
                                         />
