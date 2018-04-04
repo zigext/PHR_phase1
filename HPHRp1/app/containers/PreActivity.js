@@ -98,7 +98,6 @@ class PreActivity extends React.Component {
         }
         await this.setState({ passed: true })
         dataStore.passed = true
-        console.log("PASS = ", dataStore)
     }
 
     connectPress = () => {
@@ -107,20 +106,6 @@ class PreActivity extends React.Component {
     }
 
     renderBody = () => {
-        // switch (this.state.step) {
-        //     case 1:
-        //         return <Step1Pre setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
-        //     case 2:
-        //         return <Step2Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} sbpLowerThanNormal={this.state.sbpLowerThanNormal} abnormalGlucose={this.state.abnormalGlucose} weakMuscle={this.state.weakMuscle} />
-        //     case 3:
-        //         return <Step3Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} st={this.state.st} pvc={this.state.pvc} af={this.state.af} svt={this.state.svt} bradycardia={this.state.bradycardia} stSegment={this.state.stSegment} />
-        //     case 4:
-        //         return <Step4Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} agitation={this.state.agitation} dyspnea={this.state.dyspnea} af={this.state.af} rr={this.state.rr} spO2={this.state.spO2} paO2={this.state.paO2} />
-        //     case 5:
-        //         return <Step5Pre step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} anemia={this.state.anemia} fatigue={this.state.fatigue} nausea={this.state.nausea} chestPain={this.state.chestPain} dizziness={this.state.dizziness} pain={this.state.pain} />
-        //     case 6:
-        //         return <Step6Pre onStepChange={this.onStepChange} onPreActivityDone={this.props.onPreActivityDone} dataStore={dataStore} resetState={this.resetState} />
-        // }
         switch (this.state.step) {
             case 1:
                 return <Step1Pre useBLE={this.props.useBLE} peripheral={this.props.peripheral} setTimeStart={this.props.setTimeStart} step={this.state.step} onStepChange={this.onStepChange} onDataChange={this.onDataChange} preHr={this.state.preHr} preBp={this.state.preBp} />
