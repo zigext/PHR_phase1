@@ -59,10 +59,11 @@ export default class PostQuestions extends React.Component {
                 return <Step1PostMwt step={this.state.step} onStepChange={this.onStepChange} borg={this.props.borg} onDataChange={this.props.onDataChange} />
             case 2:
                 //Post-HR & post-BP & post-O2Sat && EKG && HRmax
-                return <Step2PostMwt step={this.state.step} onStepChange={this.onStepChange} onDataChangeTmp={this.onDataChangeTmp} onDataChange={this.props.onDataChange} hr={this.state.hr} bp={this.state.bp} o2sat={this.state.o2sat} hrmax={this.state.hrmax} ekg={this.state.ekg} />
+                return <Step2PostMwt step={this.state.step} onStepChange={this.onStepChange} onDataChangeTmp={this.onDataChangeTmp} onDataChange={this.props.onDataChange} hr={this.state.hr} hrArray={this.props.hrArray} bp={this.state.bp} o2sat={this.state.o2sat} hrmax={this.state.hrmax} ekg={this.state.ekg} useBLE={this.props.useBLE} peripheral={this.props.useBLE? this.props.peripheral: null} />
             case 3:
                 //Conditions
-                return <Step3PostMwt step={this.state.step} onStepChange={this.onStepChange} onDataChangeTmp={this.onDataChangeTmp} onDataChange={this.props.onDataChange} onStatusChange={this.props.onStatusChange} onPostQuestionsDone={this.onPostQuestionsDone} resetState={this.resetState} distance={this.state.distance} dizziness={this.state.dizziness} anemia={this.state.anemia} dyspnea={this.state.dyspnea} vomitting={this.state.vomitting} perspiration={this.state.perspiration} chestPain={this.state.chestPain} nausea={this.state.nausea} palpitation={this.state.palpitation} fatigue={this.state.fatigue} note={this.state.note} />
+                return <Step3PostMwt step={this.state.step} onStepChange={this.onStepChange} onDataChangeTmp={this.onDataChangeTmp} onDataChange={this.props.onDataChange} onStatusChange={this.props.onStatusChange} onPostQuestionsDone={this.onPostQuestionsDone} resetState={this.resetState} distance={this.state.distance} dizziness={this.state.dizziness} anemia={this.state.anemia} dyspnea={this.state.dyspnea} vomitting={this.state.vomitting} perspiration={this.state.perspiration} chestPain={this.state.chestPain} nausea={this.state.nausea} palpitation={this.state.palpitation} fatigue={this.state.fatigue} note={this.state.note}
+                        useBLE={this.props.useBLE} peripheral={this.props.useBLE? this.props.peripheral: null} />
         }
     }
 

@@ -6,11 +6,11 @@ import { connect } from 'react-redux'
 import Orientation from 'react-native-orientation'
 import moment from 'moment'
 import common from '../styles/common'
+import Heartrate from './Heartrate'
 
 let breathingExercise = {}
 
 export default class Doing6MWT extends React.Component {
-
     onCancel = () => {
         Alert.alert(
             'ทดสอบเดินบนพื้นราบ 6 นาที',
@@ -47,6 +47,7 @@ export default class Doing6MWT extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                    {this.props.useBLE ? <Heartrate state="doingMwt" peripheral={this.props.peripheral} onDataChange={this.props.onDataChange} /> : null}
                     <Timer fontSize={100} sixMinsWalk={true} onDataChange={this.props.onDataChange} isDoing6Mwt={this.props.isDoing6Mwt} />
                     <View style={{ flexDirection: 'row' }}>
                         <Button

@@ -68,6 +68,18 @@ let input = t.struct({
 })
 
 export default class Step2PostMwt extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            hr: '',
+            hrmax: ''
+        }
+    }
+
+    componentDidMount = () => {
+        this.findMaxHeartrate()
+    }
+
     onForward = () => {
         let value = this.refs.form.getValue()
         if (value) {
@@ -89,18 +101,45 @@ export default class Step2PostMwt extends React.Component {
         this.props.onStepChange(this.props.step - 1)
     }
 
+    getHeartrate = async (name, value) => {
+        await this.setState({ [name]: value })
+    }
+
+    findMaxHeartrate = async () => {
+        let hrmax = Math.max(...this.props.hrArray)
+        await this.setState({
+            hrmax
+        })
+        console.log("hrmax = ", hrmax)
+    }
+
     render() {
         let defaultValue = {}
         if (this.props.hr && this.props.hrmax && this.props.bp && this.props.o2sat && this.props.ekg) {
             let { hr: hr, hrmax: hrmax, bp: bp, o2sat: o2sat, ekg: ekg } = this.props
             defaultValue = { hr, hrmax, bp, o2sat, ekg }
         }
+        let dataFromBLE = {}
+        if (this.state.hr) {
+            let { hr: hr, hrmax: hrmax } = this.state
+            dataFromBLE = { hr, hrmax }
+            //Every input value is required, except ekg
+            if (this.props.ekg) {
+                let { bp: bp, o2sat: o2sat, ekg: ekg } = this.props
+                dataFromBLE = { hr, hrmax, bp, o2sat, ekg }
+            }
+            else {
+                let { bp: bp, o2sat: o2sat } = this.props
+                dataFromBLE = { hr, hrmax, bp, o2sat }
+            }
+        }
 
         return (
             <View style={_styles.container}>
+                {this.props.useBLE ? <Heartrate state="postMwt" getHeartrate={this.getHeartrate} peripheral={this.props.peripheral} /> : null}
                 <ScrollView>
                     <Text style={_styles.text}>บันทึกผลการทดสอบ</Text>
-                    {defaultValue ? <Form ref='form' type={input} options={options} value={defaultValue} /> : <Form ref='form' type={input} options={options} />}
+                    {dataFromBLE ? <Form ref='form' type={input} options={options} value={dataFromBLE} /> : <Form ref='form' type={input} options={options} />}
                     <View style={_styles.buttonContainer}>
                         <Icon
                             raised

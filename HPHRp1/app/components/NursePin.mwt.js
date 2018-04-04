@@ -79,7 +79,6 @@ export default class NursePin extends React.Component {
                         this.props.onDataChange('date', moment(new Date()).format("YYYY-MM-DD"))
                         this.props.onDataChange('recorder', this.state.recorder)
                         this.props.onStatusChange('pre')
-                        //  this.props.onStepChange(this.props.step + 1)
                     }
                     else {
                         ToastAndroid.showWithGravity('รหัสประจำตัวไม่ถูกต้อง', ToastAndroid.SHORT, ToastAndroid.CENTER)
@@ -95,12 +94,52 @@ export default class NursePin extends React.Component {
         this.setState({ recorder })
     }
 
+    connectPress = () => {
+        this.props.setUseBLE(null)
+        this.props.setConnectToBLE(false)
+    }
+
     render() {
         return (
             <View style={_styles.container}>
                 <ScrollView>
+                    <View style={styles.headerContainer}>
+                        {this.props.useBLE ? (
+                            <Button
+                                raised
+                                backgroundColor='white'
+                                color={common.primaryColorDark}
+                                title='ยกเลิกการเชื่อมต่อกับอุปกรณ์ Bluetooth'
+                                fontSize={14}
+                                containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
+                                buttonStyle={{ borderRadius: 10 }}
+                                onPress={() => Alert.alert(
+                                    'ยกเลิกการเชื่อมต่ออุปกรณ์ Bluetooth',
+                                    `ต้องการยกเลิกการเชื่อมต่อกับ ${this.props.peripheral.name} หรือไม่?`,
+                                    [
+                                        {
+                                            text: 'ใช่', onPress: () => {
+                                                this.props.disconnectBLE()
+                                            }
+                                        },
+                                        { text: 'ไม่ ', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
+                                    ]
+                                )}
+                            />
+                        ) : (
+                                <Button
+                                    raised
+                                    backgroundColor='white'
+                                    color={common.primaryColorDark}
+                                    title='เชื่อมต่อกับอุปกรณ์ Bluetooth'
+                                    fontSize={14}
+                                    containerViewStyle={{ borderRadius: 10, alignSelf: 'flex-start' }}
+                                    buttonStyle={{ borderRadius: 10 }}
+                                    onPress={this.connectPress}
+                                />
+                            )}
+                    </View>
                     <Text style={_styles.text}>กรุณากรอกรหัสประจำตัวพยาบาลผู้บันทึกข้อมูล</Text>
-                    {/*{this.state.recorder ? <Form ref='form' type={input} options={options} value={this.state.recorder} onChange={this.onChange.bind(this)} /> : <Form ref='form' type={input} options={options} onChange={this.onChange.bind(this)} value={this.state.recorder} />}*/}
                     <Form ref='form' type={input} options={options} value={this.state.recorder} />
                     <Icon
                         raised
@@ -125,7 +164,11 @@ const _styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'stretch',
         paddingHorizontal: 50,
-
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flex: 1
     },
     text: {
         fontSize: 20,

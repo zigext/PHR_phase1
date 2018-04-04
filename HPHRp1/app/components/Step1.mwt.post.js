@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight, Image, ScrollView } from 'r
 import { Icon, Slider } from 'react-native-elements'
 import common from '../styles/common'
 
+
 export default class Step1PostMwt extends React.Component {
     constructor(props) {
         super(props)

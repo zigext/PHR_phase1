@@ -60,6 +60,13 @@ let input = t.struct({
 })
 
 export default class Post5MinsQuestions extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            hr: ''
+        }
+    }
+
     onForward = () => {
         let value = this.refs.form.getValue()
         if (value) {
@@ -86,12 +93,25 @@ export default class Post5MinsQuestions extends React.Component {
         }
     }
 
+    getHeartrate = async (name, value) => {
+        await this.setState({ [name]: value })
+    }
+
     render() {
+        if (this.props.useBLE) {
+            ToastAndroid.showWithGravity('กรุณารออัตราการเต้นหัวใจจากอุปกรณ์ Bluetooth สักครู่', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+        let dataFromBLE = {}
+        if (this.state.hr) {
+            let { hr: hr } = this.state
+            dataFromBLE = { hr }
+        }
         return (
             <View style={_styles.container}>
+                {this.props.useBLE ? <Heartrate state="postMwt" getHeartrate={this.getHeartrate} peripheral={this.props.peripheral} /> : null}
                 <ScrollView>
                     <Text style={_styles.text}>บันทึกผลหลังทดสอบ 5 นาที</Text>
-                    <Form ref='form' type={input} options={options} />
+                    {dataFromBLE ? <Form ref='form' type={input} options={options} value={dataFromBLE} /> : <Form ref='form' type={input} options={options} />}
                     <View style={_styles.buttonContainer}>
                         <Icon
                             raised
