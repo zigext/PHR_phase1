@@ -22,8 +22,11 @@ export default class Heartrate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentHr: 0
+            currentHr: 0,
+            hrmax: 0,
+            hrArray: []
         }
+        this.hrArray = []
         this.count = 0
         this.handleUpdateValueForCharacteristic = this.handleUpdateValueForCharacteristic.bind(this)
     }
@@ -32,7 +35,7 @@ export default class Heartrate extends React.Component {
         this.handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValueForCharacteristic)
         BleManager.retrieveServices(this.props.peripheral.id).then((peripheralInfo) => {
             console.log("retrieve service = ", peripheralInfo);
-
+            //Read heartrate
             BleManager.startNotification(this.props.peripheral.id, '0000180d-0000-1000-8000-00805F9B34FB', '00002a37-0000-1000-8000-00805F9B34FB')
                 .then(() => {
                     // Success code
@@ -51,8 +54,7 @@ export default class Heartrate extends React.Component {
         this.handlerUpdate.remove();
     }
 
-
-    handleUpdateValueForCharacteristic(data) {
+    handleUpdateValueForCharacteristic = async (data) => {
         // console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
         const buffer = Buffer.Buffer.from(data.value);
         const sensorData = buffer.readUInt8(1, true);
@@ -67,9 +69,30 @@ export default class Heartrate extends React.Component {
         }
         else if (this.props.state === 'doingActivity') {
             this.setState({
-                currentHr: sensorData
+                currentHr: sensorData,
             })
         }
+        else if (this.count === 0 && this.props.getHeartrate && this.props.state === 'preMwt') {
+            this.props.getHeartrate("hr", sensorData)
+            this.count++
+        }
+        else if (this.props.state === 'doingMwt') {
+            this.setState({
+                currentHr: sensorData,
+            })
+            this.hrArray.push(sensorData)
+            await this.props.onDataChange('hrArray', this.hrArray)
+        }
+        else if (this.count === 0 && this.props.getHeartrate && this.props.state === 'postMwt') {
+            this.props.getHeartrate("hr", sensorData)
+            this.count++
+        }
+        else if (this.count === 0 && this.props.getHeartrate && this.props.state === 'postMwt5Mins') {
+            this.props.getHeartrate("hr", sensorData)
+            this.count++
+        }
+
+        //Alert when reach target HR
         if (this.state.currentHr - this.props.preHr >= 20) {
             ToastAndroid.showWithGravity('อัตราการเต้นหัวใจถึงค่าที่กำหนด ควรหยุดทำกิจกรรม', ToastAndroid.SHORT, ToastAndroid.CENTER)
             const sound = new Sound('alert.wav', Sound.MAIN_BUNDLE, error => callbackSound(error, sound))
@@ -78,10 +101,11 @@ export default class Heartrate extends React.Component {
 
     render() {
         //If it mounted from preActivity or postActivity, doesn't display anything
-        if (this.props.state === 'preActivity') {
+        if (this.props.state === 'preActivity' || this.props.state === 'postActivity' || this.props.state === 'preMwt'
+            || this.props.state === 'postMwt' || this.props.state === 'postMwt5Mins') {
             return null
         }
-        else if (this.props.state === 'doingActivity') {
+        else if (this.props.state === 'doingActivity' || this.props.state === 'doingMwt') {
             return (
                 <View style={styles.container}>
                     <Icon
@@ -94,9 +118,7 @@ export default class Heartrate extends React.Component {
                 </View>
             )
         }
-        else if (this.props.state === 'postActivity') {
-            return null
-        }
+
 
     }
 
